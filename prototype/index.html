@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consentext Phase 3.75 Working Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-dot"></div>
+        <div>
+          <strong>Consentext</strong>
+          <p>Phase 3.75 working prototype</p>
+        </div>
+      </div>
+      <nav class="top-nav">
+        <a href="#overview">Overview</a>
+        <a href="#control-plane">Control</a>
+        <a href="#lanes">Lanes</a>
+        <a href="#workflow">Flow</a>
+        <a href="#workstreams">Workstreams</a>
+        <a href="#workspace">Workspace</a>
+        <a href="#audit">Audit</a>
+        <a href="#handoff">Handoff</a>
+      </nav>
+    </header>
+
+    <main class="main-stack">
+      <section id="overview" class="hero panel reveal">
+        <div class="hero-core">
+          <div class="hero-portrait">
+            <p class="eyebrow accent">Control plane first</p>
+            <div class="hero-portrait-headline">
+              <p class="hero-portrait-tag">The governance layer sits</p>
+              <strong>between the vault and every AI interaction.</strong>
+            </div>
+            <p class="hero-portrait-lead">Vault stores the patient’s health context while the trust kernel decides what may participate, what must be minimized, and what is blocked.</p>
+            <div class="hero-portrait-grid">
+              <article>
+                <span class="mini-label">Data plane</span>
+                <strong>Vault, dashboard, ingestion</strong>
+                <p>Health portals, wearable syncing, and lab visualizations evolve while the control plane is defined.</p>
+              </article>
+              <article class="accent-card">
+                <span class="mini-label">Control plane</span>
+                <strong>Consent, policy, gateway, audit</strong>
+                <p>Phase 3.75 centers on a trust kernel that governs consent, lane routing, and auditability before exports leave Consentext.</p>
+              </article>
+            </div>
+          </div>
+          <div class="hero-main">
+            <p class="eyebrow">Phase 3.75</p>
+            <p class="hero-text">We treat the vault as the data plane and the trust kernel as the control plane. The AI gateway mediates every prompt, deriving minimal bundles and logging decisions before any response or export is allowed.</p>
+            <div class="trust-pill-row">
+              <span class="trust-pill">Derived-first export</span>
+              <span class="trust-pill">Fail-closed enforcement</span>
+              <span class="trust-pill">Append-only audit</span>
+            </div>
+            <div class="hero-actions">
+              <a href="#workspace" class="button button-primary">Launch Workspace</a>
+              <a href="#handoff" class="button button-secondary">See Build Surfaces</a>
+            </div>
+            <div class="signal-strip">
+              <article class="signal-card">
+                <span class="mini-label">Default path</span>
+                <strong>Derived-first bundle</strong>
+                <p>External requests start from minimized context, not raw source records.</p>
+              </article>
+              <article class="signal-card">
+                <span class="mini-label">Hard blocks</span>
+                <strong>Identity and records stay out</strong>
+                <p>AI-bound shares exclude identifiers and records in the active phase.</p>
+              </article>
+              <article class="signal-card">
+                <span class="mini-label">Trust proof</span>
+                <strong>Every decision leaves a trail</strong>
+                <p>Routing, policy, and recipient checks all feed the visible audit ledger.</p>
+              </article>
+            </div>
+            <div class="hero-meta-grid">
+              <article class="meta-card">
+                <span>Data plane</span>
+                <strong>Tracker, sync, vault</strong>
+                <p>Existing and parallel workstreams that Phase 3.75 governs later.</p>
+              </article>
+              <article class="meta-card accent-card">
+                <span>Control plane</span>
+                <strong>Consent, policy, gateway, audit</strong>
+                <p>Primary architecture target for this phase.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-preview">
+          <div class="preview-head">
+            <div>
+              <p class="eyebrow">Governed Request Preview</p>
+              <h2 id="hero-lane">Private+</h2>
+              <p id="hero-summary">Reduced context packet prepared for external AI assistance.</p>
+            </div>
+            <div id="hero-status" class="status-pill status-allow">Allowed</div>
+          </div>
+          <div class="preview-request card-soft">
+            <span class="mini-label">Request</span>
+            <strong id="hero-prompt">What lifestyle changes may improve these labs?</strong>
+          </div>
+          <div class="hero-preview-grid">
+            <article class="mini-stat card-soft">
+              <span>Allowed data</span>
+              <strong id="hero-allowed-count">3 pods</strong>
+            </article>
+            <article class="mini-stat card-soft warn-surface">
+              <span>Blocked data</span>
+              <strong id="hero-blocked-count">2 hard blocks</strong>
+            </article>
+            <article class="mini-stat card-soft cool-surface">
+              <span>Output class</span>
+              <strong id="hero-output-class">derived_only</strong>
+            </article>
+          </div>
+          <p class="preview-note">Lane selection, blocked context, and outbound classification update when the workspace state changes.</p>
+          <div class="exposure-meter">
+            <div class="meter-label-row">
+              <span>Privacy</span>
+              <span>Capability</span>
+              <span>Control</span>
+            </div>
+            <div class="meter-bars">
+              <div class="meter-track"><div id="meter-privacy" class="meter-fill fill-privacy" style="width: 82%"></div></div>
+              <div class="meter-track"><div id="meter-capability" class="meter-fill fill-capability" style="width: 58%"></div></div>
+              <div class="meter-track"><div id="meter-control" class="meter-fill fill-control" style="width: 90%"></div></div>
+            </div>
+          </div>
+        </aside>
+      </section>
+      
+      <section id="control-plane" class="panel control-plane-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Data vs control</p>
+          <h2>The split that Phase 3.75 protects</h2>
+          <p class="hero-text">Vault-led experiences continue while Consentext defines the control plane that governs what can leave.</p>
+        </div>
+        <div class="control-columns">
+          <article class="control-card accent-card">
+            <span class="mini-label">Data / experience layer</span>
+            <h3>Vault, dashboards, ingestion</h3>
+            <p>Existing workstreams stay alongside the new governance foundation.</p>
+            <ul class="bullet-list">
+              <li>Vault storage, portal, and tracker views</li>
+              <li>Health dashboard surfaces inspired by worker portals</li>
+              <li>Wearable sync, lab schemas, and trend visualization</li>
+            </ul>
+          </article>
+          <article class="control-card">
+            <span class="mini-label">Control plane layer</span>
+            <h3>Trust kernel + AI gateway</h3>
+            <p>Phase 3.75 focuses on the governance layer that sits before any export.</p>
+            <ul class="bullet-list">
+              <li>Trust boundary and consent engine</li>
+              <li>Policy evaluation, minimization, de-identification</li>
+              <li>AI gateway lane routing and append-only audit</li>
+            </ul>
+          </article>
+          <article class="control-card accent-soft">
+            <span class="mini-label">Why this matters</span>
+            <h3>Governance foundation</h3>
+            <p>Defining the control plane lets earlier data work survive or evolve without being rebuilt blindly.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="lanes" class="panel lanes-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Exposure lanes</p>
+          <h2>Privacy, capability, and control for every request</h2>
+          <p class="hero-text">From deterministic retrieval through off-board escapes, the AI gateway routes every prompt to the right exposure lane.</p>
+        </div>
+        <div class="lane-layout">
+          <div id="lane-cards" class="lane-cards-grid"></div>
+          <div class="lane-detail">
+            <div class="lane-detail-head">
+              <span class="mini-label">Lane snapshot</span>
+              <h3 id="lane-name">Private+</h3>
+            </div>
+            <p id="lane-summary">Lane descriptions appear here when you select a card.</p>
+            <div class="lane-progress-grid">
+              <div class="lane-progress-line">
+                <div class="lane-progress-label">
+                  <span>Privacy</span>
+                  <span id="lane-privacy-label">82%</span>
+                </div>
+                <div class="lane-progress-track">
+                  <span id="lane-privacy-bar"></span>
+                </div>
+              </div>
+              <div class="lane-progress-line">
+                <div class="lane-progress-label">
+                  <span>Capability</span>
+                  <span id="lane-capability-label">74%</span>
+                </div>
+                <div class="lane-progress-track">
+                  <span id="lane-capability-bar"></span>
+                </div>
+              </div>
+              <div class="lane-progress-line">
+                <div class="lane-progress-label">
+                  <span>Control</span>
+                  <span id="lane-control-label">90%</span>
+                </div>
+                <div class="lane-progress-track">
+                  <span id="lane-control-bar"></span>
+                </div>
+              </div>
+            </div>
+            <ul id="lane-status-list" class="lane-status-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="workstreams" class="panel workstreams-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Workstreams</p>
+          <h2>Parallel experiments, one governance alignment</h2>
+          <p class="hero-text">Data capture and UI workstreams keep evolving while Phase 3.75 designs the trust boundary that will integrate with them later.</p>
+        </div>
+        <div id="workstream-grid" class="workstream-grid"></div>
+      </section>
+
+      <section class="panel dashboard-overview reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Health Dashboard</p>
+          <h2>Live-looking indicators for patient context</h2>
+          <p class="hero-text">This layer reuses the vault context and policy snapshot to show what a practitioner would see before forwarding anything to an AI responder.</p>
+        </div>
+        <div class="dashboard-grid">
+          <article class="dashboard-card">
+            <span class="mini-label">LDL (mg/dL)</span>
+            <strong id="metric-ldl">142</strong>
+            <div class="metric-trend">
+              <span class="metric-trend-bar" id="metric-ldl-bar"></span>
+            </div>
+            <p class="metric-detail" id="metric-ldl-note">Down from 154 last month.</p>
+          </article>
+          <article class="dashboard-card">
+            <span class="mini-label">Resting heart rate (bpm)</span>
+            <strong id="metric-rhr">58</strong>
+            <div class="metric-trend">
+              <span class="metric-trend-bar" id="metric-rhr-bar"></span>
+            </div>
+            <p class="metric-detail" id="metric-rhr-note">High-confidence baseline; no drift.</p>
+          </article>
+          <article class="dashboard-card">
+            <span class="mini-label">Sleep (h)</span>
+            <strong id="metric-sleep">7.1</strong>
+            <div class="metric-trend">
+              <span class="metric-trend-bar" id="metric-sleep-bar"></span>
+            </div>
+            <p class="metric-detail" id="metric-sleep-note">Coaching target 7h 30m.</p>
+          </article>
+          <article class="dashboard-card">
+            <span class="mini-label">Daily activity</span>
+            <strong id="metric-hrv">55</strong>
+            <div class="metric-trend">
+              <span class="metric-trend-bar" id="metric-hrv-bar"></span>
+            </div>
+            <p class="metric-detail" id="metric-hrv-note">HRV trending up 8% vs last week.</p>
+          </article>
+        </div>
+
+        <div class="dashboard-lower-grid">
+          <article class="panel timeline-card">
+            <p class="mini-label">Latest decisions</p>
+            <h3>Trust events stream</h3>
+            <ul id="timeline-list" class="timeline-list"></ul>
+          </article>
+          <article class="panel pods-card">
+            <p class="mini-label">Vault pod overview</p>
+            <h3>Pod readiness for AI export</h3>
+            <table class="pods-table">
+              <thead>
+                <tr><th>Pod</th><th>Status</th><th>Notes</th></tr>
+              </thead>
+              <tbody id="pods-table"></tbody>
+            </table>
+          </article>
+        </div>
+      </section>
+
+            <section id="workflow" class="panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Workflow Spine</p>
+          <h2>The governed request path</h2>
+        </div>
+        <div class="workflow-ribbon">
+          <article class="step-card active-step"><span>1</span><strong>Select data</strong><p>Choose pods and categories from the vault.</p></article>
+          <article class="step-card active-step"><span>2</span><strong>Apply policy</strong><p>Set recipient, purpose, duration, and de-identification posture.</p></article>
+          <article class="step-card active-step"><span>3</span><strong>Route request</strong><p>Pick the correct lane based on privacy, capability, and control.</p></article>
+          <article class="step-card active-step"><span>4</span><strong>Review output</strong><p>Compare source context to the governed bundle.</p></article>
+          <article class="step-card active-step"><span>5</span><strong>Confirm audit</strong><p>Record the allow, deny, prepare, and access decisions.</p></article>
+        </div>
+      </section>
+
+      <section class="overview-grid reveal delay-2">
+        <article class="panel">
+          <div class="section-header">
+            <p class="eyebrow">Scope Clarification</p>
+            <h2>What this phase is and is not</h2>
+          </div>
+          <div class="plane-columns">
+            <div class="info-column accent-surface">
+              <h3>Phase 3.75 is</h3>
+              <ul class="bullet-list">
+                <li>Trust boundary definition</li>
+                <li>Consent engine and policy evaluation</li>
+                <li>De-identification and privacy safeguards</li>
+                <li>AI gateway architecture</li>
+                <li>Outbound governance and audit traceability</li>
+              </ul>
+            </div>
+            <div class="info-column">
+              <h3>Phase 3.75 is not</h3>
+              <ul class="bullet-list">
+                <li>Automatic rebuild of the dashboard or portal</li>
+                <li>Full wearable or EHR integration pass right now</li>
+                <li>Final model-vendor strategy</li>
+                <li>Judgment that every prior component must be replaced</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="section-header">
+            <p class="eyebrow">Lane Matrix</p>
+            <h2>Privacy, capability, and control</h2>
+          </div>
+          <div class="matrix-table">
+            <div class="matrix-row matrix-head"><span>Lane</span><span>Privacy</span><span>Capability</span><span>Control</span></div>
+            <div class="matrix-row"><span>Deterministic</span><span>Very high</span><span>Low</span><span>Very high</span></div>
+            <div class="matrix-row"><span>Private</span><span>High</span><span>Medium</span><span>High</span></div>
+            <div class="matrix-row"><span>Private+</span><span>Medium-high</span><span>High</span><span>High</span></div>
+            <div class="matrix-row"><span>Max Intelligence</span><span>Lower</span><span>Highest</span><span>Governed</span></div>
+            <div class="matrix-row"><span>Off-Board</span><span>User-dependent</span><span>Any</span><span>None</span></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel reveal">
+        <div class="section-header">
+          <p class="eyebrow">Vocabulary Alignment</p>
+          <h2>Terms the prototype now carries forward</h2>
+        </div>
+        <div class="alignment-grid">
+          <article class="definition-card"><strong>Trust Boundary</strong><p>The line separating the Consentext platform from external systems.</p></article>
+          <article class="definition-card"><strong>Trust Kernel</strong><p>The internal governance layer that enforces consent, policy, privacy controls, routing decisions, and approved outbound pathways.</p></article>
+          <article class="definition-card"><strong>Policy Evaluation</strong><p>The module that evaluates requests against the userâ€™s consent rules and determines allow or deny.</p></article>
+          <article class="definition-card"><strong>Outbound Flow</strong><p>Vault to consent and policy evaluation to de-identification to scoped export bundle to AI provider.</p></article>
+        </div>
+      </section>
+
+      <section id="workspace" class="panel workspace-shell reveal delay-1">
+        <div class="workspace-header">
+          <div>
+            <p class="eyebrow">Workspace</p>
+            <h2>Configure, simulate, and review</h2>
+            <div class="workspace-trust-row">
+              <span class="workspace-chip">Vault-backed context</span>
+              <span class="workspace-chip">Recipient-scoped policy</span>
+              <span class="workspace-chip">User-visible trust trail</span>
+            </div>
+          </div>
+          <div class="workspace-tabs" id="workspace-tabs">
+            <button class="tab-button is-active" data-tab="vault">Vault</button>
+            <button class="tab-button" data-tab="consent">Consent</button>
+            <button class="tab-button" data-tab="gateway">Gateway</button>
+            <button class="tab-button" data-tab="auditview">Audit</button>
+          </div>
+        </div>
+
+        <div class="control-status-strip">
+          <article class="control-card">
+            <span class="mini-label">Active policy</span>
+            <strong id="status-policy-id">policy-001</strong>
+            <p>Current effective share object.</p>
+          </article>
+          <article class="control-card">
+            <span class="mini-label">Share state</span>
+            <strong id="status-share">Active</strong>
+            <p>Export permission lifecycle.</p>
+          </article>
+          <article class="control-card">
+            <span class="mini-label">Recipient</span>
+            <strong id="status-recipient">AI export</strong>
+            <p>Current policy target.</p>
+          </article>
+          <article class="control-card">
+            <span class="mini-label">Current lane</span>
+            <strong id="status-lane">Private+</strong>
+            <p>Latest routing outcome.</p>
+          </article>
+          <article class="control-card control-card-accent">
+            <span class="mini-label">Audit events</span>
+            <strong id="status-audit-count">2</strong>
+            <p>Visible trust trail entries.</p>
+          </article>
+        </div>
+
+        <div class="workspace-grid">
+          <article class="panel vault-panel tab-panel is-active" data-panel="vault">
+            <div class="section-header compact">
+              <p class="eyebrow">Vault Explorer</p>
+              <h2>Data plane assets</h2>
+            </div>
+            <div class="pod-buttons" id="pod-buttons">
+              <button class="pod-button is-active" data-pod="biomarkers">Biomarkers</button>
+              <button class="pod-button" data-pod="wearables">Wearables</button>
+              <button class="pod-button" data-pod="records">Records</button>
+              <button class="pod-button" data-pod="identity">Identity</button>
+              <button class="pod-button" data-pod="derived">Derived</button>
+            </div>
+            <div class="vault-grid">
+              <div class="vault-details">
+                <div>
+                  <p class="mini-label">Selected pod</p>
+                  <h3 id="pod-title">Biomarkers Pod</h3>
+                  <p id="pod-description">Structured lab values and raw report artifacts live here.</p>
+                </div>
+                <ul id="asset-list" class="asset-list"></ul>
+              </div>
+              <div class="data-cards">
+                <article class="data-card">
+                  <span class="mini-label">Trend card</span>
+                  <strong>Lipid panel trend</strong>
+                  <div class="bar-group">
+                    <span style="height: 42%"></span>
+                    <span style="height: 58%"></span>
+                    <span style="height: 36%"></span>
+                    <span style="height: 62%"></span>
+                    <span style="height: 48%"></span>
+                  </div>
+                </article>
+                <article class="data-card accent-card">
+                  <span class="mini-label">Wearable summary</span>
+                  <strong>Sleep baseline</strong>
+                  <p>7h 24m baseline with recent deviation event in last 14 days.</p>
+                </article>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel consent-panel tab-panel" data-panel="consent">
+            <div class="section-header compact">
+              <p class="eyebrow">Consent Studio</p>
+              <h2>Create the effective share policy</h2>
+            </div>
+            <div class="form-grid">
+              <label><span>Recipient type</span><select id="recipient-type"><option value="ai_export">AI export</option><option value="api_consumer">API consumer</option></select></label>
+              <label><span>Purpose</span><select id="purpose"><option value="explanation">Explanation</option><option value="lifestyle_guidance">Lifestyle guidance</option><option value="provider_review">Provider review</option><option value="research_compare">Research comparison</option></select></label>
+              <label><span>Duration</span><select id="duration"><option value="one_time">One-time</option><option value="24_hours">24 hours</option><option value="30_days">30 days</option></select></label>
+              <label><span>Wearables granularity</span><select id="granularity"><option value="derived_only">Derived only</option><option value="raw_if_allowed">Raw if allowed</option></select></label>
+            </div>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" id="scope-biomarkers" checked> Biomarkers pod</label>
+              <label><input type="checkbox" id="scope-wearables" checked> Wearables pod</label>
+              <label><input type="checkbox" id="scope-records"> Records pod</label>
+              <label><input type="checkbox" id="scope-identity"> Identity pod</label>
+              <label><input type="checkbox" id="identifiers-toggle"> Allow identifiers</label>
+              <label><input type="checkbox" id="recipient-verified"> Recipient verified</label>
+            </div>
+            <div class="policy-chip-row" id="policy-chips"></div>
+            <div class="action-row">
+              <button id="apply-policy" class="button button-primary">Apply Policy</button>
+              <button id="revoke-share" class="button button-secondary">Revoke Share</button>
+            </div>
+            <div class="policy-preview-grid">
+              <article class="preview-card soft-card">
+                <p class="mini-label">Guardrail summary</p>
+                <ul id="guardrail-list" class="check-list"></ul>
+              </article>
+              <article class="preview-card panel-dark">
+                <p class="mini-label">Effective policy</p>
+                <pre id="policy-json" class="code-panel"></pre>
+              </article>
+            </div>
+          </article>
+
+          <article class="panel gateway-panel tab-panel" data-panel="gateway">
+            <div class="section-header compact">
+              <p class="eyebrow">Gateway Lab</p>
+              <h2>Route a user request through the trust kernel</h2>
+            </div>
+            <div class="lane-legend">
+              <span class="lane-chip lane-deterministic">Deterministic</span>
+              <span class="lane-chip lane-private">Private</span>
+              <span class="lane-chip lane-privateplus">Private+</span>
+              <span class="lane-chip lane-max">Max Intelligence</span>
+              <span class="lane-chip lane-offboard">Off-Board</span>
+            </div>
+            <label class="full-width">
+              <span>Prompt bank</span>
+              <select id="prompt-select">
+                <option value="Show my cholesterol trend over the last six months">Show my cholesterol trend over the last six months</option>
+                <option value="Explain my latest lab results in plain English">Explain my latest lab results in plain English</option>
+                <option value="What lifestyle changes may improve these labs?">What lifestyle changes may improve these labs?</option>
+                <option value="Compare treatments for high LDL">Compare treatments for high LDL</option>
+                <option value="I will paste my records directly into ChatGPT">I will paste my records directly into ChatGPT</option>
+              </select>
+            </label>
+            <div class="action-row">
+              <button id="run-route" class="button button-primary">Run Routing</button>
+            </div>
+            <div class="gateway-result">
+              <div class="route-head">
+                <div>
+                  <p class="mini-label">Selected lane</p>
+                  <h3 id="route-lane">Private</h3>
+                  <p id="route-summary">Protected internal explanation of sensitive personal health context.</p>
+                </div>
+                <div id="route-status" class="status-pill status-allow">Allowed</div>
+              </div>
+              <div class="route-grid">
+                <article class="preview-card soft-card">
+                  <p class="mini-label">Source context</p>
+                  <ul id="route-source" class="check-list"></ul>
+                </article>
+                <article class="preview-card soft-card">
+                  <p class="mini-label">Blocked</p>
+                  <ul id="route-blocked" class="check-list"></ul>
+                </article>
+                <article class="preview-card soft-card">
+                  <p class="mini-label">Governed output</p>
+                  <ul id="route-included" class="check-list"></ul>
+                </article>
+                <article class="preview-card panel-dark route-json-card wide-card">
+                  <p class="mini-label">Generated bundle</p>
+                  <pre id="route-json" class="code-panel"></pre>
+                </article>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel audit-tab-panel tab-panel" data-panel="auditview">
+            <div class="section-header compact">
+              <p class="eyebrow">Audit And API</p>
+              <h2>Test recipient access and inspect trust events</h2>
+            </div>
+            <div class="audit-tool-grid">
+              <section class="api-test-card soft-card">
+                <div class="compact-head">
+                  <p class="mini-label">API Access Test</p>
+                  <h3>Simulate a consumer fetch</h3>
+                </div>
+                <div class="form-grid single-row">
+                  <label><span>Requested pod</span><select id="api-pod"><option value="biomarkers">Biomarkers</option><option value="wearables">Wearables</option><option value="records">Records</option><option value="identity">Identity</option></select></label>
+                  <label><span>Requested scope</span><select id="api-scope"><option value="within_scope">Within active scope</option><option value="outside_scope">Outside active scope</option></select></label>
+                </div>
+                <div class="action-row">
+                  <button id="run-api" class="button button-primary">Run API Test</button>
+                </div>
+                <div class="api-result preview-card">
+                  <div class="route-head">
+                    <div>
+                      <p class="mini-label">Decision</p>
+                      <h3 id="api-decision">Denied</h3>
+                      <p id="api-reason">API consumer requests are denied until the active share, verification state, and scope all align.</p>
+                    </div>
+                    <div id="api-status" class="status-pill status-deny">Denied</div>
+                  </div>
+                </div>
+              </section>
+              <section class="audit-filter-card">
+                <p class="mini-label">Audit Filters</p>
+                <div class="filter-row" id="audit-filters">
+                  <button class="filter-chip is-active" data-filter="all">All</button>
+                  <button class="filter-chip" data-filter="allow">Allow</button>
+                  <button class="filter-chip" data-filter="deny">Deny</button>
+                  <button class="filter-chip" data-filter="policy">Policy</button>
+                  <button class="filter-chip" data-filter="offboard">Off-Board</button>
+                </div>
+                <p class="empty-hint">Run routing, policy changes, or API tests to generate audit evidence.</p>
+              </section>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="audit" class="panel audit-panel reveal">
+        <div class="section-header">
+          <p class="eyebrow">Audit Ledger</p>
+          <h2>User-visible proof of what happened</h2>
+        </div>
+        <div id="audit-feed" class="audit-feed"></div>
+      </section>
+
+      <section id="handoff" class="panel handoff-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Developer Handoff</p>
+          <h2>The first surfaces to build for real</h2>
+        </div>
+        <div class="handoff-grid">
+          <article><strong>1. Vault-backed tracker views</strong><p>Charts and tables should read through vault contracts, not bypass them.</p></article>
+          <article><strong>2. Consent and share lifecycle</strong><p>Create, preview, revoke, and audit every outbound share object.</p></article>
+          <article><strong>3. Context preparation service</strong><p>Derived-first, deterministic bundle generation with recipient-specific rules.</p></article>
+          <article><strong>4. AI gateway routing</strong><p>Classify prompt, select lane, minimize context, and record the decision.</p></article>
+          <article><strong>5. API gateway enforcement</strong><p>Verify recipient, enforce scope, issue decision, and fail closed.</p></article>
+          <article><strong>6. Audit viewer</strong><p>Make the trust trail legible to the user, not only to operators.</p></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
