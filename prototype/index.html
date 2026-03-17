@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -22,6 +22,7 @@
       <nav class="top-nav">
         <a href="#overview">Overview</a>
         <a href="#control-plane">Control</a>
+        <a href="#decisions">Decisions</a>
         <a href="#lanes">Lanes</a>
         <a href="#workflow">Flow</a>
         <a href="#workstreams">Workstreams</a>
@@ -40,25 +41,27 @@
               <p class="hero-portrait-tag">The governance layer sits</p>
               <strong>between the vault and every AI interaction.</strong>
             </div>
-            <p class="hero-portrait-lead">Vault stores the patient’s health context while the trust kernel decides what may participate, what must be minimized, and what is blocked.</p>
+            <p class="hero-portrait-lead">Vault stores the patient's health context while the trust kernel decides what may participate, what must be minimized, and what is blocked.</p>
             <div class="hero-portrait-grid">
               <article>
                 <span class="mini-label">Data plane</span>
-                <strong>Vault, dashboard, ingestion</strong>
+                <strong>Vault, health context, experience</strong>
                 <p>Health portals, wearable syncing, and lab visualizations evolve while the control plane is defined.</p>
               </article>
               <article class="accent-card">
                 <span class="mini-label">Control plane</span>
                 <strong>Consent, policy, gateway, audit</strong>
-                <p>Phase 3.75 centers on a trust kernel that governs consent, lane routing, and auditability before exports leave Consentext.</p>
+                <p>Phase 3.75 centers on a trust kernel that governs consent, lane routing, clinician sharing, and auditability before exports leave Consentext.</p>
               </article>
             </div>
           </div>
           <div class="hero-main">
             <p class="eyebrow">Phase 3.75</p>
-            <p class="hero-text">We treat the vault as the data plane and the trust kernel as the control plane. The AI gateway mediates every prompt, deriving minimal bundles and logging decisions before any response or export is allowed.</p>
+            <p class="hero-text">We treat the vault as conceptual context and the control plane as the specific architecture target. The AI gateway mediates every prompt, keeps the Private lane on an internal protected model, and handles governed external routing without collapsing Private+ and Max Intelligence into the same promise.</p>
             <div class="trust-pill-row">
-              <span class="trust-pill">Derived-first export</span>
+              <span class="trust-pill">Minimum-necessary by default</span>
+              <span class="trust-pill">Internal protected model required</span>
+              <span class="trust-pill">Adapter-ready provider base</span>
               <span class="trust-pill">Fail-closed enforcement</span>
               <span class="trust-pill">Append-only audit</span>
             </div>
@@ -69,30 +72,30 @@
             <div class="signal-strip">
               <article class="signal-card">
                 <span class="mini-label">Default path</span>
-                <strong>Derived-first bundle</strong>
-                <p>External requests start from minimized context, not raw source records.</p>
+                <strong>Private+ stays narrow</strong>
+                <p>Minimum-necessary or de-identified context is the default governed export posture.</p>
               </article>
               <article class="signal-card">
-                <span class="mini-label">Hard blocks</span>
-                <strong>Identity and records stay out</strong>
-                <p>AI-bound shares exclude identifiers and records in the active phase.</p>
+                <span class="mini-label">Locked requirement</span>
+                <strong>Private must exist internally</strong>
+                <p>The protected model inside Consentext-controlled systems is part of Phase 3.75, not a nice-to-have.</p>
               </article>
               <article class="signal-card">
-                <span class="mini-label">Trust proof</span>
-                <strong>Every decision leaves a trail</strong>
-                <p>Routing, policy, and recipient checks all feed the visible audit ledger.</p>
+                <span class="mini-label">Provider frame</span>
+                <strong>Price adapters by count</strong>
+                <p>The gateway base should stay adapter-ready now while provider count remains a conscious 1 / 2 / 3 / 4 decision.</p>
               </article>
             </div>
             <div class="hero-meta-grid">
               <article class="meta-card">
                 <span>Data plane</span>
-                <strong>Tracker, sync, vault</strong>
-                <p>Existing and parallel workstreams that Phase 3.75 governs later.</p>
+                <strong>Vault / health context store</strong>
+                <p>Conceptual context for the phase while data and experience workstreams continue.</p>
               </article>
               <article class="meta-card accent-card">
                 <span>Control plane</span>
-                <strong>Consent, policy, gateway, audit</strong>
-                <p>Primary architecture target for this phase.</p>
+                <strong>Trust kernel, consent, gateway, audit</strong>
+                <p>Specific architecture focus for this phase.</p>
               </article>
             </div>
           </div>
@@ -103,7 +106,7 @@
             <div>
               <p class="eyebrow">Governed Request Preview</p>
               <h2 id="hero-lane">Private+</h2>
-              <p id="hero-summary">Reduced context packet prepared for external AI assistance.</p>
+              <p id="hero-summary">Minimum-necessary context packet prepared for governed external AI assistance.</p>
             </div>
             <div id="hero-status" class="status-pill status-allow">Allowed</div>
           </div>
@@ -114,15 +117,15 @@
           <div class="hero-preview-grid">
             <article class="mini-stat card-soft">
               <span>Allowed data</span>
-              <strong id="hero-allowed-count">3 pods</strong>
+              <strong id="hero-allowed-count">3 allowed items</strong>
             </article>
             <article class="mini-stat card-soft warn-surface">
               <span>Blocked data</span>
-              <strong id="hero-blocked-count">2 hard blocks</strong>
+              <strong id="hero-blocked-count">2 default blocks</strong>
             </article>
             <article class="mini-stat card-soft cool-surface">
               <span>Output class</span>
-              <strong id="hero-output-class">derived_only</strong>
+              <strong id="hero-output-class">minimum_necessary_external</strong>
             </article>
           </div>
           <p class="preview-note">Lane selection, blocked context, and outbound classification update when the workspace state changes.</p>
@@ -133,14 +136,14 @@
               <span>Control</span>
             </div>
             <div class="meter-bars">
-              <div class="meter-track"><div id="meter-privacy" class="meter-fill fill-privacy" style="width: 82%"></div></div>
-              <div class="meter-track"><div id="meter-capability" class="meter-fill fill-capability" style="width: 58%"></div></div>
+              <div class="meter-track"><div id="meter-privacy" class="meter-fill fill-privacy" style="width: 80%"></div></div>
+              <div class="meter-track"><div id="meter-capability" class="meter-fill fill-capability" style="width: 74%"></div></div>
               <div class="meter-track"><div id="meter-control" class="meter-fill fill-control" style="width: 90%"></div></div>
             </div>
           </div>
         </aside>
       </section>
-      
+
       <section id="control-plane" class="panel control-plane-panel reveal delay-1">
         <div class="section-header">
           <p class="eyebrow">Data vs control</p>
@@ -154,7 +157,7 @@
             <p>Existing workstreams stay alongside the new governance foundation.</p>
             <ul class="bullet-list">
               <li>Vault storage, portal, and tracker views</li>
-              <li>Health dashboard surfaces inspired by worker portals</li>
+              <li>Health dashboard surfaces and share previews</li>
               <li>Wearable sync, lab schemas, and trend visualization</li>
             </ul>
           </article>
@@ -169,9 +172,109 @@
             </ul>
           </article>
           <article class="control-card accent-soft">
-            <span class="mini-label">Why this matters</span>
-            <h3>Governance foundation</h3>
-            <p>Defining the control plane lets earlier data work survive or evolve without being rebuilt blindly.</p>
+            <span class="mini-label">Outbound principle</span>
+            <h3>Vault to control to gateway</h3>
+            <p>Outbound disclosure originates from the control plane and AI gateway, not directly from the vault.</p>
+            <ul class="bullet-list">
+              <li>Vault / Health Context Store</li>
+              <li>Control Plane decisioning</li>
+              <li>AI Gateway routing</li>
+              <li>External systems only after governance</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+      <section id="decisions" class="panel decisions-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">March 17 Source Of Truth</p>
+          <h2>Settled direction versus open decisions</h2>
+          <p class="hero-text">This prototype now treats March 17 as the leading memo. Settled items shape the experience directly, and unresolved items stay visibly open so the build does not hard-code them by accident.</p>
+        </div>
+        <div class="decision-grid">
+          <article class="decision-card accent-card">
+            <div class="decision-head">
+              <div>
+                <p class="mini-label">Working direction</p>
+                <h3>Use these assumptions now</h3>
+              </div>
+              <span class="decision-chip decision-chip-locked">Source of truth</span>
+            </div>
+            <ul class="decision-list">
+              <li>
+                <span class="decision-tag decision-tag-locked">Locked</span>
+                <div>
+                  <strong>Private lane requires an internal protected model.</strong>
+                  <p>Phase 3.75 keeps a protected model inside Consentext-controlled systems.</p>
+                </div>
+              </li>
+              <li>
+                <span class="decision-tag decision-tag-working">Working</span>
+                <div>
+                  <strong>Private+ and Max Intelligence stay separate.</strong>
+                  <p>They share the gateway framework but make different promises about disclosure and capability.</p>
+                </div>
+              </li>
+              <li>
+                <span class="decision-tag decision-tag-locked">Locked</span>
+                <div>
+                  <strong>Patient-authorized clinician sharing matters now.</strong>
+                  <p>Doctor, clinic, and hospital sharing should be supported architecturally even while the full staff portal waits.</p>
+                </div>
+              </li>
+              <li>
+                <span class="decision-tag decision-tag-locked">Locked</span>
+                <div>
+                  <strong>Gateway pricing should be adapter-ready by provider count.</strong>
+                  <p>Ask for the base plus 1 / 2 / 3 / 4 provider implementations instead of guessing a single-provider shape.</p>
+                </div>
+              </li>
+              <li>
+                <span class="decision-tag decision-tag-working">Working</span>
+                <div>
+                  <strong>Integrations are architecture-now, implementation-later.</strong>
+                  <p>Interfaces and adapter patterns should exist now even if wearable, vendor, and EHR rollouts happen in later waves.</p>
+                </div>
+              </li>
+            </ul>
+          </article>
+          <article class="decision-card">
+            <div class="decision-head">
+              <div>
+                <p class="mini-label">Open decision</p>
+                <h3>Keep these visibly unresolved</h3>
+              </div>
+              <span class="decision-chip decision-chip-open">Do not hard-code</span>
+            </div>
+            <ul class="decision-list">
+              <li>
+                <span class="decision-tag decision-tag-open">Open</span>
+                <div>
+                  <strong>Minimal internal ops console scope</strong>
+                  <p>Audit lookup, troubleshooting, and operational visibility are likely needed, but broader account or config tooling is still undecided.</p>
+                </div>
+              </li>
+              <li>
+                <span class="decision-tag decision-tag-open">Open</span>
+                <div>
+                  <strong>UI ownership pending Joyel update</strong>
+                  <p>The prototype should not imply Jordan is locked into owning the full front-end or UI delivery surface.</p>
+                </div>
+              </li>
+              <li>
+                <span class="decision-tag decision-tag-open">Open</span>
+                <div>
+                  <strong>Reference integration pattern now versus architecture only</strong>
+                  <p>One reference implementation may help later, but the immediate requirement is an integration-aware architecture.</p>
+                </div>
+              </li>
+              <li>
+                <span class="decision-tag decision-tag-open">Open</span>
+                <div>
+                  <strong>Max Intelligence final scope if pricing bites</strong>
+                  <p>Target it for Phase 3.75, but leave room for a conscious tradeoff if pricing forces it.</p>
+                </div>
+              </li>
+            </ul>
           </article>
         </div>
       </section>
@@ -180,21 +283,21 @@
         <div class="section-header">
           <p class="eyebrow">Exposure lanes</p>
           <h2>Privacy, capability, and control for every request</h2>
-          <p class="hero-text">From deterministic retrieval through off-board escapes, the AI gateway routes every prompt to the right exposure lane.</p>
+          <p class="hero-text">From deterministic retrieval through off-board escapes, the AI gateway routes every prompt to the right exposure lane without collapsing narrow external help and broader governed help into the same thing.</p>
         </div>
         <div class="lane-layout">
           <div id="lane-cards" class="lane-cards-grid"></div>
           <div class="lane-detail">
             <div class="lane-detail-head">
               <span class="mini-label">Lane snapshot</span>
-              <h3 id="lane-name">Private+</h3>
+              <h3 id="lane-name">Private</h3>
             </div>
             <p id="lane-summary">Lane descriptions appear here when you select a card.</p>
             <div class="lane-progress-grid">
               <div class="lane-progress-line">
                 <div class="lane-progress-label">
                   <span>Privacy</span>
-                  <span id="lane-privacy-label">82%</span>
+                  <span id="lane-privacy-label">90%</span>
                 </div>
                 <div class="lane-progress-track">
                   <span id="lane-privacy-bar"></span>
@@ -203,7 +306,7 @@
               <div class="lane-progress-line">
                 <div class="lane-progress-label">
                   <span>Capability</span>
-                  <span id="lane-capability-label">74%</span>
+                  <span id="lane-capability-label">55%</span>
                 </div>
                 <div class="lane-progress-track">
                   <span id="lane-capability-bar"></span>
@@ -212,7 +315,7 @@
               <div class="lane-progress-line">
                 <div class="lane-progress-label">
                   <span>Control</span>
-                  <span id="lane-control-label">90%</span>
+                  <span id="lane-control-label">92%</span>
                 </div>
                 <div class="lane-progress-track">
                   <span id="lane-control-bar"></span>
@@ -228,16 +331,16 @@
         <div class="section-header">
           <p class="eyebrow">Workstreams</p>
           <h2>Parallel experiments, one governance alignment</h2>
-          <p class="hero-text">Data capture and UI workstreams keep evolving while Phase 3.75 designs the trust boundary that will integrate with them later.</p>
+          <p class="hero-text">Data capture, clinician-share preparation, and internal ops framing can all keep moving while Phase 3.75 locks the trust boundary, provider adapter posture, and outbound governance model.</p>
         </div>
         <div id="workstream-grid" class="workstream-grid"></div>
       </section>
 
       <section class="panel dashboard-overview reveal delay-1">
         <div class="section-header">
-          <p class="eyebrow">Health Dashboard</p>
-          <h2>Live-looking indicators for patient context</h2>
-          <p class="hero-text">This layer reuses the vault context and policy snapshot to show what a practitioner would see before forwarding anything to an AI responder.</p>
+          <p class="eyebrow">Share Preview</p>
+          <h2>Live-looking indicators for patient-authorized review</h2>
+          <p class="hero-text">This layer reuses the vault context and policy snapshot to preview what a patient or internal reviewer would inspect before authorizing an AI request or a clinician share packet. It is not a promised staff portal.</p>
         </div>
         <div class="dashboard-grid">
           <article class="dashboard-card">
@@ -282,7 +385,7 @@
           </article>
           <article class="panel pods-card">
             <p class="mini-label">Vault pod overview</p>
-            <h3>Pod readiness for AI export</h3>
+            <h3>Pod readiness for governed sharing</h3>
             <table class="pods-table">
               <thead>
                 <tr><th>Pod</th><th>Status</th><th>Notes</th></tr>
@@ -293,14 +396,14 @@
         </div>
       </section>
 
-            <section id="workflow" class="panel reveal delay-1">
+      <section id="workflow" class="panel reveal delay-1">
         <div class="section-header">
           <p class="eyebrow">Workflow Spine</p>
           <h2>The governed request path</h2>
         </div>
         <div class="workflow-ribbon">
           <article class="step-card active-step"><span>1</span><strong>Select data</strong><p>Choose pods and categories from the vault.</p></article>
-          <article class="step-card active-step"><span>2</span><strong>Apply policy</strong><p>Set recipient, purpose, duration, and de-identification posture.</p></article>
+          <article class="step-card active-step"><span>2</span><strong>Apply policy</strong><p>Set recipient, purpose, duration, and minimization posture.</p></article>
           <article class="step-card active-step"><span>3</span><strong>Route request</strong><p>Pick the correct lane based on privacy, capability, and control.</p></article>
           <article class="step-card active-step"><span>4</span><strong>Review output</strong><p>Compare source context to the governed bundle.</p></article>
           <article class="step-card active-step"><span>5</span><strong>Confirm audit</strong><p>Record the allow, deny, prepare, and access decisions.</p></article>
@@ -318,18 +421,22 @@
               <h3>Phase 3.75 is</h3>
               <ul class="bullet-list">
                 <li>Trust boundary definition</li>
+                <li>Internal protected model for the Private lane</li>
                 <li>Consent engine and policy evaluation</li>
                 <li>De-identification and privacy safeguards</li>
-                <li>AI gateway architecture</li>
+                <li>Patient-authorized clinician sharing architecture</li>
+                <li>Adapter-ready AI gateway architecture</li>
+                <li>Minimal internal ops and audit visibility</li>
                 <li>Outbound governance and audit traceability</li>
               </ul>
             </div>
             <div class="info-column">
               <h3>Phase 3.75 is not</h3>
               <ul class="bullet-list">
-                <li>Automatic rebuild of the dashboard or portal</li>
-                <li>Full wearable or EHR integration pass right now</li>
-                <li>Final model-vendor strategy</li>
+                <li>A full clinician-facing staff portal in the first pass</li>
+                <li>A full wearable or EHR implementation pass right now</li>
+                <li>A forced single-provider strategy before pricing</li>
+                <li>A lock on UI ownership before Joyel's update</li>
                 <li>Judgment that every prior component must be replaced</li>
               </ul>
             </div>
@@ -344,9 +451,9 @@
           <div class="matrix-table">
             <div class="matrix-row matrix-head"><span>Lane</span><span>Privacy</span><span>Capability</span><span>Control</span></div>
             <div class="matrix-row"><span>Deterministic</span><span>Very high</span><span>Low</span><span>Very high</span></div>
-            <div class="matrix-row"><span>Private</span><span>High</span><span>Medium</span><span>High</span></div>
+            <div class="matrix-row"><span>Private</span><span>High</span><span>Medium</span><span>Highest</span></div>
             <div class="matrix-row"><span>Private+</span><span>Medium-high</span><span>High</span><span>High</span></div>
-            <div class="matrix-row"><span>Max Intelligence</span><span>Lower</span><span>Highest</span><span>Governed</span></div>
+            <div class="matrix-row"><span>Max Intelligence</span><span>Lower</span><span>Highest</span><span>Governed, broader</span></div>
             <div class="matrix-row"><span>Off-Board</span><span>User-dependent</span><span>Any</span><span>None</span></div>
           </div>
         </article>
@@ -360,11 +467,11 @@
         <div class="alignment-grid">
           <article class="definition-card"><strong>Trust Boundary</strong><p>The line separating the Consentext platform from external systems.</p></article>
           <article class="definition-card"><strong>Trust Kernel</strong><p>The internal governance layer that enforces consent, policy, privacy controls, routing decisions, and approved outbound pathways.</p></article>
-          <article class="definition-card"><strong>Policy Evaluation</strong><p>The module that evaluates requests against the userâ€™s consent rules and determines allow or deny.</p></article>
-          <article class="definition-card"><strong>Outbound Flow</strong><p>Vault to consent and policy evaluation to de-identification to scoped export bundle to AI provider.</p></article>
+          <article class="definition-card"><strong>Internal Protected Model</strong><p>The locked Private-lane model that keeps sensitive health context inside Consentext-controlled systems.</p></article>
+          <article class="definition-card"><strong>Clinician Share Path</strong><p>The patient-authorized doctor, clinic, or hospital route that exists architecturally now even while the full staff portal waits.</p></article>
+          <article class="definition-card"><strong>Outbound Flow</strong><p>Vault / Health Context Store to Control Plane to AI Gateway to External Systems.</p></article>
         </div>
       </section>
-
       <section id="workspace" class="panel workspace-shell reveal delay-1">
         <div class="workspace-header">
           <div>
@@ -372,7 +479,8 @@
             <h2>Configure, simulate, and review</h2>
             <div class="workspace-trust-row">
               <span class="workspace-chip">Vault-backed context</span>
-              <span class="workspace-chip">Recipient-scoped policy</span>
+              <span class="workspace-chip">Patient-authorized sharing</span>
+              <span class="workspace-chip">Adapter-ready AI gateway</span>
               <span class="workspace-chip">User-visible trust trail</span>
             </div>
           </div>
@@ -380,6 +488,7 @@
             <button class="tab-button is-active" data-tab="vault">Vault</button>
             <button class="tab-button" data-tab="consent">Consent</button>
             <button class="tab-button" data-tab="gateway">Gateway</button>
+            <button class="tab-button" data-tab="ops">Ops</button>
             <button class="tab-button" data-tab="auditview">Audit</button>
           </div>
         </div>
@@ -447,9 +556,9 @@
                   </div>
                 </article>
                 <article class="data-card accent-card">
-                  <span class="mini-label">Wearable summary</span>
-                  <strong>Sleep baseline</strong>
-                  <p>7h 24m baseline with recent deviation event in last 14 days.</p>
+                  <span class="mini-label">Share readiness</span>
+                  <strong>Clinician packet posture</strong>
+                  <p>Selected records and identifiers can be reviewed for patient-authorized clinician sharing without implying a staff portal build.</p>
                 </article>
               </div>
             </div>
@@ -461,18 +570,19 @@
               <h2>Create the effective share policy</h2>
             </div>
             <div class="form-grid">
-              <label><span>Recipient type</span><select id="recipient-type"><option value="ai_export">AI export</option><option value="api_consumer">API consumer</option></select></label>
-              <label><span>Purpose</span><select id="purpose"><option value="explanation">Explanation</option><option value="lifestyle_guidance">Lifestyle guidance</option><option value="provider_review">Provider review</option><option value="research_compare">Research comparison</option></select></label>
+              <label><span>Recipient type</span><select id="recipient-type"><option value="ai_export">AI export</option><option value="clinician_share">Clinician share</option><option value="api_consumer">API consumer</option></select></label>
+              <label><span>Purpose</span><select id="purpose"><option value="explanation">Explanation</option><option value="lifestyle_guidance">Lifestyle guidance</option><option value="clinician_consult">Clinician consult</option><option value="research_compare">Research comparison</option></select></label>
               <label><span>Duration</span><select id="duration"><option value="one_time">One-time</option><option value="24_hours">24 hours</option><option value="30_days">30 days</option></select></label>
               <label><span>Wearables granularity</span><select id="granularity"><option value="derived_only">Derived only</option><option value="raw_if_allowed">Raw if allowed</option></select></label>
             </div>
+            <p class="panel-note">Clinician share models patient-authorized doctor, clinic, or hospital sharing now. Full clinician-facing staff portal behavior remains intentionally deferred.</p>
             <div class="checkbox-grid">
               <label><input type="checkbox" id="scope-biomarkers" checked> Biomarkers pod</label>
               <label><input type="checkbox" id="scope-wearables" checked> Wearables pod</label>
               <label><input type="checkbox" id="scope-records"> Records pod</label>
               <label><input type="checkbox" id="scope-identity"> Identity pod</label>
               <label><input type="checkbox" id="identifiers-toggle"> Allow identifiers</label>
-              <label><input type="checkbox" id="recipient-verified"> Recipient verified</label>
+              <label><input type="checkbox" id="recipient-verified"> Destination verified</label>
             </div>
             <div class="policy-chip-row" id="policy-chips"></div>
             <div class="action-row">
@@ -503,6 +613,18 @@
               <span class="lane-chip lane-max">Max Intelligence</span>
               <span class="lane-chip lane-offboard">Off-Board</span>
             </div>
+            <div class="gateway-note-grid">
+              <article class="preview-card soft-card">
+                <p class="mini-label">Provider base</p>
+                <strong>Adapter-ready now</strong>
+                <p>The gateway is modeled as reusable infrastructure that can take provider implementations later.</p>
+              </article>
+              <article class="preview-card soft-card">
+                <p class="mini-label">Pricing ask</p>
+                <strong>Price 1 / 2 / 3 / 4 providers</strong>
+                <p>The prototype leaves provider count open instead of pretending a single-provider MVP is already chosen.</p>
+              </article>
+            </div>
             <label class="full-width">
               <span>Prompt bank</span>
               <select id="prompt-select">
@@ -520,8 +642,8 @@
               <div class="route-head">
                 <div>
                   <p class="mini-label">Selected lane</p>
-                  <h3 id="route-lane">Private</h3>
-                  <p id="route-summary">Protected internal explanation of sensitive personal health context.</p>
+                  <h3 id="route-lane">Private+</h3>
+                  <p id="route-summary">Minimum-necessary context packet prepared for governed external AI assistance.</p>
                 </div>
                 <div id="route-status" class="status-pill status-allow">Allowed</div>
               </div>
@@ -545,11 +667,58 @@
               </div>
             </div>
           </article>
+          <article class="panel ops-panel tab-panel" data-panel="ops">
+            <div class="section-header compact">
+              <p class="eyebrow">Internal Ops</p>
+              <h2>Minimum console, not a full internal product</h2>
+              <p class="hero-text">This surface models the likely minimum requirement for Brayden, Fong, and later Huy: audit lookup, support troubleshooting, and operational visibility while broader admin scope stays open.</p>
+            </div>
+            <div class="ops-grid">
+              <article class="preview-card soft-card">
+                <p class="mini-label">Likely in scope</p>
+                <ul class="check-list">
+                  <li>Audit lookup and event trace review</li>
+                  <li>Support troubleshooting for share state and route outcomes</li>
+                  <li>Basic operational visibility into active policy posture</li>
+                </ul>
+              </article>
+              <article class="preview-card">
+                <p class="mini-label">Still open</p>
+                <ul class="check-list">
+                  <li>Large polished internal admin product</li>
+                  <li>Final user-management and account-control scope</li>
+                  <li>Configuration tooling beyond the minimum ops console</li>
+                </ul>
+              </article>
+              <article class="panel-dark preview-card">
+                <p class="mini-label">Operational snapshot</p>
+                <div class="ops-snapshot-grid">
+                  <div>
+                    <span>Latest event</span>
+                    <strong id="ops-last-event">consent_policy_created</strong>
+                  </div>
+                  <div>
+                    <span>Share state</span>
+                    <strong id="ops-share-state">Active share</strong>
+                  </div>
+                  <div>
+                    <span>Recipient mode</span>
+                    <strong id="ops-recipient-mode">AI export</strong>
+                  </div>
+                  <div>
+                    <span>Provider posture</span>
+                    <strong id="ops-provider-mode">Adapter-ready base</strong>
+                  </div>
+                </div>
+                <p id="ops-last-summary" class="ops-summary">Initial control-plane defaults are loaded for review.</p>
+              </article>
+            </div>
+          </article>
 
           <article class="panel audit-tab-panel tab-panel" data-panel="auditview">
             <div class="section-header compact">
               <p class="eyebrow">Audit And API</p>
-              <h2>Test recipient access and inspect trust events</h2>
+              <h2>Inspect trust events and test recipient access</h2>
             </div>
             <div class="audit-tool-grid">
               <section class="api-test-card soft-card">
@@ -594,7 +763,7 @@
       <section id="audit" class="panel audit-panel reveal">
         <div class="section-header">
           <p class="eyebrow">Audit Ledger</p>
-          <h2>User-visible proof of what happened</h2>
+          <h2>User-visible proof with operator lookup value</h2>
         </div>
         <div id="audit-feed" class="audit-feed"></div>
       </section>
@@ -602,15 +771,15 @@
       <section id="handoff" class="panel handoff-panel reveal delay-1">
         <div class="section-header">
           <p class="eyebrow">Developer Handoff</p>
-          <h2>The first surfaces to build for real</h2>
+          <h2>The first surfaces to build without overcommitting</h2>
         </div>
         <div class="handoff-grid">
-          <article><strong>1. Vault-backed tracker views</strong><p>Charts and tables should read through vault contracts, not bypass them.</p></article>
-          <article><strong>2. Consent and share lifecycle</strong><p>Create, preview, revoke, and audit every outbound share object.</p></article>
-          <article><strong>3. Context preparation service</strong><p>Derived-first, deterministic bundle generation with recipient-specific rules.</p></article>
-          <article><strong>4. AI gateway routing</strong><p>Classify prompt, select lane, minimize context, and record the decision.</p></article>
-          <article><strong>5. API gateway enforcement</strong><p>Verify recipient, enforce scope, issue decision, and fail closed.</p></article>
-          <article><strong>6. Audit viewer</strong><p>Make the trust trail legible to the user, not only to operators.</p></article>
+          <article><strong>1. Internal protected model surface</strong><p>Keep the Private lane visibly mandatory in Phase 3.75 and route sensitive context through it without external export.</p></article>
+          <article><strong>2. Consent and share lifecycle</strong><p>Create, preview, revoke, and audit every outbound share object across AI, clinician, and API recipients.</p></article>
+          <article><strong>3. Patient-authorized clinician sharing</strong><p>Support doctor, clinic, and hospital sharing architecturally now while leaving the full staff portal deferred.</p></article>
+          <article><strong>4. Adapter-ready AI gateway routing</strong><p>Classify prompt, preserve distinct Private+ and Max Intelligence behaviors, and keep provider count decisions open until pricing lands.</p></article>
+          <article><strong>5. Minimal internal ops console</strong><p>Provide audit lookup, troubleshooting, and operational visibility without implying a full internal admin product.</p></article>
+          <article><strong>6. Audit viewer and trust proof</strong><p>Keep the trust trail legible to users and operators while the open decisions remain marked as open.</p></article>
         </div>
       </section>
     </main>
@@ -619,8 +788,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-

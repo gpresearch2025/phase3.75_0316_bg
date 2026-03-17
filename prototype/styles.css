@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #f6f6f4;
   --surface: rgba(255, 255, 255, 0.92);
   --surface-strong: #fff;
@@ -713,7 +713,7 @@ p,li,label span { color: var(--text-muted); line-height: 1.65; }
   background: linear-gradient(180deg, #f7f2ea, #f1ece3);
   border-top: 0;
 }
-.alignment-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.alignment-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .definition-card { min-height: 100%; }
 .workspace-shell {
   padding-top: 22px;
@@ -1057,3 +1057,120 @@ input:focus {
 }
 
 
+
+.decisions-panel {
+  border-color: rgba(15, 93, 76, 0.2);
+}
+.decision-grid,
+.gateway-note-grid,
+.ops-grid,
+.ops-snapshot-grid {
+  display: grid;
+  gap: 16px;
+}
+.decision-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.decision-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.92);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.decision-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+.decision-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.decision-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 93, 76, 0.12);
+  background: rgba(255,255,255,0.72);
+}
+.decision-list strong,
+.gateway-note-grid strong,
+.ops-snapshot-grid strong {
+  display: block;
+  color: var(--text);
+}
+.decision-chip,
+.decision-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.decision-chip {
+  padding: 8px 12px;
+}
+.decision-tag {
+  min-width: 72px;
+  padding: 6px 10px;
+  height: fit-content;
+}
+.decision-chip-locked,
+.decision-tag-locked {
+  background: rgba(24,121,78,0.12);
+  color: var(--success);
+}
+.decision-tag-working {
+  background: rgba(31,106,97,0.12);
+  color: var(--accent);
+}
+.decision-chip-open,
+.decision-tag-open {
+  background: rgba(176,123,63,0.12);
+  color: var(--warning);
+}
+.panel-note {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(31, 106, 97, 0.08);
+  color: var(--text);
+  font-size: 0.92rem;
+}
+.gateway-note-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 16px;
+}
+.ops-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.ops-snapshot-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 12px;
+}
+.ops-snapshot-grid span {
+  font-size: 0.78rem;
+  color: rgba(237, 243, 240, 0.72);
+}
+.ops-summary {
+  margin-top: 14px;
+  color: rgba(237, 243, 240, 0.9);
+}
+@media (max-width: 1280px) {
+  .decision-grid,
+  .gateway-note-grid,
+  .ops-grid,
+  .ops-snapshot-grid {
+    grid-template-columns: 1fr;
+  }
+}
