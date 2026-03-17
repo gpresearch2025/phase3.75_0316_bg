@@ -1335,8 +1335,56 @@ input:focus {
 .walkthrough-controls {
   position: relative;
   z-index: 1;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: 18px;
+}
+.walkthrough-stage:fullscreen,
+.walkthrough-stage.is-fullscreen {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  padding: clamp(28px, 4vw, 48px);
+}
+.walkthrough-stage:fullscreen::before,
+.walkthrough-stage.is-fullscreen::before {
+  width: 420px;
+  height: 420px;
+}
+.walkthrough-stage:fullscreen > *,
+.walkthrough-stage.is-fullscreen > * {
+  width: min(1120px, 100%);
+  margin-inline: auto;
+}
+.walkthrough-stage:fullscreen .walkthrough-screen,
+.walkthrough-stage.is-fullscreen .walkthrough-screen {
+  margin-top: 24px;
+  padding: clamp(28px, 4vw, 42px);
+  min-height: clamp(440px, 58vh, 720px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.walkthrough-stage:fullscreen .walkthrough-story-card strong,
+.walkthrough-stage.is-fullscreen .walkthrough-story-card strong {
+  font-size: clamp(3rem, 5vw, 5rem);
+  max-width: 14ch;
+}
+.walkthrough-stage:fullscreen .walkthrough-caption,
+.walkthrough-stage.is-fullscreen .walkthrough-caption {
+  max-width: 74ch;
+  font-size: 1.08rem;
+}
+.walkthrough-stage:fullscreen .walkthrough-pill-row,
+.walkthrough-stage.is-fullscreen .walkthrough-pill-row {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.walkthrough-stage:fullscreen .walkthrough-controls,
+.walkthrough-stage.is-fullscreen .walkthrough-controls {
+  margin-top: 24px;
+}
+.walkthrough-stage:fullscreen .walkthrough-progress-block,
+.walkthrough-stage.is-fullscreen .walkthrough-progress-block {
+  margin-top: 14px;
 }
 .walkthrough-progress-block {
   position: relative;

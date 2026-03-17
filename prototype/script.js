@@ -925,6 +925,7 @@ const walkthroughFallback = document.getElementById("walkthrough-fallback");
 const walkthroughPlay = document.getElementById("walkthrough-play");
 const walkthroughPause = document.getElementById("walkthrough-pause");
 const walkthroughRestart = document.getElementById("walkthrough-restart");
+const walkthroughFullscreen = document.getElementById("walkthrough-fullscreen");
 
 const walkthroughSegments = [
   {
@@ -1012,6 +1013,33 @@ function updateWalkthroughButtons() {
   if (walkthroughPause) walkthroughPause.textContent = walkthroughState.isPaused ? "Resume" : "Pause";
 }
 
+function canUseWalkthroughFullscreen() {
+  return Boolean(
+    walkthroughStage &&
+    typeof walkthroughStage.requestFullscreen === "function" &&
+    typeof document.exitFullscreen === "function" &&
+    document.fullscreenEnabled !== false
+  );
+}
+
+function updateWalkthroughFullscreenButton() {
+  if (!walkthroughStage || !walkthroughFullscreen) return;
+
+  const isFullscreen = document.fullscreenElement === walkthroughStage;
+  const canUseFullscreen = canUseWalkthroughFullscreen();
+
+  walkthroughStage.classList.toggle("is-fullscreen", isFullscreen);
+  walkthroughFullscreen.textContent = isFullscreen ? "Exit Full Screen" : "Full Screen";
+  walkthroughFullscreen.disabled = !canUseFullscreen;
+  walkthroughFullscreen.setAttribute("aria-pressed", isFullscreen ? "true" : "false");
+
+  if (canUseFullscreen) {
+    walkthroughFullscreen.removeAttribute("title");
+  } else {
+    walkthroughFullscreen.title = "Full screen is not available in this browser";
+  }
+}
+
 function renderWalkthroughChapters() {
   if (!walkthroughChapters) return;
   walkthroughChapters.innerHTML = walkthroughSegments.map((segment, index) => `
@@ -1049,6 +1077,7 @@ function renderWalkthrough() {
   if (walkthroughStatus && !walkthroughState.isPlaying && !walkthroughState.isPaused) walkthroughStatus.textContent = `Ready: chapter ${walkthroughState.index + 1} of ${walkthroughSegments.length}`;
   renderWalkthroughChapters();
   updateWalkthroughButtons();
+  updateWalkthroughFullscreenButton();
 }
 
 function stopWalkthrough() {
@@ -1156,9 +1185,30 @@ function pauseWalkthrough() {
   }
 }
 
+async function toggleWalkthroughFullscreen() {
+  if (!walkthroughStage || !walkthroughFullscreen) return;
+
+  if (!canUseWalkthroughFullscreen()) {
+    if (walkthroughStatus) walkthroughStatus.textContent = "Full screen is not available in this browser";
+    return;
+  }
+
+  try {
+    if (document.fullscreenElement === walkthroughStage) {
+      await document.exitFullscreen();
+    } else {
+      await walkthroughStage.requestFullscreen();
+    }
+  } catch (error) {
+    if (walkthroughStatus) walkthroughStatus.textContent = "Full screen could not start in this browser";
+  }
+}
+
 if (walkthroughPlay) walkthroughPlay.addEventListener("click", () => startWalkthrough());
 if (walkthroughPause) walkthroughPause.addEventListener("click", pauseWalkthrough);
 if (walkthroughRestart) walkthroughRestart.addEventListener("click", () => startWalkthrough(true));
+if (walkthroughFullscreen) walkthroughFullscreen.addEventListener("click", toggleWalkthroughFullscreen);
+document.addEventListener("fullscreenchange", updateWalkthroughFullscreenButton);
 if ("speechSynthesis" in window) {
   window.speechSynthesis.onvoiceschanged = () => renderWalkthrough();
 }
