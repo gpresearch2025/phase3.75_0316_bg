@@ -21,6 +21,7 @@
       </div>
       <nav class="top-nav">
         <a href="#overview">Overview</a>
+        <a href="#walkthrough">Walkthrough</a>
         <a href="#control-plane">Control</a>
         <a href="#decisions">Decisions</a>
         <a href="#lanes">Lanes</a>
@@ -65,8 +66,9 @@
               <span class="trust-pill">Fail-closed enforcement</span>
               <span class="trust-pill">Append-only audit</span>
             </div>
-            <div class="hero-actions">
-              <a href="#workspace" class="button button-primary">Launch Workspace</a>
+                        <div class="hero-actions">
+              <a href="#walkthrough" class="button button-primary">Play Boss Walkthrough</a>
+              <a href="#workspace" class="button button-secondary">Launch Workspace</a>
               <a href="#handoff" class="button button-secondary">See Build Surfaces</a>
             </div>
             <div class="signal-strip">
@@ -144,6 +146,76 @@
         </aside>
       </section>
 
+      <section id="walkthrough" class="panel walkthrough-panel reveal delay-1">
+        <div class="section-header walkthrough-header">
+          <div>
+            <p class="eyebrow">Boss Walkthrough</p>
+            <h2>A plain-English explainer you can just press play</h2>
+            <p class="hero-text">This front-page walkthrough explains the site in easy terms, with a built-in voice narration and closed captions that mirror the script. It is designed to feel like a calm six-to-seven-minute presentation for a manager or boss.</p>
+          </div>
+          <article class="walkthrough-intro-card">
+            <span class="mini-label">Estimated run time</span>
+            <strong>6-7 minutes</strong>
+            <p>Voice narration, synced captions, and chapter jumping all stay inside the page.</p>
+          </article>
+        </div>
+        <div class="walkthrough-layout">
+          <article id="walkthrough-stage" class="walkthrough-stage panel-dark" data-theme="trust">
+            <div class="walkthrough-stage-head">
+              <div>
+                <p class="mini-label">Narrated reel</p>
+                <h3 id="walkthrough-title">Why this product exists</h3>
+                <p id="walkthrough-summary" class="walkthrough-summary">A simple story about safe AI, patient control, and why this matters to the business.</p>
+              </div>
+              <div class="walkthrough-badge-stack">
+                <span class="walkthrough-badge">Voice overlay</span>
+                <span class="walkthrough-badge">Captions on</span>
+              </div>
+            </div>
+            <div class="walkthrough-screen">
+              <p id="walkthrough-kicker" class="walkthrough-kicker">What this is</p>
+              <div class="walkthrough-story-card">
+                <span id="walkthrough-step" class="walkthrough-step">Chapter 1 of 8</span>
+                <strong id="walkthrough-hook">A safer way to use health context with AI.</strong>
+                <p id="walkthrough-cc" class="walkthrough-caption" aria-live="polite">Press play to hear the narrated walkthrough. The captions will repeat the voice script here.</p>
+              </div>
+              <div id="walkthrough-pills" class="walkthrough-pill-row"></div>
+            </div>
+            <div class="walkthrough-controls">
+              <button id="walkthrough-play" class="button button-primary" type="button">Play Voice Walkthrough</button>
+              <button id="walkthrough-pause" class="button button-secondary" type="button">Pause</button>
+              <button id="walkthrough-restart" class="button button-secondary" type="button">Restart</button>
+            </div>
+            <div class="walkthrough-progress-block">
+              <div class="walkthrough-progress-bar"><span id="walkthrough-progress-fill"></span></div>
+              <div class="walkthrough-progress-meta">
+                <span id="walkthrough-status">Ready to play</span>
+                <span>Closed captions repeat the voice script</span>
+              </div>
+            </div>
+            <p id="walkthrough-fallback" class="walkthrough-fallback">If your browser blocks speech, the captions and chapter buttons still give you the full talk track.</p>
+          </article>
+          <div class="walkthrough-sidebar">
+            <article class="preview-card soft-card">
+              <p class="mini-label">Boss takeaway</p>
+              <h3>Consentext helps people use AI with health context without losing control of what leaves the system.</h3>
+              <p>This explainer leads with the business meaning first, then shows the trust controls in simple language.</p>
+            </article>
+            <article class="preview-card">
+              <p class="mini-label">Chapter map</p>
+              <div id="walkthrough-chapters" class="walkthrough-chapters"></div>
+            </article>
+            <article class="preview-card soft-card">
+              <p class="mini-label">Recommended live sequence</p>
+              <ul class="check-list">
+                <li>Play the opening chapters to frame the problem and product in plain English.</li>
+                <li>Jump to the lane explanation when trust and capability tradeoffs come up.</li>
+                <li>Close on clinician sharing, operations, and audit proof for the business takeaway.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
       <section id="control-plane" class="panel control-plane-panel reveal delay-1">
         <div class="section-header">
           <p class="eyebrow">Data vs control</p>
@@ -788,3 +860,6 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+
+

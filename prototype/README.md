@@ -6,6 +6,7 @@ This prototype is now aligned to the March 17, 2026 internal handoff memo.
 `03.17.26/Consentext_Phase_3_75_Internal_Handoff_Notes_03.17.26.docx` is the precedence source when documents overlap.
 
 What the prototype now includes:
+- A boss-friendly narrated walkthrough with built-in voice playback and closed captions
 - A March 17 source-of-truth section that separates settled direction from open decisions
 - A lane model that keeps Deterministic, Private, Private+, Max Intelligence, and Off-Board distinct
 - Explicit treatment of the Private lane as a required internal protected model
@@ -16,8 +17,9 @@ What the prototype now includes:
 - Governed bundle previews that distinguish Private+ from Max Intelligence behavior
 
 Recommended review path:
-1. Start with the overview, control-plane split, and March 17 decisions section.
-2. Review the lane cards to confirm the five-lane model and the locked Private requirement.
-3. Use the workspace to switch between AI export, clinician share, and API consumer policy shapes.
-4. Run gateway routing with and without broader context selected.
-5. Inspect the Ops and Audit tabs to review trust events and minimal internal tooling scope.
+1. Start with the front-page Boss Walkthrough if you want the simplest executive summary.
+2. Review the overview, control-plane split, and March 17 decisions section.
+3. Review the lane cards to confirm the five-lane model and the locked Private requirement.
+4. Use the workspace to switch between AI export, clinician share, and API consumer policy shapes.
+5. Run gateway routing with and without broader context selected.
+6. Inspect the Ops and Audit tabs to review trust events and minimal internal tooling scope.

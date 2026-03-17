@@ -909,3 +909,257 @@ renderControlStatus();
 renderOps();
 addAudit("consent_policy_created", "Initial prototype policy loaded using the March 17 control-plane defaults.");
 addAudit("auth_login", "User entered the prototype workspace and established an authenticated session.");
+
+const walkthroughStage = document.getElementById("walkthrough-stage");
+const walkthroughTitle = document.getElementById("walkthrough-title");
+const walkthroughSummary = document.getElementById("walkthrough-summary");
+const walkthroughKicker = document.getElementById("walkthrough-kicker");
+const walkthroughStep = document.getElementById("walkthrough-step");
+const walkthroughHook = document.getElementById("walkthrough-hook");
+const walkthroughCC = document.getElementById("walkthrough-cc");
+const walkthroughPills = document.getElementById("walkthrough-pills");
+const walkthroughStatus = document.getElementById("walkthrough-status");
+const walkthroughProgressFill = document.getElementById("walkthrough-progress-fill");
+const walkthroughChapters = document.getElementById("walkthrough-chapters");
+const walkthroughFallback = document.getElementById("walkthrough-fallback");
+const walkthroughPlay = document.getElementById("walkthrough-play");
+const walkthroughPause = document.getElementById("walkthrough-pause");
+const walkthroughRestart = document.getElementById("walkthrough-restart");
+
+const walkthroughSegments = [
+  {
+    theme: "trust",
+    kicker: "What this is",
+    title: "Consentext in one sentence",
+    summary: "This chapter explains the product in plain language before the architecture starts showing up.",
+    hook: "A safer way to use health context with AI.",
+    pills: ["Patient control first", "Safe AI access", "Easy boss-level framing"],
+    speech: "Here is the simplest way to think about Consentext. It is a control layer that sits between a person's health information and any outside AI or external system. The point is not to block innovation. The point is to let people use powerful tools without losing control of what leaves the system. If you were explaining this to a boss in one sentence, you could say Consentext makes health data useful without making it reckless. Instead of letting raw information spill straight into a chatbot or partner tool, the platform creates a governed path, decides what is appropriate, and records what happened. That is the big idea the rest of the site is trying to prove."
+  },
+  {
+    theme: "problem",
+    kicker: "Why it matters",
+    title: "The problem people already feel",
+    summary: "The site solves the gap between wanting AI help and not wanting to expose sensitive health details carelessly.",
+    hook: "People want AI help, but they do not want to throw private records into the open.",
+    pills: ["Fear of oversharing", "Need for useful guidance", "Trust gap in current tools"],
+    speech: "The reason this matters is that most people already feel a tension. They want smart help. They want explanations, comparisons, and guidance. But they also know that pasting raw health records into a public AI tool is risky and hard to take back. That trust gap is where Consentext sits. The site shows that we do not need to choose between no help at all and total exposure. We can define rules, route each request to the right level of intelligence, and make the user experience feel understandable instead of scary. That is why the design keeps returning to phrases like minimum necessary, protected model, and audit trail. Those are not just technical controls. They are the trust story."
+  },
+  {
+    theme: "architecture",
+    kicker: "How it is shaped",
+    title: "The vault stays separate from the control layer",
+    summary: "This chapter explains the most important product design choice: data storage and disclosure decisions are not the same thing.",
+    hook: "The vault holds context. The control plane decides what, if anything, can leave.",
+    pills: ["Vault for context", "Control plane for decisions", "Gateway for outside movement"],
+    speech: "A helpful way to walk your boss through the architecture is to keep it simple. The vault is where the health context lives. That includes stored information, incoming feeds, and the views people use to understand their data. The control plane is a different layer. That is where the trust kernel, consent logic, policy rules, minimization, de-identification, and audit trail live. Then the AI gateway becomes the only governed path out to outside systems. The reason the site emphasizes this split is that it keeps the product honest. Storing health context is one job. Deciding what can leave is another. Consentext is strongest when those jobs are clearly separated and visibly governed."
+  },
+  {
+    theme: "routing",
+    kicker: "How requests move",
+    title: "Every request gets routed to a lane",
+    summary: "The lane model is how the product turns trust policy into a user-facing decision about capability and exposure.",
+    hook: "Not every question deserves the same level of AI or the same level of disclosure.",
+    pills: ["Five distinct lanes", "Capability matched to risk", "Real-world off-board path acknowledged"],
+    speech: "Once you understand the split between stored context and governed disclosure, the next idea is the lane model. Every request is not treated the same. Some requests do not need AI at all and can stay deterministic. Some need a protected internal explanation. Some can use outside AI with only reduced context. Some may justify a broader governed route for maximum intelligence. And some users will choose to leave the system entirely, which is why the site shows an off-board path instead of pretending it does not exist. This is an easy business concept to repeat back. The product is not one giant yes or no to AI. It is a controlled routing system that matches capability to risk."
+  },
+  {
+    theme: "private",
+    kicker: "The trust promise",
+    title: "Private and Private+ are not the same thing",
+    summary: "This chapter explains the most important distinction in the demo: the internal protected lane is mandatory, and the narrow external lane stays intentionally narrow.",
+    hook: "Private means the sensitive explanation stays inside. Private+ means outside help gets only the minimum needed.",
+    pills: ["Private is required", "Private+ is narrow by default", "Useful help without broad exposure"],
+    speech: "One of the biggest March decisions was that Private and Private Plus should never be flattened into the same product promise. Private is the locked internal lane. It means sensitive health context can be used for explanation without leaving Consentext-controlled systems. That is not optional in this phase. Private Plus is different. It is the lane for outside help when reduced, minimum necessary, or de-identified context is enough. This is important because it lets the product be both useful and disciplined. You are not telling the market that every outside AI request gets the same broad context. You are telling them there is a controlled middle ground where the user still gets value without unnecessary exposure."
+  },
+  {
+    theme: "max",
+    kicker: "Higher capability",
+    title: "Max Intelligence allows broader governed reasoning",
+    summary: "This chapter gives the boss-friendly explanation for why Max Intelligence exists and why it is still different from simply leaving the platform.",
+    hook: "Sometimes the user needs stronger reasoning, but still wants Consentext in front of the exchange.",
+    pills: ["Broader user authorization", "Still governed", "Different from off-board freedom"],
+    speech: "Max Intelligence exists for the moments when narrow context is not enough. Maybe the user wants a deeper comparison, broader reasoning, or a more powerful answer than the minimum necessary route can provide. The key is that Consentext still stays in front of that exchange. The user can authorize broader context, but the action is still governed, visible, and intentional. That is what makes it different from simply going off-board to a frontier tool alone. Off-board means the user leaves the protected environment. Max Intelligence means the user gets stronger capability while the platform still controls the path, the permissions, and the proof. That distinction matters strategically because it preserves freedom without giving up the product relationship."
+  },
+  {
+    theme: "sharing",
+    kicker: "Real-world workflow",
+    title: "Clinician sharing and internal operations are part of the story now",
+    summary: "The explainer needs to show that the product is not only about AI. It also supports patient-authorized sharing and a minimal internal operations view.",
+    hook: "People need to share safely with doctors, and the internal team needs enough visibility to support the system.",
+    pills: ["Patient-authorized clinician share", "No promised staff portal yet", "Minimal ops console"],
+    speech: "Another important update is that the story is not only about AI prompts. The system also needs a real patient-authorized clinician sharing path. That means a person can scope what should be shared with a doctor, clinic, or hospital, even if the full clinician-facing portal is not part of the first pass. On top of that, the internal team still needs a minimum operations surface. They need audit lookup, troubleshooting, and visibility into what the system is doing. The site now explains both of those points in plain language. That makes the demo more believable because it shows how the product works in real life, not just as an abstract architecture diagram."
+  },
+  {
+    theme: "outcome",
+    kicker: "What to repeat back",
+    title: "The business takeaway for your boss",
+    summary: "This closing chapter gives you the short version to repeat after the walkthrough ends.",
+    hook: "Consentext turns trust into a product feature, not a legal footnote.",
+    pills: ["Useful AI with control", "Modular for growth", "Visible proof of trust"],
+    speech: "If you want a clean closing line for your boss, use this. Consentext is building the governance and interaction layer that makes health context useful, shareable, and auditable without treating every request the same way. The product matters because it turns trust into something operational. It gives people a safer internal path, a narrow governed outside path, a broader governed path when they truly want it, and a visible record of what happened. It also stays modular enough for later provider adapters, clinician workflows, and integrations. In short, the site is showing a platform that can grow in capability without abandoning discipline. That is the story this walkthrough is meant to make easy to understand and easy to retell."
+  }
+];
+
+const walkthroughState = {
+  index: 0,
+  isPlaying: false,
+  isPaused: false,
+  runId: 0
+};
+
+function updateWalkthroughButtons() {
+  if (walkthroughPause) walkthroughPause.textContent = walkthroughState.isPaused ? "Resume" : "Pause";
+}
+
+function renderWalkthroughChapters() {
+  if (!walkthroughChapters) return;
+  walkthroughChapters.innerHTML = walkthroughSegments.map((segment, index) => `
+    <button type="button" class="walkthrough-chapter ${index === walkthroughState.index ? "is-active" : ""}" data-walkthrough-index="${index}">
+      <span>Chapter ${index + 1}</span>
+      <strong>${segment.title}</strong>
+      <p>${segment.hook}</p>
+    </button>
+  `).join("");
+
+  walkthroughChapters.querySelectorAll(".walkthrough-chapter").forEach((button) => {
+    button.addEventListener("click", () => {
+      const targetIndex = Number(button.dataset.walkthroughIndex);
+      const shouldResume = walkthroughState.isPlaying || walkthroughState.isPaused;
+      stopWalkthrough();
+      walkthroughState.index = targetIndex;
+      renderWalkthrough();
+      if (shouldResume) startWalkthrough();
+    });
+  });
+}
+
+function renderWalkthrough() {
+  if (!walkthroughStage) return;
+  const segment = walkthroughSegments[walkthroughState.index];
+  walkthroughStage.dataset.theme = segment.theme;
+  if (walkthroughTitle) walkthroughTitle.textContent = segment.title;
+  if (walkthroughSummary) walkthroughSummary.textContent = segment.summary;
+  if (walkthroughKicker) walkthroughKicker.textContent = segment.kicker;
+  if (walkthroughStep) walkthroughStep.textContent = `Chapter ${walkthroughState.index + 1} of ${walkthroughSegments.length}`;
+  if (walkthroughHook) walkthroughHook.textContent = segment.hook;
+  if (walkthroughCC) walkthroughCC.textContent = segment.speech;
+  if (walkthroughPills) walkthroughPills.innerHTML = segment.pills.map((pill) => `<span class="walkthrough-pill">${pill}</span>`).join("");
+  if (walkthroughProgressFill) walkthroughProgressFill.style.width = `${((walkthroughState.index + 1) / walkthroughSegments.length) * 100}%`;
+  if (walkthroughStatus && !walkthroughState.isPlaying && !walkthroughState.isPaused) walkthroughStatus.textContent = `Ready: chapter ${walkthroughState.index + 1} of ${walkthroughSegments.length}`;
+  renderWalkthroughChapters();
+  updateWalkthroughButtons();
+}
+
+function stopWalkthrough() {
+  walkthroughState.runId += 1;
+  walkthroughState.isPlaying = false;
+  walkthroughState.isPaused = false;
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  updateWalkthroughButtons();
+}
+
+function pickWalkthroughVoice() {
+  if (!("speechSynthesis" in window)) return null;
+  const voices = window.speechSynthesis.getVoices().filter((voice) => /en/i.test(voice.lang));
+  return voices.find((voice) => /Samantha|Google US English|Microsoft Zira|Aria|Jenny/i.test(voice.name)) || voices[0] || null;
+}
+
+function speakWalkthroughSegment() {
+  if (!("speechSynthesis" in window)) {
+    if (walkthroughStatus) walkthroughStatus.textContent = "Voice unavailable in this browser";
+    if (walkthroughFallback) walkthroughFallback.textContent = "This browser does not expose speech synthesis, so use the chapter buttons and captions as the full script.";
+    walkthroughState.isPlaying = false;
+    updateWalkthroughButtons();
+    return;
+  }
+
+  const currentRun = ++walkthroughState.runId;
+  const segment = walkthroughSegments[walkthroughState.index];
+  const utterance = new SpeechSynthesisUtterance(segment.speech);
+  const voice = pickWalkthroughVoice();
+  if (voice) utterance.voice = voice;
+  utterance.rate = 0.96;
+  utterance.pitch = 1;
+
+  utterance.onstart = () => {
+    walkthroughState.isPlaying = true;
+    walkthroughState.isPaused = false;
+    if (walkthroughStatus) walkthroughStatus.textContent = `Playing chapter ${walkthroughState.index + 1} of ${walkthroughSegments.length}`;
+    if (walkthroughFallback) walkthroughFallback.textContent = "If your browser blocks speech, the captions and chapter buttons still give you the full talk track.";
+    updateWalkthroughButtons();
+  };
+
+  utterance.onend = () => {
+    if (currentRun !== walkthroughState.runId || walkthroughState.isPaused) return;
+    if (walkthroughState.index < walkthroughSegments.length - 1) {
+      walkthroughState.index += 1;
+      renderWalkthrough();
+      speakWalkthroughSegment();
+      return;
+    }
+    walkthroughState.isPlaying = false;
+    walkthroughState.isPaused = false;
+    if (walkthroughStatus) walkthroughStatus.textContent = "Walkthrough complete. Press restart to play it again.";
+    updateWalkthroughButtons();
+  };
+
+  utterance.onerror = () => {
+    walkthroughState.isPlaying = false;
+    walkthroughState.isPaused = false;
+    if (walkthroughStatus) walkthroughStatus.textContent = "Voice playback hit a browser limitation";
+    if (walkthroughFallback) walkthroughFallback.textContent = "Voice playback could not start here, but the captions still show the full script chapter by chapter.";
+    updateWalkthroughButtons();
+  };
+
+  renderWalkthrough();
+  window.speechSynthesis.cancel();
+  window.setTimeout(() => window.speechSynthesis.speak(utterance), 80);
+}
+
+function startWalkthrough(fromStart = false) {
+  if (!walkthroughStage) return;
+  if (fromStart) {
+    stopWalkthrough();
+    walkthroughState.index = 0;
+    renderWalkthrough();
+  }
+
+  if (walkthroughState.isPaused && "speechSynthesis" in window) {
+    window.speechSynthesis.resume();
+    walkthroughState.isPaused = false;
+    walkthroughState.isPlaying = true;
+    if (walkthroughStatus) walkthroughStatus.textContent = `Playing chapter ${walkthroughState.index + 1} of ${walkthroughSegments.length}`;
+    updateWalkthroughButtons();
+    return;
+  }
+
+  if (walkthroughState.isPlaying) return;
+  speakWalkthroughSegment();
+}
+
+function pauseWalkthrough() {
+  if (!walkthroughStage || !("speechSynthesis" in window)) return;
+  if (walkthroughState.isPlaying && !walkthroughState.isPaused) {
+    window.speechSynthesis.pause();
+    walkthroughState.isPaused = true;
+    walkthroughState.isPlaying = false;
+    if (walkthroughStatus) walkthroughStatus.textContent = `Paused on chapter ${walkthroughState.index + 1}`;
+    updateWalkthroughButtons();
+    return;
+  }
+
+  if (walkthroughState.isPaused) {
+    startWalkthrough();
+  }
+}
+
+if (walkthroughPlay) walkthroughPlay.addEventListener("click", () => startWalkthrough());
+if (walkthroughPause) walkthroughPause.addEventListener("click", pauseWalkthrough);
+if (walkthroughRestart) walkthroughRestart.addEventListener("click", () => startWalkthrough(true));
+if ("speechSynthesis" in window) {
+  window.speechSynthesis.onvoiceschanged = () => renderWalkthrough();
+}
+renderWalkthrough();

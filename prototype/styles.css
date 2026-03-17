@@ -1174,3 +1174,245 @@ input:focus {
     grid-template-columns: 1fr;
   }
 }
+
+.walkthrough-panel {
+  border-color: rgba(15, 93, 76, 0.22);
+  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(239,244,241,0.94));
+}
+.walkthrough-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: start;
+}
+.walkthrough-intro-card {
+  min-width: 240px;
+  max-width: 280px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(15, 93, 76, 0.12);
+  background: linear-gradient(180deg, rgba(245,250,248,0.96), rgba(255,255,255,0.92));
+  box-shadow: var(--shadow-sm);
+}
+.walkthrough-intro-card strong,
+.walkthrough-story-card strong {
+  display: block;
+}
+.walkthrough-layout,
+.walkthrough-sidebar,
+.walkthrough-controls,
+.walkthrough-progress-meta,
+.walkthrough-stage-head,
+.walkthrough-badge-stack,
+.walkthrough-pill-row,
+.walkthrough-chapters {
+  display: grid;
+  gap: 14px;
+}
+.walkthrough-layout {
+  grid-template-columns: minmax(0, 1.3fr) minmax(300px, 0.7fr);
+  align-items: start;
+}
+.walkthrough-sidebar {
+  grid-template-columns: 1fr;
+}
+.walkthrough-stage {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  min-height: 100%;
+}
+.walkthrough-stage::before {
+  content: "";
+  position: absolute;
+  inset: -10% auto auto -10%;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%);
+  pointer-events: none;
+}
+.walkthrough-stage[data-theme="trust"] {
+  background: linear-gradient(160deg, #152f28, #10211d 55%, #0d1715);
+}
+.walkthrough-stage[data-theme="problem"] {
+  background: linear-gradient(160deg, #34251f, #241915 55%, #17100e);
+}
+.walkthrough-stage[data-theme="architecture"] {
+  background: linear-gradient(160deg, #142b34, #102129 55%, #0b1418);
+}
+.walkthrough-stage[data-theme="routing"] {
+  background: linear-gradient(160deg, #233118, #172410 55%, #10180b);
+}
+.walkthrough-stage[data-theme="private"] {
+  background: linear-gradient(160deg, #153124, #11261c 55%, #0c1712);
+}
+.walkthrough-stage[data-theme="max"] {
+  background: linear-gradient(160deg, #23193d, #18102b 55%, #120c1f);
+}
+.walkthrough-stage[data-theme="sharing"] {
+  background: linear-gradient(160deg, #3a2417, #28190f 55%, #1a1009);
+}
+.walkthrough-stage[data-theme="outcome"] {
+  background: linear-gradient(160deg, #122f31, #0f2224 55%, #0c1717);
+}
+.walkthrough-stage-head {
+  position: relative;
+  z-index: 1;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+.walkthrough-summary,
+.walkthrough-fallback,
+.walkthrough-progress-meta span,
+.walkthrough-chapter p {
+  color: rgba(237, 243, 240, 0.78);
+}
+.walkthrough-badge-stack {
+  justify-items: end;
+}
+.walkthrough-badge,
+.walkthrough-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: #f3f7f5;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.walkthrough-screen {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.walkthrough-kicker {
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e7bf89;
+}
+.walkthrough-story-card {
+  display: grid;
+  gap: 12px;
+}
+.walkthrough-step {
+  display: inline-flex;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(237,243,240,0.88);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.walkthrough-story-card strong {
+  font-family: "Playfair Display", "Times New Roman", serif;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  line-height: 1.02;
+  color: #f5f7f6;
+  max-width: 12ch;
+}
+.walkthrough-caption {
+  max-width: 62ch;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: rgba(243,247,245,0.92);
+}
+.walkthrough-pill-row {
+  margin-top: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+.walkthrough-controls {
+  position: relative;
+  z-index: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 18px;
+}
+.walkthrough-progress-block {
+  position: relative;
+  z-index: 1;
+  margin-top: 8px;
+}
+.walkthrough-progress-bar {
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.08);
+}
+.walkthrough-progress-bar span {
+  display: block;
+  height: 100%;
+  width: 12.5%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #efbf84, #68c8b9);
+  transition: width 280ms ease;
+}
+.walkthrough-progress-meta {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 10px;
+  font-size: 0.84rem;
+}
+.walkthrough-chapters {
+  margin-top: 12px;
+}
+.walkthrough-chapter {
+  width: 100%;
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 93, 76, 0.12);
+  background: rgba(255,255,255,0.78);
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.walkthrough-chapter span {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--warm);
+}
+.walkthrough-chapter strong {
+  color: var(--text);
+}
+.walkthrough-chapter:hover,
+.walkthrough-chapter.is-active {
+  transform: translateY(-2px);
+  border-color: rgba(15, 93, 76, 0.32);
+  box-shadow: var(--shadow-sm);
+}
+@media (max-width: 1280px) {
+  .walkthrough-layout,
+  .walkthrough-header,
+  .walkthrough-stage-head,
+  .walkthrough-progress-meta {
+    grid-template-columns: 1fr;
+  }
+  .walkthrough-badge-stack {
+    justify-items: start;
+  }
+}
+@media (max-width: 760px) {
+  .walkthrough-controls {
+    grid-template-columns: 1fr;
+  }
+  .walkthrough-screen,
+  .walkthrough-stage {
+    padding: 18px;
+  }
+  .walkthrough-story-card strong {
+    max-width: none;
+  }
+}
