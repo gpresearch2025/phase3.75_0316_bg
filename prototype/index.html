@@ -21,6 +21,8 @@
           </div>
         </div>
         <div class="topbar-actions">
+          <button id="boss-mode-toggle" class="topbar-toggle topbar-toggle-secondary" type="button" aria-pressed="false">Boss mode off</button>
+          <button id="theme-toggle" class="topbar-toggle topbar-toggle-secondary" type="button" aria-pressed="false">Light theme</button>
           <button id="focus-mode-toggle" class="topbar-toggle topbar-toggle-secondary" type="button" aria-pressed="false">Focus mode off</button>
           <button id="topbar-toggle" class="topbar-toggle" type="button" aria-expanded="true" aria-controls="top-nav">Minimize header</button>
         </div>
@@ -28,14 +30,14 @@
       <nav id="top-nav" class="top-nav">
         <a href="#overview">Overview</a>
         <a href="#walkthrough">Walkthrough</a>
-        <a href="#control-plane">Control</a>
-        <a href="#decisions">Decisions</a>
-        <a href="#lanes">Lanes</a>
-        <a href="#workflow" data-focus-link="true">Flow</a>
-        <a href="#workstreams" data-focus-link="true">Workstreams</a>
-        <a href="#workspace" data-focus-link="true">Workspace</a>
-        <a href="#audit" data-focus-link="true">Audit</a>
-        <a href="#handoff" data-focus-link="true">Handoff</a>
+        <a href="#control-plane" data-boss-link="true">Control</a>
+        <a href="#decisions" data-boss-link="true">Decisions</a>
+        <a href="#lanes" data-boss-link="true">Lanes</a>
+        <a href="#workflow" data-focus-link="true" data-boss-link="true">Flow</a>
+        <a href="#workstreams" data-focus-link="true" data-boss-link="true">Workstreams</a>
+        <a href="#workspace" data-focus-link="true" data-boss-link="true">Workspace</a>
+        <a href="#audit" data-focus-link="true" data-boss-link="true">Audit</a>
+        <a href="#handoff" data-focus-link="true" data-boss-link="true">Handoff</a>
       </nav>
     </header>
 
@@ -98,10 +100,11 @@
               <span class="trust-pill">Fail-closed enforcement</span>
               <span class="trust-pill">Append-only audit</span>
             </div>
-                        <div class="hero-actions">
+            <div class="hero-actions">
               <a href="#walkthrough" class="button button-primary">Play Boss Walkthrough</a>
-              <a href="#workspace" class="button button-secondary">Launch Workspace</a>
-              <a href="#handoff" class="button button-secondary">See Build Surfaces</a>
+              <button id="hero-boss-toggle" class="button button-secondary" type="button">Turn Boss Mode On</button>
+              <a href="executive-brief.html" class="button button-secondary">Open Executive Brief</a>
+              <a href="#artifacts" class="button button-secondary">Open Artifact Center</a>
             </div>
             <div class="signal-strip">
               <article class="signal-card">
@@ -252,7 +255,196 @@
           </div>
         </div>
       </section>
-      <section id="control-plane" class="panel control-plane-panel reveal delay-1">
+      <section id="presentation-suite" class="panel presentation-suite reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Presentation Kit</p>
+          <h2>Everything you need for a cleaner boss-facing demo</h2>
+          <p class="hero-text">This layer keeps the prototype explainable in the room and shareable after the meeting, with boss mode, the light enterprise theme, the printable brief, and the downloadable walkthrough all in one place.</p>
+        </div>
+        <div class="presentation-grid">
+          <article class="presentation-card preview-card soft-card">
+            <p class="mini-label">Boss Mode</p>
+            <h3>Simplify the page for leadership review</h3>
+            <p>Hide the deeper build and operator sections so the page reads as a concise product story instead of a working prototype.</p>
+            <div class="artifact-actions">
+              <button id="presentation-boss-toggle" class="button button-primary" type="button">Turn Boss Mode On</button>
+            </div>
+          </article>
+          <article class="presentation-card preview-card">
+            <p class="mini-label">Theme Option</p>
+            <h3>Switch to a lighter enterprise look</h3>
+            <p id="theme-status">The current presentation starts in the darker technical theme. Switch when you want a cleaner boardroom feel.</p>
+            <div class="artifact-actions">
+              <button id="presentation-theme-toggle" class="button button-secondary" type="button">Switch to Light Theme</button>
+            </div>
+          </article>
+          <article class="presentation-card preview-card soft-card">
+            <p class="mini-label">Executive Brief</p>
+            <h3>Use the one-page summary after the live walkthrough</h3>
+            <p>Open the clean brief in the browser, print it directly, or download the generated PDF version for easy forwarding.</p>
+            <div class="artifact-actions">
+              <a href="executive-brief.html" class="button button-secondary">Open Brief</a>
+              <button id="print-brief" class="button button-secondary" type="button">Print Brief</button>
+              <a href="assets/executive-brief/consentext-phase-3-75-executive-brief.pdf" class="button button-secondary" download>Download PDF</a>
+            </div>
+          </article>
+          <article class="presentation-card preview-card panel-dark">
+            <p class="mini-label">Narrated MP4</p>
+            <h3>Download the walkthrough as a real video</h3>
+            <video class="walkthrough-video-player" controls preload="metadata">
+              <source src="assets/walkthrough-video/consentext-boss-walkthrough.mp4" type="video/mp4">
+            </video>
+            <div class="artifact-actions">
+              <a href="assets/walkthrough-video/consentext-boss-walkthrough.mp4" class="button button-primary" download>Download MP4</a>
+              <a href="assets/walkthrough-video/consentext-boss-walkthrough.srt" class="button button-secondary" download>Download Captions</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="presets" class="panel scenario-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Scenario Presets</p>
+          <h2>Tell the story with a few fast reusable demo states</h2>
+          <p class="hero-text">Each preset applies a clean policy posture, swaps to the right tab, and moves the prototype into a ready-to-explain state for a specific stakeholder question.</p>
+        </div>
+        <div id="scenario-grid" class="scenario-grid"></div>
+      </section>
+
+      <section id="lane-compare" class="panel lane-compare-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Lane Comparison</p>
+          <h2>Show the difference between safety, utility, and freedom at a glance</h2>
+          <p class="hero-text">This side-by-side view makes it easier to explain why Private, Private+, Max Intelligence, and Off-Board are distinct product promises instead of one blended AI mode.</p>
+        </div>
+        <div id="lane-comparison-grid" class="lane-comparison-grid"></div>
+      </section>
+
+      <section id="trust-flow" class="panel trust-flow-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Animated Trust Flow</p>
+          <h2>The product story from context to proof</h2>
+          <p class="hero-text">The trust flow makes the control boundary easier to explain live: context starts in the vault, policy narrows what can move, lane routing decides capability, the gateway enforces the route, and the audit trail proves what happened.</p>
+        </div>
+        <div class="trust-flow-shell">
+          <div class="trust-flow-rail" aria-hidden="true">
+            <span class="trust-flow-orb"></span>
+            <article class="trust-node">
+              <span class="mini-label">1</span>
+              <strong>Vault context</strong>
+              <p>Health context stays in Consentext custody.</p>
+            </article>
+            <article class="trust-node">
+              <span class="mini-label">2</span>
+              <strong>Policy check</strong>
+              <p id="trust-policy-summary">Minimum-necessary policy stays active.</p>
+            </article>
+            <article class="trust-node trust-node-live">
+              <span class="mini-label">3</span>
+              <strong id="trust-flow-lane">Private+</strong>
+              <p id="trust-flow-lane-summary">Current lane matches the active route.</p>
+            </article>
+            <article class="trust-node">
+              <span class="mini-label">4</span>
+              <strong id="trust-flow-gateway">Adapter-ready gateway</strong>
+              <p id="trust-flow-gateway-summary">The outbound path stays mediated by Consentext.</p>
+            </article>
+            <article class="trust-node">
+              <span class="mini-label">5</span>
+              <strong id="trust-flow-proof">Audit proof</strong>
+              <p id="trust-flow-proof-summary">Every route and share event leaves a legible proof trail.</p>
+            </article>
+          </div>
+          <div class="trust-flow-meta-grid">
+            <article class="preview-card soft-card">
+              <p class="mini-label">Active policy</p>
+              <strong id="trust-policy-id">policy-001</strong>
+              <p>Current share object controlling the route.</p>
+            </article>
+            <article class="preview-card soft-card">
+              <p class="mini-label">Recipient posture</p>
+              <strong id="trust-recipient-mode">AI export</strong>
+              <p>Destination class currently selected in the policy.</p>
+            </article>
+            <article class="preview-card panel-dark">
+              <p class="mini-label">Latest proof</p>
+              <strong id="trust-last-proof">consent_policy_created</strong>
+              <p id="trust-last-proof-note">Initial prototype policy loaded using the March 17 control-plane defaults.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="glossary" class="panel glossary-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Glossary</p>
+          <h2>Hover or focus the key terms when you want plain-English help</h2>
+          <p class="hero-text">These tooltips are meant for exactly the moment when a stakeholder asks what a phrase means and you want a short answer without dropping into internal jargon.</p>
+        </div>
+        <div class="glossary-grid">
+          <button type="button" class="glossary-term" data-definition="The trust kernel is the governance layer that decides what data may leave, in what form, and under which rules.">
+            <span>Trust kernel</span>
+            <small>The decision layer between health context and external use.</small>
+          </button>
+          <button type="button" class="glossary-term" data-definition="Minimum necessary means only the smallest useful subset of data leaves the system for the intended task.">
+            <span>Minimum necessary</span>
+            <small>The narrowest context that still gets the job done.</small>
+          </button>
+          <button type="button" class="glossary-term" data-definition="Protected model means the Private lane runs on an internal model inside Consentext-controlled systems, not a public external endpoint.">
+            <span>Protected model</span>
+            <small>The internal AI path required for the Private lane.</small>
+          </button>
+          <button type="button" class="glossary-term" data-definition="Off-Board means the user leaves Consentext protections and uses an outside AI tool directly.">
+            <span>Off-Board</span>
+            <small>The exit path when the user bypasses Consentext.</small>
+          </button>
+          <button type="button" class="glossary-term" data-definition="Adapter-ready means the gateway is designed so different provider implementations can be added later without redesigning the control layer.">
+            <span>Adapter-ready</span>
+            <small>The gateway stays modular while provider pricing is still open.</small>
+          </button>
+          <button type="button" class="glossary-term" data-definition="Patient-authorized clinician share means the patient chooses what to send to a doctor, clinic, or hospital without assuming a full staff portal already exists.">
+            <span>Clinician share</span>
+            <small>The scoped doctor, clinic, or hospital sharing path.</small>
+          </button>
+        </div>
+      </section>
+
+      <section id="artifacts" class="panel artifacts-panel reveal delay-1">
+        <div class="section-header">
+          <p class="eyebrow">Artifact Center</p>
+          <h2>Download the files that explain or prove the current state</h2>
+          <p class="hero-text">This is the shareable side of the prototype: the live policy export, the audit summary, the clinician packet preview, the executive brief, and the downloadable walkthrough media.</p>
+        </div>
+        <div class="artifact-grid">
+          <article class="artifact-card preview-card soft-card">
+            <p class="mini-label">Downloads</p>
+            <h3>Take the current story and state with you</h3>
+            <div class="artifact-actions">
+              <button id="download-policy" class="button button-primary" type="button">Download Policy JSON</button>
+              <button id="download-audit" class="button button-secondary" type="button">Download Audit Summary</button>
+              <button id="download-clinician-packet" class="button button-secondary" type="button">Download Clinician Packet</button>
+              <a href="executive-brief.html" class="button button-secondary">Open Brief</a>
+              <a href="assets/executive-brief/consentext-phase-3-75-executive-brief.pdf" class="button button-secondary" download>Download PDF</a>
+              <a href="assets/walkthrough-video/consentext-boss-walkthrough.mp4" class="button button-secondary" download>Download MP4</a>
+              <a href="assets/walkthrough-video/consentext-boss-walkthrough.srt" class="button button-secondary" download>Download Captions</a>
+            </div>
+          </article>
+          <article class="artifact-card panel-dark">
+            <p class="mini-label">Policy export preview</p>
+            <pre id="artifact-policy-preview" class="code-panel artifact-code"></pre>
+          </article>
+          <article class="artifact-card panel-dark">
+            <p class="mini-label">Audit summary preview</p>
+            <pre id="audit-summary-preview" class="code-panel artifact-code"></pre>
+          </article>
+          <article class="artifact-card panel-dark">
+            <p class="mini-label">Clinician packet preview</p>
+            <pre id="clinician-packet-preview" class="code-panel artifact-code"></pre>
+          </article>
+        </div>
+      </section>
+
+      <section id="control-plane" class="panel control-plane-panel reveal delay-1" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Data vs control</p>
           <h2>The split that Phase 3.75 protects</h2>
@@ -292,7 +484,7 @@
           </article>
         </div>
       </section>
-      <section id="decisions" class="panel decisions-panel reveal delay-1">
+      <section id="decisions" class="panel decisions-panel reveal delay-1" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">March 17 Source Of Truth</p>
           <h2>Settled direction versus open decisions</h2>
@@ -387,7 +579,7 @@
         </div>
       </section>
 
-      <section id="lanes" class="panel lanes-panel reveal delay-1">
+      <section id="lanes" class="panel lanes-panel reveal delay-1" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Exposure lanes</p>
           <h2>Privacy, capability, and control for every request</h2>
@@ -435,7 +627,7 @@
         </div>
       </section>
 
-      <section id="workstreams" class="panel workstreams-panel reveal delay-1" data-focus-hidden="true">
+      <section id="workstreams" class="panel workstreams-panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Workstreams</p>
           <h2>Parallel experiments, one governance alignment</h2>
@@ -444,7 +636,7 @@
         <div id="workstream-grid" class="workstream-grid"></div>
       </section>
 
-      <section class="panel dashboard-overview reveal delay-1" data-focus-hidden="true">
+      <section class="panel dashboard-overview reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Share Preview</p>
           <h2>Live-looking indicators for patient-authorized review</h2>
@@ -504,7 +696,7 @@
         </div>
       </section>
 
-      <section id="workflow" class="panel reveal delay-1" data-focus-hidden="true">
+      <section id="workflow" class="panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Workflow Spine</p>
           <h2>The governed request path</h2>
@@ -518,7 +710,7 @@
         </div>
       </section>
 
-      <section class="overview-grid reveal delay-2" data-focus-hidden="true">
+      <section class="overview-grid reveal delay-2" data-focus-hidden="true" data-boss-hidden="true">
         <article class="panel">
           <div class="section-header">
             <p class="eyebrow">Scope Clarification</p>
@@ -567,7 +759,7 @@
         </article>
       </section>
 
-      <section class="panel reveal" data-focus-hidden="true">
+      <section class="panel reveal" data-focus-hidden="true" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Vocabulary Alignment</p>
           <h2>Terms the prototype now carries forward</h2>
@@ -580,7 +772,7 @@
           <article class="definition-card"><strong>Outbound Flow</strong><p>Vault / Health Context Store to Control Plane to AI Gateway to External Systems.</p></article>
         </div>
       </section>
-      <section id="workspace" class="panel workspace-shell reveal delay-1" data-focus-hidden="true">
+      <section id="workspace" class="panel workspace-shell reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
         <div class="workspace-header">
           <div>
             <p class="eyebrow">Workspace</p>
@@ -781,24 +973,45 @@
               <h2>Minimum console, not a full internal product</h2>
               <p class="hero-text">This surface models the likely minimum requirement for Brayden, Fong, and later Huy: audit lookup, support troubleshooting, and operational visibility while broader admin scope stays open.</p>
             </div>
-            <div class="ops-grid">
-              <article class="preview-card soft-card">
-                <p class="mini-label">Likely in scope</p>
-                <ul class="check-list">
-                  <li>Audit lookup and event trace review</li>
-                  <li>Support troubleshooting for share state and route outcomes</li>
-                  <li>Basic operational visibility into active policy posture</li>
-                </ul>
+            <div class="ops-status-strip">
+              <article class="ops-status-card preview-card soft-card">
+                <p class="mini-label">Share lifecycle</p>
+                <strong id="ops-health-share">Healthy</strong>
+                <p id="ops-health-share-note">Active share is ready for governed use.</p>
               </article>
-              <article class="preview-card">
-                <p class="mini-label">Still open</p>
-                <ul class="check-list">
-                  <li>Large polished internal admin product</li>
-                  <li>Final user-management and account-control scope</li>
-                  <li>Configuration tooling beyond the minimum ops console</li>
-                </ul>
+              <article class="ops-status-card preview-card soft-card">
+                <p class="mini-label">Gateway routing</p>
+                <strong id="ops-health-gateway">Ready</strong>
+                <p id="ops-health-gateway-note">The current lane can be explained and replayed.</p>
               </article>
-              <article class="panel-dark preview-card">
+              <article class="ops-status-card preview-card soft-card">
+                <p class="mini-label">Audit proof</p>
+                <strong id="ops-health-audit">Visible</strong>
+                <p id="ops-health-audit-note">Trust events remain available for lookup and escalation.</p>
+              </article>
+            </div>
+            <div class="ops-console-grid">
+              <article class="preview-card soft-card ops-console-card">
+                <div class="ops-console-head">
+                  <div>
+                    <p class="mini-label">Event console</p>
+                    <h3>Search the trust trail</h3>
+                  </div>
+                  <label class="ops-search-field">
+                    <span>Search</span>
+                    <input id="ops-search" type="search" placeholder="Search routes, shares, policy, or off-board">
+                  </label>
+                </div>
+                <div class="filter-row ops-filter-row" id="ops-filters">
+                  <button class="filter-chip ops-filter-chip is-active" data-ops-filter="all">All</button>
+                  <button class="filter-chip ops-filter-chip" data-ops-filter="allow">Allow</button>
+                  <button class="filter-chip ops-filter-chip" data-ops-filter="deny">Deny</button>
+                  <button class="filter-chip ops-filter-chip" data-ops-filter="policy">Policy</button>
+                  <button class="filter-chip ops-filter-chip" data-ops-filter="offboard">Off-Board</button>
+                </div>
+                <div id="ops-event-list" class="ops-event-list"></div>
+              </article>
+              <article class="panel-dark preview-card ops-snapshot-card">
                 <p class="mini-label">Operational snapshot</p>
                 <div class="ops-snapshot-grid">
                   <div>
@@ -817,8 +1030,38 @@
                     <span>Provider posture</span>
                     <strong id="ops-provider-mode">Adapter-ready base</strong>
                   </div>
+                  <div>
+                    <span>Last lane</span>
+                    <strong id="ops-last-lane">Private+</strong>
+                  </div>
+                  <div>
+                    <span>Open risks</span>
+                    <strong id="ops-open-risks">0</strong>
+                  </div>
                 </div>
                 <p id="ops-last-summary" class="ops-summary">Initial control-plane defaults are loaded for review.</p>
+              </article>
+            </div>
+            <div class="ops-grid">
+              <article class="preview-card">
+                <p class="mini-label">Likely in scope</p>
+                <ul class="check-list">
+                  <li>Audit lookup and event trace review</li>
+                  <li>Support troubleshooting for share state and route outcomes</li>
+                  <li>Basic operational visibility into active policy posture</li>
+                </ul>
+              </article>
+              <article class="preview-card">
+                <p class="mini-label">Still open</p>
+                <ul class="check-list">
+                  <li>Large polished internal admin product</li>
+                  <li>Final user-management and account-control scope</li>
+                  <li>Configuration tooling beyond the minimum ops console</li>
+                </ul>
+              </article>
+              <article class="preview-card soft-card">
+                <p class="mini-label">Operational note</p>
+                <p>The purpose of this console is support and explanation, not a fully mature admin product. It helps the team answer what happened, why it happened, and what can be shared next.</p>
               </article>
             </div>
           </article>
@@ -868,7 +1111,7 @@
         </div>
       </section>
 
-      <section id="audit" class="panel audit-panel reveal" data-focus-hidden="true">
+      <section id="audit" class="panel audit-panel reveal" data-focus-hidden="true" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Audit Ledger</p>
           <h2>User-visible proof with operator lookup value</h2>
@@ -876,7 +1119,7 @@
         <div id="audit-feed" class="audit-feed"></div>
       </section>
 
-      <section id="handoff" class="panel handoff-panel reveal delay-1" data-focus-hidden="true">
+      <section id="handoff" class="panel handoff-panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Developer Handoff</p>
           <h2>The first surfaces to build without overcommitting</h2>

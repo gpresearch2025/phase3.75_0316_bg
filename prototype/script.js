@@ -188,6 +188,77 @@ const workstreams = [
   }
 ];
 
+const scenarioPresets = [
+  {
+    id: "labs-explainer",
+    title: "Explain labs safely",
+    lane: "Private",
+    summary: "Show the internal protected explanation path for a straightforward health question.",
+    outcome: "Internal protected model, no external provider",
+    recipient: "ai_export",
+    purpose: "explanation",
+    duration: "24_hours",
+    granularity: "derived_only",
+    pods: ["biomarkers", "wearables"],
+    identifiers: false,
+    verified: true,
+    prompt: "Explain my latest lab results in plain English",
+    targetTab: "gateway",
+    autoRoute: true
+  },
+  {
+    id: "clinician-share",
+    title: "Share with clinician",
+    lane: "Clinician share",
+    summary: "Prepare a patient-authorized packet for a doctor, clinic, or hospital without implying a full staff portal.",
+    outcome: "Scoped share packet for a verified destination",
+    recipient: "clinician_share",
+    purpose: "clinician_consult",
+    duration: "30_days",
+    granularity: "derived_only",
+    pods: ["biomarkers", "records", "identity"],
+    identifiers: true,
+    verified: true,
+    prompt: null,
+    targetTab: "consent",
+    autoRoute: false
+  },
+  {
+    id: "max-intelligence",
+    title: "Use stronger AI reasoning",
+    lane: "Max Intelligence",
+    summary: "Show the broader governed route when the user wants deeper reasoning and explicitly authorizes more context.",
+    outcome: "Broader governed context while Consentext stays in front",
+    recipient: "ai_export",
+    purpose: "research_compare",
+    duration: "24_hours",
+    granularity: "raw_if_allowed",
+    pods: ["biomarkers", "wearables", "records", "identity"],
+    identifiers: true,
+    verified: true,
+    prompt: "Compare treatments for high LDL",
+    targetTab: "gateway",
+    autoRoute: true
+  },
+  {
+    id: "off-board-risk",
+    title: "Show the off-board risk",
+    lane: "Off-Board",
+    summary: "Demonstrate the real user exit path when someone leaves Consentext and pastes data into an outside tool directly.",
+    outcome: "User leaves the protected environment",
+    recipient: "ai_export",
+    purpose: "lifestyle_guidance",
+    duration: "one_time",
+    granularity: "derived_only",
+    pods: ["biomarkers", "wearables"],
+    identifiers: false,
+    verified: true,
+    prompt: "I will paste my records directly into ChatGPT",
+    targetTab: "gateway",
+    autoRoute: true
+  }
+];
+
 const healthMetrics = {
   ldl: { value: 142, unit: "mg/dL", target: 130, note: "Down from 154 last month.", fill: 78 },
   rhr: { value: 58, unit: " bpm", target: 60, note: "High-confidence baseline; no drift.", fill: 60 },
@@ -201,17 +272,29 @@ const state = {
   activePolicy: null,
   audit: [],
   auditFilter: "all",
-  currentRoute: null
+  currentRoute: null,
+  opsFilter: "all",
+  opsSearch: "",
+  activeScenario: ""
 };
 
 const topbar = document.querySelector(".topbar");
 const topNav = document.getElementById("top-nav");
 const topbarToggle = document.getElementById("topbar-toggle");
+const bossModeToggle = document.getElementById("boss-mode-toggle");
+const themeToggle = document.getElementById("theme-toggle");
 const focusModeToggle = document.getElementById("focus-mode-toggle");
+const heroBossToggle = document.getElementById("hero-boss-toggle");
+const presentationBossToggle = document.getElementById("presentation-boss-toggle");
+const presentationThemeToggle = document.getElementById("presentation-theme-toggle");
 const focusHiddenSections = document.querySelectorAll("[data-focus-hidden='true']");
 const focusHiddenLinks = document.querySelectorAll("[data-focus-link='true']");
+const bossHiddenSections = document.querySelectorAll("[data-boss-hidden='true']");
+const bossHiddenLinks = document.querySelectorAll("[data-boss-link='true']");
 const topbarStorageKey = "consentext.topbar.collapsed";
 const focusModeStorageKey = "consentext.focusmode.enabled";
+const bossModeStorageKey = "consentext.bossmode.enabled";
+const themeStorageKey = "consentext.theme.enterprise_light";
 
 const podButtons = document.querySelectorAll(".pod-button");
 const podTitle = document.getElementById("pod-title");
@@ -291,6 +374,8 @@ const laneCapabilityLabel = document.getElementById("lane-capability-label");
 const laneControlLabel = document.getElementById("lane-control-label");
 const laneStatusListEl = document.getElementById("lane-status-list");
 const workstreamGrid = document.getElementById("workstream-grid");
+const scenarioGrid = document.getElementById("scenario-grid");
+const laneComparisonGrid = document.getElementById("lane-comparison-grid");
 const statusPolicyId = document.getElementById("status-policy-id");
 const statusShare = document.getElementById("status-share");
 const statusRecipient = document.getElementById("status-recipient");
@@ -300,7 +385,37 @@ const opsLastEvent = document.getElementById("ops-last-event");
 const opsShareState = document.getElementById("ops-share-state");
 const opsRecipientMode = document.getElementById("ops-recipient-mode");
 const opsProviderMode = document.getElementById("ops-provider-mode");
+const opsLastLane = document.getElementById("ops-last-lane");
+const opsOpenRisks = document.getElementById("ops-open-risks");
 const opsLastSummary = document.getElementById("ops-last-summary");
+const opsHealthShare = document.getElementById("ops-health-share");
+const opsHealthShareNote = document.getElementById("ops-health-share-note");
+const opsHealthGateway = document.getElementById("ops-health-gateway");
+const opsHealthGatewayNote = document.getElementById("ops-health-gateway-note");
+const opsHealthAudit = document.getElementById("ops-health-audit");
+const opsHealthAuditNote = document.getElementById("ops-health-audit-note");
+const opsSearch = document.getElementById("ops-search");
+const opsFilterChips = document.querySelectorAll(".ops-filter-chip");
+const opsEventList = document.getElementById("ops-event-list");
+const trustPolicyId = document.getElementById("trust-policy-id");
+const trustPolicySummary = document.getElementById("trust-policy-summary");
+const trustRecipientMode = document.getElementById("trust-recipient-mode");
+const trustFlowLane = document.getElementById("trust-flow-lane");
+const trustFlowLaneSummary = document.getElementById("trust-flow-lane-summary");
+const trustFlowGateway = document.getElementById("trust-flow-gateway");
+const trustFlowGatewaySummary = document.getElementById("trust-flow-gateway-summary");
+const trustFlowProof = document.getElementById("trust-flow-proof");
+const trustFlowProofSummary = document.getElementById("trust-flow-proof-summary");
+const trustLastProof = document.getElementById("trust-last-proof");
+const trustLastProofNote = document.getElementById("trust-last-proof-note");
+const themeStatus = document.getElementById("theme-status");
+const printBrief = document.getElementById("print-brief");
+const downloadPolicy = document.getElementById("download-policy");
+const downloadAudit = document.getElementById("download-audit");
+const downloadClinicianPacket = document.getElementById("download-clinician-packet");
+const artifactPolicyPreview = document.getElementById("artifact-policy-preview");
+const auditSummaryPreview = document.getElementById("audit-summary-preview");
+const clinicianPacketPreview = document.getElementById("clinician-packet-preview");
 
 function nowLabel() {
   return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -311,6 +426,120 @@ function classifyAction(action) {
   if (action.includes("denied") || action.includes("failed")) return "deny";
   if (action.includes("policy") || action.includes("share") || action.includes("verification")) return "policy";
   return "allow";
+}
+
+function buildPolicyNarrative(policy) {
+  if (!policy) return "No active policy is loaded yet.";
+  if (policy.recipient_type === "clinician_share") {
+    return `Patient-authorized clinician sharing is scoped for ${purposeLabels[policy.purpose] || policy.purpose} across ${policy.pod_types.join(", ")}.`;
+  }
+  if (policy.recipient_type === "api_consumer") {
+    return `API consumer access is governed by verification checks and the current share scope across ${policy.pod_types.join(", ")}.`;
+  }
+  return `AI export is governed as ${policy.deidentify_by_default ? "minimum-necessary by default" : "broader authorized"} across ${policy.pod_types.join(", ")}.`;
+}
+
+function buildAuditSummary() {
+  const latestEvents = state.audit.slice(0, 6).map((entry) => ({
+    time: entry.time,
+    action: entry.action,
+    kind: entry.kind,
+    summary: entry.summary
+  }));
+
+  return {
+    generated_at: new Date().toISOString(),
+    active_policy: state.activePolicy ? state.activePolicy.policy_id : "none",
+    share_state: state.shareStatus,
+    current_lane: state.currentRoute ? state.currentRoute.lane : "pending",
+    event_count: state.audit.length,
+    recent_risks: latestEvents.filter((entry) => ["deny", "offboard"].includes(entry.kind)).length,
+    events: latestEvents
+  };
+}
+
+function buildClinicianPacket() {
+  const policy = state.activePolicy || computeEffectivePolicy().policy;
+  const podSummaries = policy.pod_types.map((pod) => {
+    const source = vaultPods[pod];
+    return {
+      pod,
+      label: source ? source.title : pod,
+      highlights: source ? source.assets.slice(0, 2).map((asset) => asset.name) : []
+    };
+  });
+
+  return {
+    packet_id: `clinician-packet-${policy.policy_id}`,
+    readiness: policy.recipient_type === "clinician_share" ? "patient_authorized_share_ready" : "preview_only_not_clinician_mode",
+    destination_type: policy.recipient_type === "clinician_share" ? "doctor_clinic_or_hospital" : recipientLabels[policy.recipient_type],
+    purpose: purposeLabels[policy.purpose] || policy.purpose,
+    duration: policy.duration,
+    destination_verified: policy.recipient_verified,
+    identifiers_included: policy.identifiers_included,
+    notes: policy.recipient_type === "clinician_share"
+      ? "This preview models a patient-authorized packet for a verified clinician destination."
+      : "Switch recipient type to clinician share for a fully aligned packet preview.",
+    included_pods: podSummaries
+  };
+}
+
+function downloadTextAsset(filename, content, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+function renderArtifactPreviews() {
+  if (artifactPolicyPreview) {
+    artifactPolicyPreview.textContent = JSON.stringify(state.activePolicy || computeEffectivePolicy().policy, null, 2);
+  }
+  if (auditSummaryPreview) {
+    auditSummaryPreview.textContent = JSON.stringify(buildAuditSummary(), null, 2);
+  }
+  if (clinicianPacketPreview) {
+    clinicianPacketPreview.textContent = JSON.stringify(buildClinicianPacket(), null, 2);
+  }
+}
+
+function renderTrustFlow() {
+  const policy = state.activePolicy || computeEffectivePolicy().policy;
+  const last = state.audit[0];
+  const route = state.currentRoute;
+
+  if (trustPolicyId) trustPolicyId.textContent = policy ? policy.policy_id : "policy-000";
+  if (trustPolicySummary) trustPolicySummary.textContent = buildPolicyNarrative(policy);
+  if (trustRecipientMode) trustRecipientMode.textContent = policy ? recipientLabels[policy.recipient_type] : "Not set";
+  if (trustFlowLane) trustFlowLane.textContent = route ? route.lane : "Pending";
+  if (trustFlowLaneSummary) trustFlowLaneSummary.textContent = route ? route.summary : "Run a preset or a route to show the current decision.";
+  if (trustFlowGateway) {
+    trustFlowGateway.textContent = !policy
+      ? "Gateway pending"
+      : policy.recipient_type === "ai_export"
+        ? "Adapter-ready gateway"
+        : policy.recipient_type === "clinician_share"
+          ? "Verified clinician path"
+          : "Verified API contract";
+  }
+  if (trustFlowGatewaySummary) {
+    trustFlowGatewaySummary.textContent = !policy
+      ? "No active outbound posture is loaded."
+      : policy.recipient_type === "ai_export"
+        ? "Consentext keeps the provider decision behind the governed gateway."
+        : policy.recipient_type === "clinician_share"
+          ? "The share path stays patient-authorized and destination-bound."
+          : "The fetch path stays constrained by verification and scope checks.";
+  }
+  if (trustFlowProof) trustFlowProof.textContent = last ? last.action : "Audit proof pending";
+  if (trustFlowProofSummary) trustFlowProofSummary.textContent = last ? last.summary : "New trust events will appear here after routes, shares, or API tests run.";
+  if (trustLastProof) trustLastProof.textContent = last ? last.action : "No events yet";
+  if (trustLastProofNote) trustLastProofNote.textContent = last ? last.summary : "Run a preset, policy change, or route to populate the proof trail.";
 }
 
 function addAudit(action, summary) {
@@ -435,9 +664,35 @@ function renderDashboard() {
   renderTimeline();
 }
 
+function renderOpsConsole() {
+  if (!opsEventList) return;
+  const filteredEvents = state.audit.filter((entry) => {
+    const matchesFilter = state.opsFilter === "all" || entry.kind === state.opsFilter;
+    const query = state.opsSearch.trim().toLowerCase();
+    const haystack = `${entry.action} ${entry.summary} ${entry.kind}`.toLowerCase();
+    const matchesSearch = !query || haystack.includes(query);
+    return matchesFilter && matchesSearch;
+  });
+
+  opsEventList.innerHTML = filteredEvents.length
+    ? filteredEvents.map((entry) => `
+      <article class="ops-event ops-event-${entry.kind}">
+        <div class="ops-event-meta">
+          <strong>${entry.action}</strong>
+          <span>${entry.time}</span>
+        </div>
+        <p>${entry.summary}</p>
+      </article>
+    `).join("")
+    : '<article class="ops-event ops-event-empty"><div class="ops-event-meta"><strong>No matching events</strong><span>Adjust search or filters</span></div><p>The current console filter did not match any trust events.</p></article>';
+}
+
 function renderOps() {
   const policy = state.activePolicy;
   const last = state.audit[0];
+  const route = state.currentRoute;
+  const recentRisks = state.audit.slice(0, 8).filter((entry) => ["deny", "offboard"].includes(entry.kind)).length;
+
   if (opsLastEvent) opsLastEvent.textContent = last ? last.action : "No events yet";
   if (opsShareState) opsShareState.textContent = state.shareStatus === "active" ? "Active share" : "Revoked share";
   if (opsRecipientMode) opsRecipientMode.textContent = policy ? recipientLabels[policy.recipient_type] : "Not set";
@@ -450,7 +705,35 @@ function renderOps() {
           ? "Clinician destination, no AI provider"
           : "API contract only";
   }
+  if (opsLastLane) opsLastLane.textContent = route ? route.lane : "Pending";
+  if (opsOpenRisks) opsOpenRisks.textContent = String(recentRisks + (state.shareStatus !== "active" ? 1 : 0));
   if (opsLastSummary) opsLastSummary.textContent = last ? last.summary : "Apply a policy or run a route to populate ops context.";
+
+  if (opsHealthShare) opsHealthShare.textContent = state.shareStatus === "active" ? "Healthy" : "Needs attention";
+  if (opsHealthShareNote) {
+    opsHealthShareNote.textContent = state.shareStatus === "active"
+      ? "Active share is ready for governed use."
+      : "Revoked share blocks future governed exports until reauthorized.";
+  }
+  if (opsHealthGateway) opsHealthGateway.textContent = route && route.statusClass === "status-deny" ? "Review" : "Ready";
+  if (opsHealthGatewayNote) {
+    opsHealthGatewayNote.textContent = !route
+      ? "Run a preset or route to populate the current gateway state."
+      : route.statusClass === "status-deny"
+        ? route.summary
+        : `${route.lane} is the latest explainable route.`;
+  }
+  if (opsHealthAudit) opsHealthAudit.textContent = state.audit.length ? "Visible" : "Pending";
+  if (opsHealthAuditNote) {
+    opsHealthAuditNote.textContent = state.audit.length
+      ? `${state.audit.length} trust event${state.audit.length === 1 ? "" : "s"} available for lookup.`
+      : "New events will appear here after routes, shares, or API tests run.";
+  }
+
+  renderOpsConsole();
+  renderArtifactPreviews();
+  renderTrustFlow();
+  renderLaneComparison();
 }
 
 function updateLaneDetail(lane) {
@@ -501,6 +784,81 @@ function renderLaneCards() {
   });
 
   selectLane(laneMap.find((item) => item.lane === "Private") || laneMap[0]);
+}
+
+function renderLaneComparison() {
+  if (!laneComparisonGrid) return;
+  laneComparisonGrid.innerHTML = laneMap.map((lane) => `
+    <article class="lane-compare-card ${state.currentRoute?.lane === lane.lane ? "is-active" : ""}">
+      <div class="lane-compare-head">
+        <span class="lane-chip ${lane.lane === "Deterministic" ? "lane-deterministic" : lane.lane === "Private" ? "lane-private" : lane.lane === "Private+" ? "lane-privateplus" : lane.lane === "Max Intelligence" ? "lane-max" : "lane-offboard"}">${lane.lane}</span>
+        <strong>${lane.role}</strong>
+      </div>
+      <p>${lane.promise}</p>
+      <div class="lane-compare-stats">
+        <span>Privacy ${lane.privacy}%</span>
+        <span>Capability ${lane.capability}%</span>
+        <span>Control ${lane.control}%</span>
+      </div>
+      <ul class="check-list lane-compare-list">
+        <li>${lane.summary}</li>
+        <li>${lane.leaves}</li>
+        <li>${lane.internal ? "Internal protected model only" : lane.offboard ? "Outside Consentext protections" : lane.adapterPath}</li>
+      </ul>
+    </article>
+  `).join("");
+}
+
+function applyScenarioPreset(presetId) {
+  const preset = scenarioPresets.find((item) => item.id === presetId);
+  if (!preset) return;
+
+  state.activeScenario = preset.id;
+  if (recipientType) recipientType.value = preset.recipient;
+  if (purpose) purpose.value = preset.purpose;
+  if (duration) duration.value = preset.duration;
+  if (granularity) granularity.value = preset.granularity;
+  if (scopeBiomarkers) scopeBiomarkers.checked = preset.pods.includes("biomarkers");
+  if (scopeWearables) scopeWearables.checked = preset.pods.includes("wearables");
+  if (scopeRecords) scopeRecords.checked = preset.pods.includes("records");
+  if (scopeIdentity) scopeIdentity.checked = preset.pods.includes("identity");
+  if (identifiersToggle) identifiersToggle.checked = preset.identifiers;
+  if (recipientVerified) recipientVerified.checked = preset.verified;
+  if (promptSelect && preset.prompt) promptSelect.value = preset.prompt;
+
+  state.shareStatus = "active";
+  renderPolicy();
+  switchTab(preset.targetTab);
+  renderScenarioPresets();
+
+  if (preset.autoRoute && preset.prompt) {
+    runRouting();
+  } else {
+    renderArtifactPreviews();
+    renderTrustFlow();
+    renderLaneComparison();
+  }
+}
+
+function renderScenarioPresets() {
+  if (!scenarioGrid) return;
+  scenarioGrid.innerHTML = scenarioPresets.map((preset) => `
+    <article class="scenario-card ${state.activeScenario === preset.id ? "is-active" : ""}">
+      <div class="scenario-head">
+        <span class="mini-label">${preset.lane}</span>
+        <strong>${preset.title}</strong>
+      </div>
+      <p>${preset.summary}</p>
+      <div class="scenario-outcome">${preset.outcome}</div>
+      <button type="button" class="button button-secondary scenario-button" data-scenario-id="${preset.id}">Load Preset</button>
+    </article>
+  `).join("");
+
+  scenarioGrid.querySelectorAll(".scenario-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      applyScenarioPreset(button.dataset.scenarioId);
+    });
+  });
 }
 
 function renderWorkstreams() {
@@ -849,6 +1207,17 @@ filterChips.forEach((button) => button.addEventListener("click", () => {
   renderAudit();
 }));
 
+opsFilterChips.forEach((button) => button.addEventListener("click", () => {
+  state.opsFilter = button.dataset.opsFilter;
+  opsFilterChips.forEach((chip) => chip.classList.toggle("is-active", chip === button));
+  renderOpsConsole();
+}));
+
+opsSearch?.addEventListener("input", () => {
+  state.opsSearch = opsSearch.value;
+  renderOpsConsole();
+});
+
 [recipientType, purpose, duration, granularity, scopeBiomarkers, scopeWearables, scopeRecords, scopeIdentity, identifiersToggle, recipientVerified].forEach((input) => {
   input?.addEventListener("change", renderPolicy);
 });
@@ -868,11 +1237,25 @@ revokeShare?.addEventListener("click", () => {
 
 if (runRoute) runRoute.addEventListener("click", runRouting);
 if (runApi) runApi.addEventListener("click", runApiSimulation);
+printBrief?.addEventListener("click", () => {
+  window.open("executive-brief.html?print=1", "_blank", "noopener");
+});
+downloadPolicy?.addEventListener("click", () => {
+  downloadTextAsset("consentext-policy.json", JSON.stringify(state.activePolicy || computeEffectivePolicy().policy, null, 2), "application/json;charset=utf-8");
+});
+downloadAudit?.addEventListener("click", () => {
+  downloadTextAsset("consentext-audit-summary.json", JSON.stringify(buildAuditSummary(), null, 2), "application/json;charset=utf-8");
+});
+downloadClinicianPacket?.addEventListener("click", () => {
+  downloadTextAsset("consentext-clinician-packet.json", JSON.stringify(buildClinicianPacket(), null, 2), "application/json;charset=utf-8");
+});
 
 renderPod("biomarkers");
 if (promptSelect) promptSelect.value = "What lifestyle changes may improve these labs?";
 renderPolicy();
 renderLaneCards();
+renderLaneComparison();
+renderScenarioPresets();
 renderWorkstreams();
 
 const initialRoute = {
@@ -1001,6 +1384,15 @@ const walkthroughSegments = [
     speech: "Another important update is that the story is not only about AI prompts. The system also needs a real patient-authorized clinician sharing path. That means a person can scope what should be shared with a doctor, clinic, or hospital, even if the full clinician-facing portal is not part of the first pass. On top of that, the internal team still needs a minimum operations surface. They need audit lookup, troubleshooting, and visibility into what the system is doing. The site now explains both of those points in plain language. That makes the demo more believable because it shows how the product works in real life, not just as an abstract architecture diagram."
   },
   {
+    theme: "presentation",
+    kicker: "How to present it",
+    title: "Boss mode, the brief, and downloadable artifacts keep the story moving",
+    summary: "This chapter explains why the site now works as a presentation kit instead of only a live prototype.",
+    hook: "You can simplify the page, switch to a lighter look, and leave the meeting with real follow-up artifacts.",
+    pills: ["Boss mode", "Executive brief and PDF", "MP4, captions, and packet exports"],
+    speech: "A final useful thing to show is that the site no longer depends on a live presenter remembering every talking point. You can turn on Boss Mode to hide the denser build surfaces. You can switch to a lighter enterprise theme if the room wants a cleaner look. You can open a one page executive brief, download a narrated MP4 walkthrough, and export the current policy, audit summary, or clinician packet preview. That matters because it turns the prototype from a one time demo into a shareable presentation kit. The explanation, the proof, and the follow up materials are all built into the product story now."
+  },
+  {
     theme: "outcome",
     kicker: "What to repeat back",
     title: "The business takeaway for your boss",
@@ -1097,6 +1489,94 @@ function initializeFocusMode() {
   setFocusMode(shouldEnableFocusMode, { persist: false });
   focusModeToggle.addEventListener("click", () => {
     setFocusMode(!document.body.classList.contains("focus-mode"));
+  });
+}
+
+function setBossMode(enabled, { persist = true } = {}) {
+  document.body.classList.toggle("boss-mode", enabled);
+
+  if (bossModeToggle) {
+    bossModeToggle.textContent = enabled ? "Boss mode on" : "Boss mode off";
+    bossModeToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+    bossModeToggle.setAttribute("aria-label", enabled ? "Disable boss mode" : "Enable boss mode");
+  }
+  if (heroBossToggle) heroBossToggle.textContent = enabled ? "Turn Boss Mode Off" : "Turn Boss Mode On";
+  if (presentationBossToggle) presentationBossToggle.textContent = enabled ? "Turn Boss Mode Off" : "Turn Boss Mode On";
+
+  bossHiddenSections.forEach((section) => {
+    section.setAttribute("aria-hidden", enabled ? "true" : "false");
+  });
+
+  bossHiddenLinks.forEach((link) => {
+    link.tabIndex = enabled ? -1 : 0;
+  });
+
+  if (!persist) return;
+
+  try {
+    window.localStorage.setItem(bossModeStorageKey, enabled ? "true" : "false");
+  } catch (error) {
+    // Storage can fail in embedded contexts; the toggle should still work.
+  }
+}
+
+function initializeBossMode() {
+  let shouldEnableBossMode = false;
+
+  try {
+    shouldEnableBossMode = window.localStorage.getItem(bossModeStorageKey) === "true";
+  } catch (error) {
+    shouldEnableBossMode = false;
+  }
+
+  setBossMode(shouldEnableBossMode, { persist: false });
+  [bossModeToggle, heroBossToggle, presentationBossToggle].forEach((button) => {
+    button?.addEventListener("click", () => {
+      setBossMode(!document.body.classList.contains("boss-mode"));
+    });
+  });
+}
+
+function setThemeMode(enabled, { persist = true } = {}) {
+  document.body.classList.toggle("theme-light", enabled);
+
+  if (themeToggle) {
+    themeToggle.textContent = enabled ? "Dark theme" : "Light theme";
+    themeToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+    themeToggle.setAttribute("aria-label", enabled ? "Switch to dark technical theme" : "Switch to light enterprise theme");
+  }
+  if (presentationThemeToggle) {
+    presentationThemeToggle.textContent = enabled ? "Switch to Dark Theme" : "Switch to Light Theme";
+  }
+  if (themeStatus) {
+    themeStatus.textContent = enabled
+      ? "The lighter enterprise presentation is active. Switch back when you want the darker technical control-room look."
+      : "The current presentation starts in the darker technical theme. Switch when you want a cleaner boardroom feel.";
+  }
+
+  if (!persist) return;
+
+  try {
+    window.localStorage.setItem(themeStorageKey, enabled ? "true" : "false");
+  } catch (error) {
+    // Storage can fail in embedded contexts; the toggle should still work.
+  }
+}
+
+function initializeThemeMode() {
+  let shouldEnableLightTheme = false;
+
+  try {
+    shouldEnableLightTheme = window.localStorage.getItem(themeStorageKey) === "true";
+  } catch (error) {
+    shouldEnableLightTheme = false;
+  }
+
+  setThemeMode(shouldEnableLightTheme, { persist: false });
+  [themeToggle, presentationThemeToggle].forEach((button) => {
+    button?.addEventListener("click", () => {
+      setThemeMode(!document.body.classList.contains("theme-light"));
+    });
   });
 }
 
@@ -1305,4 +1785,6 @@ if ("speechSynthesis" in window) {
 }
 initializeTopbar();
 initializeFocusMode();
+initializeBossMode();
+initializeThemeMode();
 renderWalkthrough();
