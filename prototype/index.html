@@ -12,14 +12,17 @@
 <body>
   <div class="site-shell">
     <header class="topbar">
-      <div class="brand-block">
-        <div class="brand-dot"></div>
-        <div>
-          <strong>Consentext</strong>
-          <p>Phase 3.75 working prototype</p>
+      <div class="topbar-head">
+        <div class="brand-block">
+          <div class="brand-dot"></div>
+          <div>
+            <strong>Consentext</strong>
+            <p>Phase 3.75 working prototype</p>
+          </div>
         </div>
+        <button id="topbar-toggle" class="topbar-toggle" type="button" aria-expanded="true" aria-controls="top-nav">Minimize header</button>
       </div>
-      <nav class="top-nav">
+      <nav id="top-nav" class="top-nav">
         <a href="#overview">Overview</a>
         <a href="#walkthrough">Walkthrough</a>
         <a href="#control-plane">Control</a>

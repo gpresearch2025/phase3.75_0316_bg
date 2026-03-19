@@ -204,6 +204,11 @@ const state = {
   currentRoute: null
 };
 
+const topbar = document.querySelector(".topbar");
+const topNav = document.getElementById("top-nav");
+const topbarToggle = document.getElementById("topbar-toggle");
+const topbarStorageKey = "consentext.topbar.collapsed";
+
 const podButtons = document.querySelectorAll(".pod-button");
 const podTitle = document.getElementById("pod-title");
 const podDescription = document.getElementById("pod-description");
@@ -1009,6 +1014,45 @@ const walkthroughState = {
   runId: 0
 };
 
+function setTopbarCollapsed(collapsed, { persist = true } = {}) {
+  if (!topbar || !topbarToggle || !topNav) return;
+
+  topbar.classList.toggle("is-collapsed", collapsed);
+  topbarToggle.textContent = collapsed ? "Expand header" : "Minimize header";
+  topbarToggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  topbarToggle.setAttribute("aria-label", collapsed ? "Expand header navigation" : "Minimize header navigation");
+  topNav.setAttribute("aria-hidden", collapsed ? "true" : "false");
+
+  topNav.querySelectorAll("a").forEach((link) => {
+    link.tabIndex = collapsed ? -1 : 0;
+  });
+
+  if (!persist) return;
+
+  try {
+    window.localStorage.setItem(topbarStorageKey, collapsed ? "true" : "false");
+  } catch (error) {
+    // Storage can fail in embedded contexts; the toggle should still work.
+  }
+}
+
+function initializeTopbar() {
+  if (!topbar || !topbarToggle || !topNav) return;
+
+  let shouldCollapse = false;
+
+  try {
+    shouldCollapse = window.localStorage.getItem(topbarStorageKey) === "true";
+  } catch (error) {
+    shouldCollapse = false;
+  }
+
+  setTopbarCollapsed(shouldCollapse, { persist: false });
+  topbarToggle.addEventListener("click", () => {
+    setTopbarCollapsed(!topbar.classList.contains("is-collapsed"));
+  });
+}
+
 function updateWalkthroughButtons() {
   if (walkthroughPause) walkthroughPause.textContent = walkthroughState.isPaused ? "Resume" : "Pause";
 }
@@ -1212,4 +1256,5 @@ document.addEventListener("fullscreenchange", updateWalkthroughFullscreenButton)
 if ("speechSynthesis" in window) {
   window.speechSynthesis.onvoiceschanged = () => renderWalkthrough();
 }
+initializeTopbar();
 renderWalkthrough();
