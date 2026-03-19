@@ -1661,10 +1661,26 @@ function stopWalkthrough() {
   updateWalkthroughButtons();
 }
 
+function scoreWalkthroughVoice(voice) {
+  if (!voice || !/en/i.test(voice.lang || "")) return -1;
+
+  const name = voice.name || "";
+  let score = 0;
+
+  if (/Natural|Neural|Multilingual|Online/i.test(name)) score += 60;
+  if (/Andrew|Ava|Emma|Brian|Jenny|Aria|Michelle|Roger|Guy|Samantha|Google US English/i.test(name)) score += 35;
+  if (/Zira|David|Mark|Hazel/i.test(name)) score -= 10;
+  if (voice.localService) score += 5;
+
+  return score;
+}
+
 function pickWalkthroughVoice() {
   if (!("speechSynthesis" in window)) return null;
   const voices = window.speechSynthesis.getVoices().filter((voice) => /en/i.test(voice.lang));
-  return voices.find((voice) => /Samantha|Google US English|Microsoft Zira|Aria|Jenny/i.test(voice.name)) || voices[0] || null;
+  return voices
+    .slice()
+    .sort((a, b) => scoreWalkthroughVoice(b) - scoreWalkthroughVoice(a))[0] || null;
 }
 
 function speakWalkthroughSegment() {
@@ -1681,8 +1697,8 @@ function speakWalkthroughSegment() {
   const utterance = new SpeechSynthesisUtterance(segment.speech);
   const voice = pickWalkthroughVoice();
   if (voice) utterance.voice = voice;
-  utterance.rate = 0.96;
-  utterance.pitch = 1;
+  utterance.rate = /Natural|Neural|Multilingual|Online/i.test(voice?.name || "") ? 1 : 0.96;
+  utterance.pitch = 0.98;
 
   utterance.onstart = () => {
     walkthroughState.isPlaying = true;

@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import ffmpegPath from "ffmpeg-static";
+import ffprobeStatic from "ffprobe-static";
 import { chromium } from "playwright";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,7 +20,9 @@ const srtPath = path.join(tempDir, "consentext-boss-walkthrough.srt");
 const intermediateVideoPath = path.join(tempDir, "consentext-boss-walkthrough-nocaptions.mp4");
 const finalVideoPath = path.join(outputDir, "consentext-boss-walkthrough.mp4");
 const finalSrtPath = path.join(outputDir, "consentext-boss-walkthrough.srt");
-const voiceName = "Microsoft Zira Desktop";
+const ffprobePath = ffprobeStatic.path || ffprobeStatic;
+const voiceName = "en-US-AndrewMultilingualNeural";
+const voiceRate = "-4%";
 const fps = 30;
 
 main().catch((error) => {
@@ -41,9 +44,10 @@ async function main() {
   })));
 
   synthesizeAudio();
-  const segmentDurations = segments.map((_, index) => getWavDurationSeconds(path.join(audioDir, `segment-${String(index).padStart(2, "0")}.wav`)));
+  const segmentAudioPaths = segments.map((_, index) => resolveAudioPath(index));
+  const segmentDurations = segmentAudioPaths.map((audioPath) => getAudioDurationSeconds(audioPath));
   await renderImages(segments);
-  encodeSegmentVideos(segmentDurations);
+  encodeSegmentVideos(segmentDurations, segmentAudioPaths);
   writeConcatFile(segments.length);
   concatSegmentVideos();
   writeSrt(segments, segmentDurations, srtPath);
@@ -83,7 +87,7 @@ function synthesizeAudio() {
       "-VoiceName",
       voiceName,
       "-Rate",
-      "-1"
+      voiceRate
     ],
     { stdio: "inherit" }
   );
@@ -129,11 +133,11 @@ async function renderImages(segments) {
   await browser.close();
 }
 
-function encodeSegmentVideos(segmentDurations) {
+function encodeSegmentVideos(segmentDurations, segmentAudioPaths) {
   for (let index = 0; index < segmentDurations.length; index += 1) {
     const duration = Math.max(segmentDurations[index] + 0.15, 1);
     const imagePath = path.join(imageDir, `segment-${String(index).padStart(2, "0")}.png`);
-    const audioPath = path.join(audioDir, `segment-${String(index).padStart(2, "0")}.wav`);
+    const audioPath = segmentAudioPaths[index];
     const videoPath = path.join(segmentDir, `segment-${String(index).padStart(2, "0")}.mp4`);
 
     execFfmpeg([
@@ -294,38 +298,38 @@ function escapeForSubtitleFilter(value) {
   return value.replace(/\\/g, "/").replace(/:/g, "\\:").replace(/,/g, "\\,").replace(/'/g, "\\'");
 }
 
-function getWavDurationSeconds(filePath) {
-  const buffer = fs.readFileSync(filePath);
-  if (buffer.toString("ascii", 0, 4) !== "RIFF" || buffer.toString("ascii", 8, 12) !== "WAVE") {
-    throw new Error(`Unsupported WAV format: ${filePath}`);
+function resolveAudioPath(index) {
+  const segmentId = `segment-${String(index).padStart(2, "0")}`;
+  const mp3Path = path.join(audioDir, `${segmentId}.mp3`);
+  if (fs.existsSync(mp3Path)) return mp3Path;
+
+  const wavPath = path.join(audioDir, `${segmentId}.wav`);
+  if (fs.existsSync(wavPath)) return wavPath;
+
+  throw new Error(`Missing synthesized audio for ${segmentId}`);
+}
+
+function getAudioDurationSeconds(filePath) {
+  const output = execFileSync(
+    ffprobePath,
+    [
+      "-v",
+      "error",
+      "-show_entries",
+      "format=duration",
+      "-of",
+      "default=noprint_wrappers=1:nokey=1",
+      filePath
+    ],
+    { encoding: "utf8" }
+  ).trim();
+
+  const duration = Number.parseFloat(output);
+  if (!Number.isFinite(duration) || duration <= 0) {
+    throw new Error(`Could not read audio duration: ${filePath}`);
   }
 
-  let offset = 12;
-  let byteRate = 0;
-  let dataSize = 0;
-
-  while (offset + 8 <= buffer.length) {
-    const chunkId = buffer.toString("ascii", offset, offset + 4);
-    const chunkSize = buffer.readUInt32LE(offset + 4);
-    const chunkDataStart = offset + 8;
-
-    if (chunkId === "fmt ") {
-      byteRate = buffer.readUInt32LE(chunkDataStart + 8);
-    }
-
-    if (chunkId === "data") {
-      dataSize = chunkSize;
-      break;
-    }
-
-    offset = chunkDataStart + chunkSize + (chunkSize % 2);
-  }
-
-  if (!byteRate || !dataSize) {
-    throw new Error(`Could not read WAV duration: ${filePath}`);
-  }
-
-  return dataSize / byteRate;
+  return duration;
 }
 
 function execFfmpeg(args, cwd = process.cwd()) {
