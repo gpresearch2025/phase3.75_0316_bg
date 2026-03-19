@@ -1324,82 +1324,82 @@ const walkthroughSegments = [
     theme: "trust",
     kicker: "What this is",
     title: "Consentext in one sentence",
-    summary: "This chapter explains the product in plain language before the architecture starts showing up.",
-    hook: "A safer way to use health context with AI.",
-    pills: ["Patient control first", "Safe AI access", "Easy boss-level framing"],
-    speech: "Here is the simplest way to think about Consentext. It is a control layer that sits between a person's health information and any outside AI or external system. The point is not to block innovation. The point is to let people use powerful tools without losing control of what leaves the system. If you were explaining this to a boss in one sentence, you could say Consentext makes health data useful without making it reckless. Instead of letting raw information spill straight into a chatbot or partner tool, the platform creates a governed path, decides what is appropriate, and records what happened. That is the big idea the rest of the site is trying to prove."
+    summary: "This chapter frames the system as a policy and routing layer before the implementation surfaces start showing up.",
+    hook: "Consentext is the control boundary between stored health context and any outbound use.",
+    pills: ["Trust boundary", "Routing contract", "Audit-first control"],
+    speech: "The fastest technical framing is this. Consentext is a control boundary that sits between stored health context and every outbound AI or share action. The vault holds context. Consent and policy decide what may move. The gateway enforces the selected route. Audit records what happened. The system is valuable because disclosure behavior stops being implicit. Instead of letting every request act like a raw export, the product classifies the request, chooses the correct lane, applies transforms, and leaves proof behind. That control boundary is the main idea the rest of the prototype is trying to make concrete."
   },
   {
     theme: "problem",
     kicker: "Why it matters",
-    title: "The problem people already feel",
-    summary: "The site solves the gap between wanting AI help and not wanting to expose sensitive health details carelessly.",
-    hook: "People want AI help, but they do not want to throw private records into the open.",
-    pills: ["Fear of oversharing", "Need for useful guidance", "Trust gap in current tools"],
-    speech: "The reason this matters is that most people already feel a tension. They want smart help. They want explanations, comparisons, and guidance. But they also know that pasting raw health records into a public AI tool is risky and hard to take back. That trust gap is where Consentext sits. The site shows that we do not need to choose between no help at all and total exposure. We can define rules, route each request to the right level of intelligence, and make the user experience feel understandable instead of scary. That is why the design keeps returning to phrases like minimum necessary, protected model, and audit trail. Those are not just technical controls. They are the trust story."
+    title: "The current failure mode is implicit disclosure",
+    summary: "The site addresses the gap between wanting useful AI and not having explicit, inspectable disclosure behavior.",
+    hook: "Most current flows either overexpose data or force the user to avoid useful tooling entirely.",
+    pills: ["Implicit exports", "Unsafe copy-paste behavior", "No durable proof"],
+    speech: "The problem is not just that health data is sensitive. The deeper problem is that most current AI flows make disclosure behavior implicit. A user pastes something into a tool, a system forwards context to a provider, or a share occurs with weak scoping, and nobody has a stable contract for what actually left. Consentext is trying to solve that gap. The user should be able to get useful explanation and stronger reasoning without every request turning into a broad export. The architecture matters because it creates explicit scope, explicit route selection, and explicit proof rather than relying on hand-wavy trust language."
   },
   {
     theme: "architecture",
     kicker: "How it is shaped",
-    title: "The vault stays separate from the control layer",
-    summary: "This chapter explains the most important product design choice: data storage and disclosure decisions are not the same thing.",
-    hook: "The vault holds context. The control plane decides what, if anything, can leave.",
-    pills: ["Vault for context", "Control plane for decisions", "Gateway for outside movement"],
-    speech: "A helpful way to walk your boss through the architecture is to keep it simple. The vault is where the health context lives. That includes stored information, incoming feeds, and the views people use to understand their data. The control plane is a different layer. That is where the trust kernel, consent logic, policy rules, minimization, de-identification, and audit trail live. Then the AI gateway becomes the only governed path out to outside systems. The reason the site emphasizes this split is that it keeps the product honest. Storing health context is one job. Deciding what can leave is another. Consentext is strongest when those jobs are clearly separated and visibly governed."
+    title: "The vault stays separate from the control plane",
+    summary: "This chapter explains the most important design choice: data custody and disclosure decisions are different responsibilities.",
+    hook: "The vault owns context. The control plane owns decisions. The gateway owns outbound enforcement.",
+    pills: ["Data plane", "Control plane", "Fail-closed gateway"],
+    speech: "The most important architecture choice is the split between the vault and the control plane. The vault is where stored health context, raw artifacts, and derived summaries live. The control plane is where consent logic, policy objects, lane selection, minimization, de-identification, and audit live. The gateway then becomes the only governed path to external systems. That separation matters because storing context is not the same job as deciding what may leave. Once those responsibilities are separated, the system can fail closed, keep the policy object legible, and make outbound behavior inspectable instead of magical."
   },
   {
     theme: "routing",
     kicker: "How requests move",
-    title: "Every request gets routed to a lane",
-    summary: "The lane model is how the product turns trust policy into a user-facing decision about capability and exposure.",
-    hook: "Not every question deserves the same level of AI or the same level of disclosure.",
-    pills: ["Five distinct lanes", "Capability matched to risk", "Real-world off-board path acknowledged"],
-    speech: "Once you understand the split between stored context and governed disclosure, the next idea is the lane model. Every request is not treated the same. Some requests do not need AI at all and can stay deterministic. Some need a protected internal explanation. Some can use outside AI with only reduced context. Some may justify a broader governed route for maximum intelligence. And some users will choose to leave the system entirely, which is why the site shows an off-board path instead of pretending it does not exist. This is an easy business concept to repeat back. The product is not one giant yes or no to AI. It is a controlled routing system that matches capability to risk."
+    title: "Every request resolves to a lane",
+    summary: "The lane model is how the system turns policy into capability, disclosure class, and enforcement behavior.",
+    hook: "Not every request deserves the same model path or the same disclosure posture.",
+    pills: ["Five distinct lanes", "Capability matched to risk", "Off-board path modeled honestly"],
+    speech: "Once the boundary is clear, the next idea is the lane model. Deterministic requests stay retrieval-only. Private requests use the internal protected model. Private Plus uses minimum-necessary or de-identified governed export. Max Intelligence uses broader user-authorized governed export. Off-Board models the moment the user leaves Consentext entirely. In implementation terms, the lane is the compact output of policy evaluation. It tells the rest of the system what class of context is allowed to move, which transforms apply, which gateway path is legal, and what kind of audit event should be appended."
   },
   {
     theme: "private",
     kicker: "The trust promise",
-    title: "Private and Private+ are not the same thing",
-    summary: "This chapter explains the most important distinction in the demo: the internal protected lane is mandatory, and the narrow external lane stays intentionally narrow.",
-    hook: "Private means the sensitive explanation stays inside. Private+ means outside help gets only the minimum needed.",
-    pills: ["Private is required", "Private+ is narrow by default", "Useful help without broad exposure"],
-    speech: "One of the biggest March decisions was that Private and Private Plus should never be flattened into the same product promise. Private is the locked internal lane. It means sensitive health context can be used for explanation without leaving Consentext-controlled systems. That is not optional in this phase. Private Plus is different. It is the lane for outside help when reduced, minimum necessary, or de-identified context is enough. This is important because it lets the product be both useful and disciplined. You are not telling the market that every outside AI request gets the same broad context. You are telling them there is a controlled middle ground where the user still gets value without unnecessary exposure."
+    title: "Private and Private+ enforce different outbound contracts",
+    summary: "This chapter covers the most important implementation distinction in the prototype.",
+    hook: "Private stays internal. Private+ is the narrow external lane. Those are different contracts, not different colors.",
+    pills: ["Private is mandatory", "Private+ is narrow by default", "Distinct output classes"],
+    speech: "One of the most important March decisions is that Private and Private Plus are not interchangeable. Private is the locked internal lane. It requires a protected model running inside Consentext-controlled systems, and that is a phase requirement, not a nice-to-have. Private Plus is different. It is the narrow governed external lane where only minimum-necessary or de-identified context may move. The reason this distinction matters is that it changes real system behavior. Different transforms run. Different output classifications appear. Different provider paths are legal. If those two lanes collapse, the rest of the control plane loses meaning."
   },
   {
     theme: "max",
     kicker: "Higher capability",
-    title: "Max Intelligence allows broader governed reasoning",
-    summary: "This chapter gives the boss-friendly explanation for why Max Intelligence exists and why it is still different from simply leaving the platform.",
-    hook: "Sometimes the user needs stronger reasoning, but still wants Consentext in front of the exchange.",
-    pills: ["Broader user authorization", "Still governed", "Different from off-board freedom"],
-    speech: "Max Intelligence exists for the moments when narrow context is not enough. Maybe the user wants a deeper comparison, broader reasoning, or a more powerful answer than the minimum necessary route can provide. The key is that Consentext still stays in front of that exchange. The user can authorize broader context, but the action is still governed, visible, and intentional. That is what makes it different from simply going off-board to a frontier tool alone. Off-board means the user leaves the protected environment. Max Intelligence means the user gets stronger capability while the platform still controls the path, the permissions, and the proof. That distinction matters strategically because it preserves freedom without giving up the product relationship."
+    title: "Max Intelligence is broader governed routing, not a bypass",
+    summary: "This chapter explains why the highest-capability lane still belongs inside the same control model.",
+    hook: "Sometimes narrow context is not enough, but the system still needs to stay in front of the exchange.",
+    pills: ["Broader user authorization", "Still gateway-mediated", "Not the same as off-board"],
+    speech: "Max Intelligence exists for the moments when a narrow route is not enough. A user may want deeper comparison, broader reasoning, or a more capable external model path than Private Plus can support. The important thing is that Consentext still stays in front of that exchange. The user authorizes broader context, the gateway still mediates provider access, and the audit log still records the route. That is what makes Max Intelligence different from Off-Board. Off-Board means the user leaves the protected environment. Max Intelligence means the system offers a broader governed lane without abandoning the control relationship."
   },
   {
     theme: "sharing",
     kicker: "Real-world workflow",
-    title: "Clinician sharing and internal operations are part of the story now",
-    summary: "The explainer needs to show that the product is not only about AI. It also supports patient-authorized sharing and a minimal internal operations view.",
-    hook: "People need to share safely with doctors, and the internal team needs enough visibility to support the system.",
-    pills: ["Patient-authorized clinician share", "No promised staff portal yet", "Minimal ops console"],
-    speech: "Another important update is that the story is not only about AI prompts. The system also needs a real patient-authorized clinician sharing path. That means a person can scope what should be shared with a doctor, clinic, or hospital, even if the full clinician-facing portal is not part of the first pass. On top of that, the internal team still needs a minimum operations surface. They need audit lookup, troubleshooting, and visibility into what the system is doing. The site now explains both of those points in plain language. That makes the demo more believable because it shows how the product works in real life, not just as an abstract architecture diagram."
+    title: "Clinician sharing and internal ops are part of the system now",
+    summary: "The architecture story is not only about AI prompts. It also includes patient-authorized shares and operational visibility.",
+    hook: "Clinician handoff and support visibility need real surfaces, not just future-state notes.",
+    pills: ["Patient-authorized clinician share", "Recipient verification", "Minimal ops console"],
+    speech: "The prototype also has to show that this is more than an AI routing demo. A patient-authorized clinician share path is now part of the system contract. That means a person can scope what should be sent to a doctor, clinic, or hospital without pretending a full staff portal already exists. On top of that, the internal team needs enough operational visibility to support the system. They need event lookup, route search, recent risk review, and proof that a share or route behaved the way policy said it should. That is why the prototype now includes both the clinician packet preview and the internal ops console."
   },
   {
     theme: "presentation",
     kicker: "How to present it",
-    title: "Boss mode, the brief, and downloadable artifacts keep the story moving",
-    summary: "This chapter explains why the site now works as a presentation kit instead of only a live prototype.",
-    hook: "You can simplify the page, switch to a lighter look, and leave the meeting with real follow-up artifacts.",
-    pills: ["Boss mode", "Executive brief and PDF", "MP4, captions, and packet exports"],
-    speech: "A final useful thing to show is that the site no longer depends on a live presenter remembering every talking point. You can turn on Boss Mode to hide the denser build surfaces. You can switch to a lighter enterprise theme if the room wants a cleaner look. You can open a one page executive brief, download a narrated MP4 walkthrough, and export the current policy, audit summary, or clinician packet preview. That matters because it turns the prototype from a one time demo into a shareable presentation kit. The explanation, the proof, and the follow up materials are all built into the product story now."
+    title: "Summary mode, the brief, and exported artifacts make review asynchronous",
+    summary: "This chapter explains why the site now works as a review package instead of only a live prototype.",
+    hook: "You can simplify the page, switch to a lighter docs look, and leave with real artifacts instead of screenshots.",
+    pills: ["Summary mode", "Technical brief and PDF", "MP4, captions, and JSON exports"],
+    speech: "A useful change in this pass is that the site no longer depends on a live presenter remembering every talking point. You can turn on Summary Mode to hide the denser prototype surfaces. You can switch to a lighter documentation theme for daytime review. You can open a one-page technical brief, download the narrated MP4 walkthrough, and export the current policy, audit summary, or clinician packet preview. That matters because it turns the prototype into a review package that a senior developer can inspect asynchronously, not just a live demo that disappears when the meeting ends."
   },
   {
     theme: "outcome",
     kicker: "What to repeat back",
-    title: "The business takeaway for your boss",
-    summary: "This closing chapter gives you the short version to repeat after the walkthrough ends.",
-    hook: "Consentext turns trust into a product feature, not a legal footnote.",
-    pills: ["Useful AI with control", "Modular for growth", "Visible proof of trust"],
-    speech: "If you want a clean closing line for your boss, use this. Consentext is building the governance and interaction layer that makes health context useful, shareable, and auditable without treating every request the same way. The product matters because it turns trust into something operational. It gives people a safer internal path, a narrow governed outside path, a broader governed path when they truly want it, and a visible record of what happened. It also stays modular enough for later provider adapters, clinician workflows, and integrations. In short, the site is showing a platform that can grow in capability without abandoning discipline. That is the story this walkthrough is meant to make easy to understand and easy to retell."
+    title: "The implementation takeaway",
+    summary: "This closing chapter gives the short architectural framing to carry out of the walkthrough.",
+    hook: "Consentext is a policy engine plus governed gateway, not just a prompt interface.",
+    pills: ["Explicit lane contracts", "Gateway-mediated export", "Append-only proof"],
+    speech: "The implementation takeaway is this. Consentext is a policy engine plus governed gateway in front of health-context use. It separates data custody from disclosure logic, enforces distinct lane contracts, and records what happened as audit proof. The system gives users a safer internal path, a narrow governed external path, a broader governed path when they explicitly want it, and an honest model of what happens when they leave protections entirely. It also stays modular enough for later provider adapters, clinician workflows, and integration work. That is the architecture this walkthrough is trying to make legible."
   }
 ];
 
@@ -1496,12 +1496,12 @@ function setBossMode(enabled, { persist = true } = {}) {
   document.body.classList.toggle("boss-mode", enabled);
 
   if (bossModeToggle) {
-    bossModeToggle.textContent = enabled ? "Boss mode on" : "Boss mode off";
+    bossModeToggle.textContent = enabled ? "Summary mode on" : "Summary mode off";
     bossModeToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
-    bossModeToggle.setAttribute("aria-label", enabled ? "Disable boss mode" : "Enable boss mode");
+    bossModeToggle.setAttribute("aria-label", enabled ? "Disable summary mode" : "Enable summary mode");
   }
-  if (heroBossToggle) heroBossToggle.textContent = enabled ? "Turn Boss Mode Off" : "Turn Boss Mode On";
-  if (presentationBossToggle) presentationBossToggle.textContent = enabled ? "Turn Boss Mode Off" : "Turn Boss Mode On";
+  if (heroBossToggle) heroBossToggle.textContent = enabled ? "Turn Summary Mode Off" : "Turn Summary Mode On";
+  if (presentationBossToggle) presentationBossToggle.textContent = enabled ? "Turn Summary Mode Off" : "Turn Summary Mode On";
 
   bossHiddenSections.forEach((section) => {
     section.setAttribute("aria-hidden", enabled ? "true" : "false");
@@ -1543,15 +1543,15 @@ function setThemeMode(enabled, { persist = true } = {}) {
   if (themeToggle) {
     themeToggle.textContent = enabled ? "Dark theme" : "Light theme";
     themeToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
-    themeToggle.setAttribute("aria-label", enabled ? "Switch to dark technical theme" : "Switch to light enterprise theme");
+    themeToggle.setAttribute("aria-label", enabled ? "Switch to dark technical theme" : "Switch to light documentation theme");
   }
   if (presentationThemeToggle) {
     presentationThemeToggle.textContent = enabled ? "Switch to Dark Theme" : "Switch to Light Theme";
   }
   if (themeStatus) {
     themeStatus.textContent = enabled
-      ? "The lighter enterprise presentation is active. Switch back when you want the darker technical control-room look."
-      : "The current presentation starts in the darker technical theme. Switch when you want a cleaner boardroom feel.";
+      ? "The lighter documentation theme is active. Switch back when you want the darker technical control-room look."
+      : "The current presentation starts in the darker technical theme. Switch when you want a cleaner documentation-style review surface.";
   }
 
   if (!persist) return;

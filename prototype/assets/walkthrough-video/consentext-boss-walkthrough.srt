@@ -1,256 +1,208 @@
 1
-00:00:00,000 --> 00:00:03,463
-Here is the simplest way to think about Consentext.
+00:00:00,000 --> 00:00:02,883
+The fastest technical framing is this.
 
 2
-00:00:03,463 --> 00:00:10,795
-It is a control layer that sits between a person's health information and any outside AI or external system.
+00:00:02,883 --> 00:00:11,303
+Consentext is a control boundary that sits between stored health context and every outbound AI or share action.
 
 3
-00:00:10,795 --> 00:00:13,307
-The point is not to block innovation.
+00:00:11,303 --> 00:00:19,343
+The vault holds context. Consent and policy decide what may move. The gateway enforces the selected route.
 
 4
-00:00:13,307 --> 00:00:19,757
-The point is to let people use powerful tools without losing control of what leaves the system.
+00:00:19,343 --> 00:00:27,005
+Audit records what happened. The system is valuable because disclosure behavior stops being implicit.
 
 5
-00:00:19,757 --> 00:00:28,719
-If you were explaining this to a boss in one sentence, you could say Consentext makes health data useful without making it reckless.
+00:00:27,005 --> 00:00:39,294
+Instead of letting every request act like a raw export, the product classifies the request, chooses the correct lane, applies transforms, and leaves proof behind.
 
 6
-00:00:28,719 --> 00:00:40,600
-Instead of letting raw information spill straight into a chatbot or partner tool, the platform creates a governed path, decides what is appropriate, and records what happened.
+00:00:39,294 --> 00:00:46,272
+That control boundary is the main idea the rest of the prototype is trying to make concrete.
 
 7
-00:00:40,600 --> 00:00:44,742
-That is the big idea the rest of the site is trying to prove.
+00:00:46,272 --> 00:00:50,088
+The problem is not just that health data is sensitive.
 
 8
-00:00:44,742 --> 00:00:51,246
-The reason this matters is that most people already feel a tension. They want smart help.
+00:00:50,088 --> 00:00:55,952
+The deeper problem is that most current AI flows make disclosure behavior implicit.
 
 9
-00:00:51,246 --> 00:00:54,901
-They want explanations, comparisons, and guidance.
+00:00:55,952 --> 00:01:08,033
+A user pastes something into a tool, a system forwards context to a provider, or a share occurs with weak scoping, and nobody has a stable contract for what actually left.
 
 10
-00:00:54,901 --> 00:01:02,502
-But they also know that pasting raw health records into a public AI tool is risky and hard to take back.
+00:01:08,033 --> 00:01:10,789
+Consentext is trying to solve that gap.
 
 11
-00:01:02,502 --> 00:01:11,857
-That trust gap is where Consentext sits. The site shows that we do not need to choose between no help at all and total exposure.
+00:01:10,789 --> 00:01:19,479
+The user should be able to get useful explanation and stronger reasoning without every request turning into a broad export.
 
 12
-00:01:11,857 --> 00:01:22,235
-We can define rules, route each request to the right level of intelligence, and make the user experience feel understandable instead of scary.
+00:01:19,479 --> 00:01:30,289
+The architecture matters because it creates explicit scope, explicit route selection, and explicit proof rather than relying on hand-wavy trust language.
 
 13
-00:01:22,235 --> 00:01:30,055
-That is why the design keeps returning to phrases like minimum necessary, protected model, and audit trail.
+00:01:30,289 --> 00:01:37,024
+The most important architecture choice is the split between the vault and the control plane.
 
 14
-00:01:30,055 --> 00:01:34,733
-Those are not just technical controls. They are the trust story.
+00:01:37,024 --> 00:01:43,173
+The vault is where stored health context, raw artifacts, and derived summaries live.
 
 15
-00:01:34,733 --> 00:01:43,847
-A helpful way to walk your boss through the architecture is to keep it simple. The vault is where the health context lives.
+00:01:43,173 --> 00:01:52,104
+The control plane is where consent logic, policy objects, lane selection, minimization, de-identification, and audit live.
 
 16
-00:01:43,847 --> 00:01:51,257
-That includes stored information, incoming feeds, and the views people use to understand their data.
+00:01:52,104 --> 00:01:57,082
+The gateway then becomes the only governed path to external systems.
 
 17
-00:01:51,257 --> 00:01:54,147
-The control plane is a different layer.
+00:01:57,082 --> 00:02:04,036
+That separation matters because storing context is not the same job as deciding what may leave.
 
 18
-00:01:54,147 --> 00:02:02,669
-That is where the trust kernel, consent logic, policy rules, minimization, de-identification, and audit trail live.
+00:02:04,036 --> 00:02:15,822
+Once those responsibilities are separated, the system can fail closed, keep the policy object legible, and make outbound behavior inspectable instead of magical.
 
 19
-00:02:02,669 --> 00:02:08,152
-Then the AI gateway becomes the only governed path out to outside systems.
+00:02:15,822 --> 00:02:23,732
+Once the boundary is clear, the next idea is the lane model. Deterministic requests stay retrieval-only.
 
 20
-00:02:08,152 --> 00:02:16,526
-The reason the site emphasizes this split is that it keeps the product honest. Storing health context is one job.
+00:02:23,732 --> 00:02:32,860
+Private requests use the internal protected model. Private Plus uses minimum-necessary or de-identified governed export.
 
 21
-00:02:16,526 --> 00:02:25,344
-Deciding what can leave is another. Consentext is strongest when those jobs are clearly separated and visibly governed.
+00:02:32,860 --> 00:02:42,520
+Max Intelligence uses broader user-authorized governed export. Off-Board models the moment the user leaves Consentext entirely.
 
 22
-00:02:25,344 --> 00:02:33,545
-Once you understand the split between stored context and governed disclosure, the next idea is the lane model.
+00:02:42,520 --> 00:02:48,377
+In implementation terms, the lane is the compact output of policy evaluation.
 
 23
-00:02:33,545 --> 00:02:41,150
-Every request is not treated the same. Some requests do not need AI at all and can stay deterministic.
+00:02:48,377 --> 00:03:01,689
+It tells the rest of the system what class of context is allowed to move, which transforms apply, which gateway path is legal, and what kind of audit event should be appended.
 
 24
-00:02:41,150 --> 00:02:48,159
-Some need a protected internal explanation. Some can use outside AI with only reduced context.
+00:03:01,689 --> 00:03:08,894
+One of the most important March decisions is that Private and Private Plus are not interchangeable.
 
 25
-00:02:48,159 --> 00:02:53,154
-Some may justify a broader governed route for maximum intelligence.
-
-26
-00:02:53,154 --> 00:03:03,816
-And some users will choose to leave the system entirely, which is why the site shows an off-board path instead of pretending it does not exist.
-
-27
-00:03:03,816 --> 00:03:10,825
-This is an easy business concept to repeat back. The product is not one giant yes or no to AI.
-
-28
-00:03:10,825 --> 00:03:15,745
-It is a controlled routing system that matches capability to risk.
-
-29
-00:03:15,745 --> 00:03:24,404
-One of the biggest March decisions was that Private and Private Plus should never be flattened into the same product promise.
-
-30
-00:03:24,404 --> 00:03:26,898
+00:03:08,894 --> 00:03:11,514
 Private is the locked internal lane.
 
+26
+00:03:11,514 --> 00:03:20,830
+It requires a protected model running inside Consentext-controlled systems, and that is a phase requirement, not a nice-to-have.
+
+27
+00:03:20,830 --> 00:03:30,292
+Private Plus is different. It is the narrow governed external lane where only minimum-necessary or de-identified context may move.
+
+28
+00:03:30,292 --> 00:03:37,716
+The reason this distinction matters is that it changes real system behavior. Different transforms run.
+
+29
+00:03:37,716 --> 00:03:43,247
+Different output classifications appear. Different provider paths are legal.
+
+30
+00:03:43,247 --> 00:03:48,560
+If those two lanes collapse, the rest of the control plane loses meaning.
+
 31
-00:03:26,898 --> 00:03:34,378
-It means sensitive health context can be used for explanation without leaving Consentext-controlled systems.
+00:03:48,560 --> 00:03:53,680
+Max Intelligence exists for the moments when a narrow route is not enough.
 
 32
-00:03:34,378 --> 00:03:38,673
-That is not optional in this phase. Private Plus is different.
+00:03:53,680 --> 00:04:02,121
+A user may want deeper comparison, broader reasoning, or a more capable external model path than Private Plus can support.
 
 33
-00:03:38,673 --> 00:03:45,600
-It is the lane for outside help when reduced, minimum necessary, or de-identified context is enough.
+00:04:02,121 --> 00:04:07,449
+The important thing is that Consentext still stays in front of that exchange.
 
 34
-00:03:45,600 --> 00:03:50,933
-This is important because it lets the product be both useful and disciplined.
+00:04:07,449 --> 00:04:15,959
+The user authorizes broader context, the gateway still mediates provider access, and the audit log still records the route.
 
 35
-00:03:50,933 --> 00:03:57,098
-You are not telling the market that every outside AI request gets the same broad context.
+00:04:15,959 --> 00:04:24,261
+That is what makes Max Intelligence different from Off-Board. Off-Board means the user leaves the protected environment.
 
 36
-00:03:57,098 --> 00:04:05,272
-You are telling them there is a controlled middle ground where the user still gets value without unnecessary exposure.
+00:04:24,261 --> 00:04:31,802
+Max Intelligence means the system offers a broader governed lane without abandoning the control relationship.
 
 37
-00:04:05,272 --> 00:04:10,354
-Max Intelligence exists for the moments when narrow context is not enough.
+00:04:31,802 --> 00:04:36,880
+The prototype also has to show that this is more than an AI routing demo.
 
 38
-00:04:10,354 --> 00:04:19,419
-Maybe the user wants a deeper comparison, broader reasoning, or a more powerful answer than the minimum necessary route can provide.
+00:04:36,880 --> 00:04:42,237
+A patient-authorized clinician share path is now part of the system contract.
 
 39
-00:04:19,419 --> 00:04:23,883
-The key is that Consentext still stays in front of that exchange.
+00:04:42,237 --> 00:04:51,766
+That means a person can scope what should be sent to a doctor, clinic, or hospital without pretending a full staff portal already exists.
 
 40
-00:04:23,883 --> 00:04:30,683
-The user can authorize broader context, but the action is still governed, visible, and intentional.
+00:04:51,766 --> 00:04:58,166
+On top of that, the internal team needs enough operational visibility to support the system.
 
 41
-00:04:30,683 --> 00:04:36,520
-That is what makes it different from simply going off-board to a frontier tool alone.
+00:04:58,166 --> 00:05:07,070
+They need event lookup, route search, recent risk review, and proof that a share or route behaved the way policy said it should.
 
 42
-00:04:36,520 --> 00:04:40,503
-Off-board means the user leaves the protected environment.
+00:05:07,070 --> 00:05:14,165
+That is why the prototype now includes both the clinician packet preview and the internal ops console.
 
 43
-00:04:40,503 --> 00:04:49,569
-Max Intelligence means the user gets stronger capability while the platform still controls the path, the permissions, and the proof.
+00:05:14,165 --> 00:05:22,056
+A useful change in this pass is that the site no longer depends on a live presenter remembering every talking point.
 
 44
-00:04:49,569 --> 00:04:57,192
-That distinction matters strategically because it preserves freedom without giving up the product relationship.
+00:05:22,056 --> 00:05:26,613
+You can turn on Summary Mode to hide the denser prototype surfaces.
 
 45
-00:04:57,192 --> 00:05:02,261
-Another important update is that the story is not only about AI prompts.
+00:05:26,613 --> 00:05:31,171
+You can switch to a lighter documentation theme for daytime review.
 
 46
-00:05:02,261 --> 00:05:07,260
-The system also needs a real patient-authorized clinician sharing path.
+00:05:31,171 --> 00:05:41,647
+You can open a one-page technical brief, download the narrated MP4 walkthrough, and export the current policy, audit summary, or clinician packet preview.
 
 47
-00:05:07,260 --> 00:05:18,454
-That means a person can scope what should be shared with a doctor, clinic, or hospital, even if the full clinician-facing portal is not part of the first pass.
+00:05:41,647 --> 00:05:53,687
+That matters because it turns the prototype into a review package that a senior developer can inspect asynchronously, not just a live demo that disappears when the meeting ends.
 
 48
-00:05:18,454 --> 00:05:23,735
-On top of that, the internal team still needs a minimum operations surface.
+00:05:53,687 --> 00:06:02,212
+The implementation takeaway is this. Consentext is a policy engine plus governed gateway in front of health-context use.
 
 49
-00:05:23,735 --> 00:05:29,790
-They need audit lookup, troubleshooting, and visibility into what the system is doing.
+00:06:02,212 --> 00:06:11,021
+It separates data custody from disclosure logic, enforces distinct lane contracts, and records what happened as audit proof.
 
 50
-00:05:29,790 --> 00:05:34,084
-The site now explains both of those points in plain language.
+00:06:11,021 --> 00:06:25,655
+The system gives users a safer internal path, a narrow governed external path, a broader governed path when they explicitly want it, and an honest model of what happens when they leave protections entirely.
 
 51
-00:05:34,084 --> 00:05:43,518
-That makes the demo more believable because it shows how the product works in real life, not just as an abstract architecture diagram.
+00:06:25,655 --> 00:06:32,759
+It also stays modular enough for later provider adapters, clinician workflows, and integration work.
 
 52
-00:05:43,518 --> 00:05:51,441
-A final useful thing to show is that the site no longer depends on a live presenter remembering every talking point.
-
-53
-00:05:51,441 --> 00:05:55,539
-You can turn on Boss Mode to hide the denser build surfaces.
-
-54
-00:05:55,539 --> 00:06:00,867
-You can switch to a lighter enterprise theme if the room wants a cleaner look.
-
-55
-00:06:00,867 --> 00:06:11,249
-You can open a one page executive brief, download a narrated MP4 walkthrough, and export the current policy, audit summary, or clinician packet preview.
-
-56
-00:06:11,249 --> 00:06:18,011
-That matters because it turns the prototype from a one time demo into a shareable presentation kit.
-
-57
-00:06:18,011 --> 00:06:24,636
-The explanation, the proof, and the follow up materials are all built into the product story now.
-
-58
-00:06:24,636 --> 00:06:28,577
-If you want a clean closing line for your boss, use this.
-
-59
-00:06:28,577 --> 00:06:39,847
-Consentext is building the governance and interaction layer that makes health context useful, shareable, and auditable without treating every request the same way.
-
-60
-00:06:39,847 --> 00:06:44,687
-The product matters because it turns trust into something operational.
-
-61
-00:06:44,687 --> 00:06:55,611
-It gives people a safer internal path, a narrow governed outside path, a broader governed path when they truly want it, and a visible record of what happened.
-
-62
-00:06:55,611 --> 00:07:02,249
-It also stays modular enough for later provider adapters, clinician workflows, and integrations.
-
-63
-00:07:02,249 --> 00:07:09,094
-In short, the site is showing a platform that can grow in capability without abandoning discipline.
-
-64
-00:07:09,094 --> 00:07:15,316
-That is the story this walkthrough is meant to make easy to understand and easy to retell.
+00:06:32,759 --> 00:06:37,589
+That is the architecture this walkthrough is trying to make legible.
 

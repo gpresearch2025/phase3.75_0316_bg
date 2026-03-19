@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="topbar-actions">
-          <button id="boss-mode-toggle" class="topbar-toggle topbar-toggle-secondary" type="button" aria-pressed="false">Boss mode off</button>
+          <button id="boss-mode-toggle" class="topbar-toggle topbar-toggle-secondary" type="button" aria-pressed="false">Summary mode off</button>
           <button id="theme-toggle" class="topbar-toggle topbar-toggle-secondary" type="button" aria-pressed="false">Light theme</button>
           <button id="focus-mode-toggle" class="topbar-toggle topbar-toggle-secondary" type="button" aria-pressed="false">Focus mode off</button>
           <button id="topbar-toggle" class="topbar-toggle" type="button" aria-expanded="true" aria-controls="top-nav">Minimize header</button>
@@ -45,26 +45,26 @@
       <section class="panel executive-strip reveal">
         <div class="executive-strip-head">
           <div>
-            <p class="eyebrow">Executive Summary</p>
+            <p class="eyebrow">Technical Snapshot</p>
             <h2>The shortest accurate way to describe the product</h2>
           </div>
-          <span class="executive-status">Presentation-ready summary</span>
+          <span class="executive-status">Developer review ready</span>
         </div>
         <div class="executive-summary-grid">
           <article class="executive-summary-card">
             <span class="mini-label">What it is</span>
-            <strong>Consentext is the governance layer between health context and AI.</strong>
-            <p>It decides what can stay internal, what can leave in reduced form, and what must be blocked or explicitly authorized.</p>
+            <strong>Consentext is the policy and routing layer in front of health-context use.</strong>
+            <p>It decides what stays internal, what may leave in reduced form, what needs explicit authorization, and what must fail closed.</p>
           </article>
           <article class="executive-summary-card">
             <span class="mini-label">Why it matters</span>
-            <strong>It turns trust into a product feature instead of a legal afterthought.</strong>
-            <p>The platform gives people safer AI help, a visible control boundary, and a proof trail for every decision.</p>
+            <strong>It makes disclosure behavior explicit, testable, and auditable.</strong>
+            <p>The platform turns vague trust promises into route selection, transform rules, recipient checks, and append-only proof.</p>
           </article>
           <article class="executive-summary-card">
-            <span class="mini-label">What is locked</span>
-            <strong>The Private lane stays internal, and Private+ stays narrow by default.</strong>
-            <p>That distinction is the core business promise, and the rest of the prototype is now organized around it.</p>
+            <span class="mini-label">Non-negotiable contract</span>
+            <strong>Private is internal-only, Private+ is narrow, and broader reasoning is a separate governed lane.</strong>
+            <p>That separation is the core system contract, and the rest of the prototype is organized around enforcing it consistently.</p>
           </article>
         </div>
       </section>
@@ -101,9 +101,9 @@
               <span class="trust-pill">Append-only audit</span>
             </div>
             <div class="hero-actions">
-              <a href="#walkthrough" class="button button-primary">Play Boss Walkthrough</a>
-              <button id="hero-boss-toggle" class="button button-secondary" type="button">Turn Boss Mode On</button>
-              <a href="executive-brief.html" class="button button-secondary">Open Executive Brief</a>
+              <a href="#walkthrough" class="button button-primary">Play Technical Walkthrough</a>
+              <button id="hero-boss-toggle" class="button button-secondary" type="button">Turn Summary Mode On</button>
+              <a href="executive-brief.html" class="button button-secondary">Open Technical Brief</a>
               <a href="#artifacts" class="button button-secondary">Open Artifact Center</a>
             </div>
             <div class="signal-strip">
@@ -187,9 +187,9 @@
       <section id="walkthrough" class="panel walkthrough-panel reveal delay-1">
         <div class="section-header walkthrough-header">
           <div>
-            <p class="eyebrow">Boss Walkthrough</p>
-            <h2>A plain-English explainer you can just press play</h2>
-            <p class="hero-text">This front-page walkthrough explains the site in easy terms, with a built-in voice narration and closed captions that mirror the script. It is designed to feel like a calm six-to-seven-minute presentation for a manager or boss.</p>
+            <p class="eyebrow">Technical Walkthrough</p>
+            <h2>A narrated architecture review you can just press play</h2>
+            <p class="hero-text">This front-page walkthrough explains the system in implementation terms, with built-in voice narration and closed captions that mirror the script. It is tuned for a senior developer who needs the trust boundary, routing model, and proof surfaces quickly.</p>
           </div>
           <article class="walkthrough-intro-card">
             <span class="mini-label">Estimated run time</span>
@@ -201,9 +201,9 @@
           <article id="walkthrough-stage" class="walkthrough-stage panel-dark" data-theme="trust">
             <div class="walkthrough-stage-head">
               <div>
-                <p class="mini-label">Narrated reel</p>
-                <h3 id="walkthrough-title">Why this product exists</h3>
-                <p id="walkthrough-summary" class="walkthrough-summary">A simple story about safe AI, patient control, and why this matters to the business.</p>
+                <p class="mini-label">Narrated architecture review</p>
+                <h3 id="walkthrough-title">Consentext in one sentence</h3>
+                <p id="walkthrough-summary" class="walkthrough-summary">A technical framing of the trust boundary, routing contract, and proof surfaces.</p>
               </div>
               <div class="walkthrough-badge-stack">
                 <span class="walkthrough-badge">Voice overlay</span>
@@ -213,14 +213,14 @@
             <div class="walkthrough-screen">
               <p id="walkthrough-kicker" class="walkthrough-kicker">What this is</p>
               <div class="walkthrough-story-card">
-                <span id="walkthrough-step" class="walkthrough-step">Chapter 1 of 8</span>
-                <strong id="walkthrough-hook">A safer way to use health context with AI.</strong>
-                <p id="walkthrough-cc" class="walkthrough-caption" aria-live="polite">Press play to hear the narrated walkthrough. The captions will repeat the voice script here.</p>
+                <span id="walkthrough-step" class="walkthrough-step">Chapter 1 of 9</span>
+                <strong id="walkthrough-hook">A governed way to use health context with AI.</strong>
+                <p id="walkthrough-cc" class="walkthrough-caption" aria-live="polite">Press play to hear the narrated technical walkthrough. The captions will repeat the voice script here.</p>
               </div>
               <div id="walkthrough-pills" class="walkthrough-pill-row"></div>
             </div>
             <div class="walkthrough-controls">
-              <button id="walkthrough-play" class="button button-primary" type="button">Play Voice Walkthrough</button>
+              <button id="walkthrough-play" class="button button-primary" type="button">Play Technical Walkthrough</button>
               <button id="walkthrough-pause" class="button button-secondary" type="button">Pause</button>
               <button id="walkthrough-restart" class="button button-secondary" type="button">Restart</button>
               <button id="walkthrough-fullscreen" class="button button-secondary" type="button">Full Screen</button>
@@ -229,27 +229,27 @@
               <div class="walkthrough-progress-bar"><span id="walkthrough-progress-fill"></span></div>
               <div class="walkthrough-progress-meta">
                 <span id="walkthrough-status">Ready to play</span>
-                <span>Closed captions repeat the voice script</span>
+                <span>Closed captions mirror the narration</span>
               </div>
             </div>
-            <p id="walkthrough-fallback" class="walkthrough-fallback">If your browser blocks speech, the captions and chapter buttons still give you the full talk track.</p>
+            <p id="walkthrough-fallback" class="walkthrough-fallback">If your browser blocks speech, the captions and chapter buttons still give you the full technical script.</p>
           </article>
           <div class="walkthrough-sidebar">
             <article class="preview-card soft-card">
-              <p class="mini-label">Boss takeaway</p>
-              <h3>Consentext helps people use AI with health context without losing control of what leaves the system.</h3>
-              <p>This explainer leads with the business meaning first, then shows the trust controls in simple language.</p>
+              <p class="mini-label">Reviewer takeaway</p>
+              <h3>Consentext is a governed routing layer that decides what stays internal, what can leave in reduced form, and what gets blocked.</h3>
+              <p>This walkthrough leads with system boundary, lane semantics, and proof surfaces before product polish.</p>
             </article>
             <article class="preview-card">
               <p class="mini-label">Chapter map</p>
               <div id="walkthrough-chapters" class="walkthrough-chapters"></div>
             </article>
             <article class="preview-card soft-card">
-              <p class="mini-label">Recommended live sequence</p>
+              <p class="mini-label">Recommended review path</p>
               <ul class="check-list">
-                <li>Play the opening chapters to frame the problem and product in plain English.</li>
-                <li>Jump to the lane explanation when trust and capability tradeoffs come up.</li>
-                <li>Close on clinician sharing, operations, and audit proof for the business takeaway.</li>
+                <li>Start with the trust boundary and the vault-versus-control-plane split.</li>
+                <li>Jump to lane comparison and trust flow when route semantics come up.</li>
+                <li>Close on the ops console, audit proof, and exported artifacts for implementation review.</li>
               </ul>
             </article>
           </div>
@@ -257,46 +257,46 @@
       </section>
       <section id="presentation-suite" class="panel presentation-suite reveal delay-1">
         <div class="section-header">
-          <p class="eyebrow">Presentation Kit</p>
-          <h2>Everything you need for a cleaner boss-facing demo</h2>
-          <p class="hero-text">This layer keeps the prototype explainable in the room and shareable after the meeting, with boss mode, the light enterprise theme, the printable brief, and the downloadable walkthrough all in one place.</p>
+          <p class="eyebrow">Review Kit</p>
+          <h2>Everything you need for a clean technical review</h2>
+          <p class="hero-text">This layer keeps the prototype explainable in the room and reviewable afterward, with summary mode, the light docs theme, the printable technical brief, and the downloadable walkthrough all in one place.</p>
         </div>
         <div class="presentation-grid">
           <article class="presentation-card preview-card soft-card">
-            <p class="mini-label">Boss Mode</p>
-            <h3>Simplify the page for leadership review</h3>
-            <p>Hide the deeper build and operator sections so the page reads as a concise product story instead of a working prototype.</p>
+            <p class="mini-label">Summary Mode</p>
+            <h3>Collapse to the core architecture story</h3>
+            <p>Hide the denser prototype sections when you want to start with the boundary, route model, and artifacts before drilling down.</p>
             <div class="artifact-actions">
-              <button id="presentation-boss-toggle" class="button button-primary" type="button">Turn Boss Mode On</button>
+              <button id="presentation-boss-toggle" class="button button-primary" type="button">Turn Summary Mode On</button>
             </div>
           </article>
           <article class="presentation-card preview-card">
             <p class="mini-label">Theme Option</p>
-            <h3>Switch to a lighter enterprise look</h3>
-            <p id="theme-status">The current presentation starts in the darker technical theme. Switch when you want a cleaner boardroom feel.</p>
+            <h3>Switch to a lighter documentation look</h3>
+            <p id="theme-status">The current presentation starts in the darker technical theme. Switch when you want a cleaner documentation-style review surface.</p>
             <div class="artifact-actions">
               <button id="presentation-theme-toggle" class="button button-secondary" type="button">Switch to Light Theme</button>
             </div>
           </article>
           <article class="presentation-card preview-card soft-card">
-            <p class="mini-label">Executive Brief</p>
-            <h3>Use the one-page summary after the live walkthrough</h3>
-            <p>Open the clean brief in the browser, print it directly, or download the generated PDF version for easy forwarding.</p>
+            <p class="mini-label">Technical Brief</p>
+            <h3>Use the one-page architecture summary after the walkthrough</h3>
+            <p>Open the brief in the browser, print it directly, or download the generated PDF version for asynchronous review.</p>
             <div class="artifact-actions">
-              <a href="executive-brief.html" class="button button-secondary">Open Brief</a>
+              <a href="executive-brief.html" class="button button-secondary">Open Technical Brief</a>
               <button id="print-brief" class="button button-secondary" type="button">Print Brief</button>
-              <a href="assets/executive-brief/consentext-phase-3-75-executive-brief.pdf" class="button button-secondary" download>Download PDF</a>
+              <a href="assets/executive-brief/consentext-phase-3-75-executive-brief.pdf" class="button button-secondary" download="consentext-phase-3-75-technical-brief.pdf">Download PDF</a>
             </div>
           </article>
           <article class="presentation-card preview-card panel-dark">
             <p class="mini-label">Narrated MP4</p>
-            <h3>Download the walkthrough as a real video</h3>
+            <h3>Download the walkthrough as a technical review video</h3>
             <video class="walkthrough-video-player" controls preload="metadata">
               <source src="assets/walkthrough-video/consentext-boss-walkthrough.mp4" type="video/mp4">
             </video>
             <div class="artifact-actions">
-              <a href="assets/walkthrough-video/consentext-boss-walkthrough.mp4" class="button button-primary" download>Download MP4</a>
-              <a href="assets/walkthrough-video/consentext-boss-walkthrough.srt" class="button button-secondary" download>Download Captions</a>
+              <a href="assets/walkthrough-video/consentext-boss-walkthrough.mp4" class="button button-primary" download="consentext-phase-3-75-technical-walkthrough.mp4">Download MP4</a>
+              <a href="assets/walkthrough-video/consentext-boss-walkthrough.srt" class="button button-secondary" download="consentext-phase-3-75-technical-walkthrough.srt">Download Captions</a>
             </div>
           </article>
         </div>
@@ -306,7 +306,7 @@
         <div class="section-header">
           <p class="eyebrow">Scenario Presets</p>
           <h2>Tell the story with a few fast reusable demo states</h2>
-          <p class="hero-text">Each preset applies a clean policy posture, swaps to the right tab, and moves the prototype into a ready-to-explain state for a specific stakeholder question.</p>
+          <p class="hero-text">Each preset applies a clean policy posture, swaps to the right tab, and moves the prototype into a ready-to-review state for a concrete architecture question.</p>
         </div>
         <div id="scenario-grid" class="scenario-grid"></div>
       </section>
@@ -315,7 +315,7 @@
         <div class="section-header">
           <p class="eyebrow">Lane Comparison</p>
           <h2>Show the difference between safety, utility, and freedom at a glance</h2>
-          <p class="hero-text">This side-by-side view makes it easier to explain why Private, Private+, Max Intelligence, and Off-Board are distinct product promises instead of one blended AI mode.</p>
+          <p class="hero-text">This side-by-side view makes it easier to explain why Private, Private+, Max Intelligence, and Off-Board are distinct behavioral contracts instead of one blended AI mode.</p>
         </div>
         <div id="lane-comparison-grid" class="lane-comparison-grid"></div>
       </section>
@@ -323,8 +323,8 @@
       <section id="trust-flow" class="panel trust-flow-panel reveal delay-1">
         <div class="section-header">
           <p class="eyebrow">Animated Trust Flow</p>
-          <h2>The product story from context to proof</h2>
-          <p class="hero-text">The trust flow makes the control boundary easier to explain live: context starts in the vault, policy narrows what can move, lane routing decides capability, the gateway enforces the route, and the audit trail proves what happened.</p>
+          <h2>The request path from context to proof</h2>
+          <p class="hero-text">The trust flow makes the control boundary easier to inspect live: context starts in the vault, policy narrows what can move, lane routing decides capability, the gateway enforces the route, and the audit trail proves what happened.</p>
         </div>
         <div class="trust-flow-shell">
           <div class="trust-flow-rail" aria-hidden="true">
@@ -378,8 +378,8 @@
       <section id="glossary" class="panel glossary-panel reveal delay-1">
         <div class="section-header">
           <p class="eyebrow">Glossary</p>
-          <h2>Hover or focus the key terms when you want plain-English help</h2>
-          <p class="hero-text">These tooltips are meant for exactly the moment when a stakeholder asks what a phrase means and you want a short answer without dropping into internal jargon.</p>
+          <h2>Hover or focus the key terms when you want a fast architecture definition</h2>
+          <p class="hero-text">These tooltips are meant for the moment when someone asks what a phrase means in system terms and you want a short, stable answer.</p>
         </div>
         <div class="glossary-grid">
           <button type="button" class="glossary-term" data-definition="The trust kernel is the governance layer that decides what data may leave, in what form, and under which rules.">
@@ -413,7 +413,7 @@
         <div class="section-header">
           <p class="eyebrow">Artifact Center</p>
           <h2>Download the files that explain or prove the current state</h2>
-          <p class="hero-text">This is the shareable side of the prototype: the live policy export, the audit summary, the clinician packet preview, the executive brief, and the downloadable walkthrough media.</p>
+          <p class="hero-text">This is the shareable side of the prototype: the live policy export, the audit summary, the clinician packet preview, the technical brief, and the downloadable walkthrough media.</p>
         </div>
         <div class="artifact-grid">
           <article class="artifact-card preview-card soft-card">
@@ -423,10 +423,10 @@
               <button id="download-policy" class="button button-primary" type="button">Download Policy JSON</button>
               <button id="download-audit" class="button button-secondary" type="button">Download Audit Summary</button>
               <button id="download-clinician-packet" class="button button-secondary" type="button">Download Clinician Packet</button>
-              <a href="executive-brief.html" class="button button-secondary">Open Brief</a>
-              <a href="assets/executive-brief/consentext-phase-3-75-executive-brief.pdf" class="button button-secondary" download>Download PDF</a>
-              <a href="assets/walkthrough-video/consentext-boss-walkthrough.mp4" class="button button-secondary" download>Download MP4</a>
-              <a href="assets/walkthrough-video/consentext-boss-walkthrough.srt" class="button button-secondary" download>Download Captions</a>
+              <a href="executive-brief.html" class="button button-secondary">Open Technical Brief</a>
+              <a href="assets/executive-brief/consentext-phase-3-75-executive-brief.pdf" class="button button-secondary" download="consentext-phase-3-75-technical-brief.pdf">Download PDF</a>
+              <a href="assets/walkthrough-video/consentext-boss-walkthrough.mp4" class="button button-secondary" download="consentext-phase-3-75-technical-walkthrough.mp4">Download MP4</a>
+              <a href="assets/walkthrough-video/consentext-boss-walkthrough.srt" class="button button-secondary" download="consentext-phase-3-75-technical-walkthrough.srt">Download Captions</a>
             </div>
           </article>
           <article class="artifact-card panel-dark">

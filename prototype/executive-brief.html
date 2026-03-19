@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consentext Phase 3.75 Executive Brief</title>
+  <title>Consentext Phase 3.75 Technical Brief</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,76 +13,102 @@
   <main class="brief-sheet">
     <header class="brief-hero">
       <p class="brief-kicker">Consentext / Phase 3.75</p>
-      <h1>Executive Brief</h1>
-      <p class="brief-tagline">Consentext is the governance layer between health context and AI. It helps people use AI, share safely with clinicians, and keep a visible proof trail without treating every request the same way.</p>
+      <h1>Technical Brief</h1>
+      <p class="brief-tagline">Consentext is the policy, routing, and audit layer between stored health context and every outbound AI or clinician-share action. It makes disclosure behavior explicit instead of implicit.</p>
     </header>
 
     <section class="brief-grid">
       <article class="brief-card">
-        <p class="mini-label">What it is</p>
-        <strong>A trust and routing layer in front of health-context use.</strong>
-        <p>Vault keeps the health context. The trust kernel decides what may stay internal, what may leave in reduced form, and what must be blocked or explicitly authorized.</p>
+        <p class="mini-label">System boundary</p>
+        <strong>Vault is the data plane. Trust kernel, policy engine, gateway, and audit are the control plane.</strong>
+        <p>The main architectural choice is keeping stored health context separate from disclosure decisions so every outbound path is mediated, classified, and logged.</p>
       </article>
       <article class="brief-card">
-        <p class="mini-label">Who it is for</p>
-        <strong>People who want useful AI and safe sharing without losing control.</strong>
-        <p>The prototype is framed for patients first, with support for patient-authorized clinician sharing and a minimal internal ops console for support and audit lookup.</p>
-      </article>
-    </section>
-
-    <section class="brief-grid">
-      <article class="brief-card">
-        <p class="mini-label">Key distinction</p>
-        <strong>Private and Private+ are not the same promise.</strong>
-        <p>Private means the explanation stays inside Consentext on a protected internal model. Private+ means outside help gets only the minimum needed through a governed route.</p>
-      </article>
-      <article class="brief-card">
-        <p class="mini-label">Why it matters</p>
-        <strong>Trust becomes a product feature, not a legal afterthought.</strong>
-        <p>The value is not only the answer from AI. The value is the visible control boundary, the lane decision, the patient share controls, and the proof of what happened.</p>
+        <p class="mini-label">Core contract</p>
+        <strong>Every request resolves to a lane with a disclosure class, an enforcement path, and an audit footprint.</strong>
+        <p>The prototype is not just a prompt UI. It is a routing system that decides whether the request stays deterministic, uses an internal protected model, uses narrow governed external help, uses broader governed help, or leaves Consentext entirely.</p>
       </article>
     </section>
 
     <section class="brief-grid">
       <article class="brief-card">
-        <p class="mini-label">Feature buckets</p>
+        <p class="mini-label">Lane semantics</p>
         <ul>
-          <li>Core concept: vault context separated from governance and outbound routing.</li>
-          <li>Primary workflow: policy creation, lane selection, governed gateway, and audit trail.</li>
-          <li>Supporting controls: clinician share path, recipient verification, and ops lookup.</li>
-          <li>Proof: downloadable policy, audit summary, clinician packet preview, and narrated walkthrough.</li>
+          <li>Deterministic: structured retrieval, no AI required.</li>
+          <li>Private: protected internal model only, no external disclosure.</li>
+          <li>Private+: minimum-necessary or de-identified governed export.</li>
+          <li>Max Intelligence: broader user-authorized governed export.</li>
+          <li>Off-Board: user leaves Consentext protections entirely.</li>
         </ul>
       </article>
       <article class="brief-card">
-        <p class="mini-label">Current locked direction</p>
+        <p class="mini-label">Non-negotiable distinction</p>
+        <strong>Private and Private+ are different technical contracts, not cosmetic labels.</strong>
+        <p>Private requires an internal protected model inside Consentext-controlled systems. Private+ is the narrow external lane, with transform and scope reduction before outbound routing. Max Intelligence is a separate broader governed contract, not a synonym for Private+.</p>
+      </article>
+    </section>
+
+    <section class="brief-grid">
+      <article class="brief-card">
+        <p class="mini-label">Policy object</p>
         <ul>
-          <li>Private requires an internal protected model.</li>
-          <li>Private+ stays narrow by default.</li>
-          <li>Gateway remains adapter-ready while provider count and pricing stay open.</li>
-          <li>Patient-authorized clinician sharing is in scope before a full staff portal.</li>
+          <li>Recipient type, verification status, and intended purpose.</li>
+          <li>Duration, pod scope, granularity, and identifier posture.</li>
+          <li>Outbound classification and share status.</li>
+          <li>Generated policy id, route summary, and append-only audit linkage.</li>
+        </ul>
+      </article>
+      <article class="brief-card">
+        <p class="mini-label">Enforcement path</p>
+        <ul>
+          <li>Policy evaluation selects route eligibility and output class.</li>
+          <li>Transforms reduce or block context before the gateway sees it.</li>
+          <li>The gateway mediates provider access through an adapter-ready layer.</li>
+          <li>Every route, share, revoke, and access check appends to audit.</li>
         </ul>
       </article>
     </section>
 
     <section class="brief-grid">
       <article class="brief-card">
-        <p class="mini-label">Recommended live demo</p>
+        <p class="mini-label">Supporting surfaces</p>
         <ul>
-          <li>Start with the overview and the one-sentence framing.</li>
-          <li>Play the walkthrough opening chapters to explain the trust problem.</li>
-          <li>Use scenario presets to show Private, clinician share, and Max Intelligence.</li>
-          <li>Close on the audit proof, artifact downloads, and the business takeaway.</li>
+          <li>Patient-authorized clinician share exists before any promised staff portal.</li>
+          <li>Internal ops console supports route search, event filtering, and recent risk review.</li>
+          <li>Artifacts include policy JSON, audit summary JSON, clinician packet preview, PDF brief, and narrated walkthrough media.</li>
+          <li>Summary mode and light theme make the review easier without changing product logic.</li>
         </ul>
       </article>
       <article class="brief-card">
-        <p class="mini-label">Repeat-back takeaway</p>
-        <strong>Consentext makes health context useful, shareable, and auditable without forcing every request into the same level of disclosure.</strong>
-        <p>It creates a safer internal path, a narrow governed outside path, a broader governed path when the user truly wants it, and a visible proof trail for every decision.</p>
+        <p class="mini-label">Open implementation decisions</p>
+        <ul>
+          <li>Protected internal model choice for the Private lane.</li>
+          <li>How many external providers the adapter layer should support in the first paid version.</li>
+          <li>Reference integration pattern for recipient verification and external APIs.</li>
+          <li>How far clinician workflows extend before a full portal becomes necessary.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="brief-grid">
+      <article class="brief-card">
+        <p class="mini-label">Recommended review path</p>
+        <ul>
+          <li>Start with the overview and control-plane framing.</li>
+          <li>Play the narrated walkthrough for the lane and trust-flow model.</li>
+          <li>Use scenario presets to inspect Private, clinician share, Max Intelligence, and Off-Board.</li>
+          <li>Finish in the workspace, ops console, audit surface, and artifact center.</li>
+        </ul>
+      </article>
+      <article class="brief-card">
+        <p class="mini-label">Implementation takeaway</p>
+        <strong>Consentext is a policy engine plus governed gateway in front of health-context use, with explicit lane contracts and audit proof.</strong>
+        <p>The value is not only safer AI usage. The value is that disclosure logic becomes visible, consistent, and extendable without collapsing every request into the same trust posture.</p>
       </article>
     </section>
 
     <footer class="brief-footer">
-      <p>Prepared from the March 17 Phase 3.75 direction. Use this page as a print-friendly summary, a PDF export source, or a short follow-up after the live walkthrough.</p>
+      <p>Prepared from the March 17 Phase 3.75 direction. Use this page as a print-friendly technical summary, a PDF export source, or a follow-up after the live walkthrough.</p>
       <p><a href="index.html">Return to prototype</a></p>
     </footer>
   </main>
