@@ -192,7 +192,7 @@ const scenarioPresets = [
   {
     id: "labs-explainer",
     title: "Explain labs safely",
-    lane: "Private",
+    badge: "Private lane",
     summary: "Show the internal protected explanation path for a straightforward health question.",
     outcome: "Internal protected model, no external provider",
     recipient: "ai_export",
@@ -209,7 +209,7 @@ const scenarioPresets = [
   {
     id: "clinician-share",
     title: "Share with clinician",
-    lane: "Clinician share",
+    badge: "Clinician share path",
     summary: "Prepare a patient-authorized packet for a doctor, clinic, or hospital without implying a full staff portal.",
     outcome: "Scoped share packet for a verified destination",
     recipient: "clinician_share",
@@ -226,7 +226,7 @@ const scenarioPresets = [
   {
     id: "max-intelligence",
     title: "Use stronger AI reasoning",
-    lane: "Max Intelligence",
+    badge: "Max Intelligence lane",
     summary: "Show the broader governed route when the user wants deeper reasoning and explicitly authorizes more context.",
     outcome: "Broader governed context while Consentext stays in front",
     recipient: "ai_export",
@@ -243,7 +243,7 @@ const scenarioPresets = [
   {
     id: "off-board-risk",
     title: "Show the off-board risk",
-    lane: "Off-Board",
+    badge: "Off-Board path",
     summary: "Demonstrate the real user exit path when someone leaves Consentext and pastes data into an outside tool directly.",
     outcome: "User leaves the protected environment",
     recipient: "ai_export",
@@ -845,7 +845,7 @@ function renderScenarioPresets() {
   scenarioGrid.innerHTML = scenarioPresets.map((preset) => `
     <article class="scenario-card ${state.activeScenario === preset.id ? "is-active" : ""}">
       <div class="scenario-head">
-        <span class="mini-label">${preset.lane}</span>
+        <span class="mini-label">${preset.badge}</span>
         <strong>${preset.title}</strong>
       </div>
       <p>${preset.summary}</p>
