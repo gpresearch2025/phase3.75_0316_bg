@@ -76,7 +76,7 @@
               <p class="hero-portrait-tag">The governance layer sits</p>
               <strong>between the vault and every AI interaction.</strong>
             </div>
-            <p class="hero-portrait-lead">Vault stores the patient's health context while the trust kernel decides what may participate, what must be minimized, and what is blocked.</p>
+            <p class="hero-portrait-lead">Vault stores the user's health context while the trust kernel decides what may participate, what must be minimized, and what is blocked.</p>
             <div class="hero-portrait-grid">
               <article>
                 <span class="mini-label">Data plane</span>
@@ -121,6 +121,11 @@
                 <span class="mini-label">Provider frame</span>
                 <strong>Price adapters by count</strong>
                 <p>The gateway base should stay adapter-ready now while provider count remains a conscious 1 / 2 / 3 / 4 decision.</p>
+              </article>
+              <article class="signal-card">
+                <span class="mini-label">Launch boundary</span>
+                <strong>Medication data allowed, medication guidance deferred</strong>
+                <p>Medication can live in records and clinician-share packets, but launch AI does not promise dosing, start or stop advice, interaction clearance, or treatment-direction outputs.</p>
               </article>
             </div>
             <div class="hero-meta-grid">
@@ -369,7 +374,7 @@
             <article class="preview-card panel-dark">
               <p class="mini-label">Latest proof</p>
               <strong id="trust-last-proof">consent_policy_created</strong>
-              <p id="trust-last-proof-note">Initial prototype policy loaded using the March 17 control-plane defaults.</p>
+              <p id="trust-last-proof-note">Initial prototype policy loaded using the March 17 control-plane baseline plus the March 19 medication-scope override.</p>
             </article>
           </div>
         </div>
@@ -402,9 +407,13 @@
             <span>Adapter-ready</span>
             <small>The gateway stays modular while provider pricing is still open.</small>
           </button>
-          <button type="button" class="glossary-term" data-definition="Patient-authorized clinician share means the patient chooses what to send to a doctor, clinic, or hospital without assuming a full staff portal already exists.">
+          <button type="button" class="glossary-term" data-definition="User-authorized clinician share means the user chooses what to send to a doctor, clinic, or hospital without assuming a full staff portal already exists.">
             <span>Clinician share</span>
             <small>The scoped doctor, clinic, or hospital sharing path.</small>
+          </button>
+          <button type="button" class="glossary-term" data-definition="Medication may exist as part of the user record and clinician-sharing packet, but launch AI does not provide dosing advice, medication recommendations, interaction clearance, or treatment-direction outputs.">
+            <span>Medication boundary</span>
+            <small>Record data allowed, medication guidance deferred at launch.</small>
           </button>
         </div>
       </section>
@@ -486,9 +495,9 @@
       </section>
       <section id="decisions" class="panel decisions-panel reveal delay-1" data-boss-hidden="true">
         <div class="section-header">
-          <p class="eyebrow">March 17 Source Of Truth</p>
+          <p class="eyebrow">March 17 + March 19 Source Of Truth</p>
           <h2>Settled direction versus open decisions</h2>
-          <p class="hero-text">This prototype now treats March 17 as the leading memo. Settled items shape the experience directly, and unresolved items stay visibly open so the build does not hard-code them by accident.</p>
+          <p class="hero-text">This prototype treats the March 17 architecture memo as the base source of truth, with the March 19 medicine note overriding launch language and medication scope. Settled items shape the experience directly, and unresolved items stay visibly open so the build does not hard-code them by accident.</p>
         </div>
         <div class="decision-grid">
           <article class="decision-card accent-card">
@@ -517,8 +526,15 @@
               <li>
                 <span class="decision-tag decision-tag-locked">Locked</span>
                 <div>
-                  <strong>Patient-authorized clinician sharing matters now.</strong>
+                  <strong>User-authorized clinician sharing matters now.</strong>
                   <p>Doctor, clinic, and hospital sharing should be supported architecturally even while the full staff portal waits.</p>
+                </div>
+              </li>
+              <li>
+                <span class="decision-tag decision-tag-locked">Locked</span>
+                <div>
+                  <strong>Medication may live in records, but medication guidance is out of launch scope.</strong>
+                  <p>Medication can exist in the Vault and clinician-sharing records, but launch AI should not promise dosing advice, start or stop guidance, interaction clearance, or medication intelligence.</p>
                 </div>
               </li>
               <li>
@@ -639,8 +655,8 @@
       <section class="panel dashboard-overview reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Share Preview</p>
-          <h2>Live-looking indicators for patient-authorized review</h2>
-          <p class="hero-text">This layer reuses the vault context and policy snapshot to preview what a patient or internal reviewer would inspect before authorizing an AI request or a clinician share packet. It is not a promised staff portal.</p>
+          <h2>Live-looking indicators for user-authorized review</h2>
+          <p class="hero-text">This layer reuses the vault context and policy snapshot to preview what a user or internal reviewer would inspect before authorizing an AI request or a clinician share packet. It is not a promised staff portal.</p>
         </div>
         <div class="dashboard-grid">
           <article class="dashboard-card">
@@ -724,7 +740,7 @@
                 <li>Internal protected model for the Private lane</li>
                 <li>Consent engine and policy evaluation</li>
                 <li>De-identification and privacy safeguards</li>
-                <li>Patient-authorized clinician sharing architecture</li>
+            <li>User-authorized clinician sharing architecture</li>
                 <li>Adapter-ready AI gateway architecture</li>
                 <li>Minimal internal ops and audit visibility</li>
                 <li>Outbound governance and audit traceability</li>
@@ -768,7 +784,7 @@
           <article class="definition-card"><strong>Trust Boundary</strong><p>The line separating the Consentext platform from external systems.</p></article>
           <article class="definition-card"><strong>Trust Kernel</strong><p>The internal governance layer that enforces consent, policy, privacy controls, routing decisions, and approved outbound pathways.</p></article>
           <article class="definition-card"><strong>Internal Protected Model</strong><p>The locked Private-lane model that keeps sensitive health context inside Consentext-controlled systems.</p></article>
-          <article class="definition-card"><strong>Clinician Share Path</strong><p>The patient-authorized doctor, clinic, or hospital route that exists architecturally now even while the full staff portal waits.</p></article>
+          <article class="definition-card"><strong>Clinician Share Path</strong><p>The user-authorized doctor, clinic, or hospital route that exists architecturally now even while the full staff portal waits.</p></article>
           <article class="definition-card"><strong>Outbound Flow</strong><p>Vault / Health Context Store to Control Plane to AI Gateway to External Systems.</p></article>
         </div>
       </section>
@@ -779,7 +795,7 @@
             <h2>Configure, simulate, and review</h2>
             <div class="workspace-trust-row">
               <span class="workspace-chip">Vault-backed context</span>
-              <span class="workspace-chip">Patient-authorized sharing</span>
+              <span class="workspace-chip">User-authorized sharing</span>
               <span class="workspace-chip">Adapter-ready AI gateway</span>
               <span class="workspace-chip">User-visible trust trail</span>
             </div>
@@ -858,7 +874,7 @@
                 <article class="data-card accent-card">
                   <span class="mini-label">Share readiness</span>
                   <strong>Clinician packet posture</strong>
-                  <p>Selected records and identifiers can be reviewed for patient-authorized clinician sharing without implying a staff portal build.</p>
+                  <p>Selected records and identifiers can be reviewed for user-authorized clinician sharing without implying a staff portal build.</p>
                 </article>
               </div>
             </div>
@@ -875,7 +891,7 @@
               <label><span>Duration</span><select id="duration"><option value="one_time">One-time</option><option value="24_hours">24 hours</option><option value="30_days">30 days</option></select></label>
               <label><span>Wearables granularity</span><select id="granularity"><option value="derived_only">Derived only</option><option value="raw_if_allowed">Raw if allowed</option></select></label>
             </div>
-            <p class="panel-note">Clinician share models patient-authorized doctor, clinic, or hospital sharing now. Full clinician-facing staff portal behavior remains intentionally deferred.</p>
+            <p class="panel-note">Clinician share models user-authorized doctor, clinic, or hospital sharing now. Full clinician-facing staff portal behavior remains intentionally deferred.</p>
             <div class="checkbox-grid">
               <label><input type="checkbox" id="scope-biomarkers" checked> Biomarkers pod</label>
               <label><input type="checkbox" id="scope-wearables" checked> Wearables pod</label>
@@ -931,7 +947,7 @@
                 <option value="Show my cholesterol trend over the last six months">Show my cholesterol trend over the last six months</option>
                 <option value="Explain my latest lab results in plain English">Explain my latest lab results in plain English</option>
                 <option value="What lifestyle changes may improve these labs?">What lifestyle changes may improve these labs?</option>
-                <option value="Compare treatments for high LDL">Compare treatments for high LDL</option>
+                <option value="Compare research summaries for high LDL and list clinician questions">Compare research summaries for high LDL and list clinician questions</option>
                 <option value="I will paste my records directly into ChatGPT">I will paste my records directly into ChatGPT</option>
               </select>
             </label>
@@ -1127,7 +1143,7 @@
         <div class="handoff-grid">
           <article><strong>1. Internal protected model surface</strong><p>Keep the Private lane visibly mandatory in Phase 3.75 and route sensitive context through it without external export.</p></article>
           <article><strong>2. Consent and share lifecycle</strong><p>Create, preview, revoke, and audit every outbound share object across AI, clinician, and API recipients.</p></article>
-          <article><strong>3. Patient-authorized clinician sharing</strong><p>Support doctor, clinic, and hospital sharing architecturally now while leaving the full staff portal deferred.</p></article>
+          <article><strong>3. User-authorized clinician sharing</strong><p>Support doctor, clinic, and hospital sharing architecturally now while leaving the full staff portal deferred.</p></article>
           <article><strong>4. Adapter-ready AI gateway routing</strong><p>Classify prompt, preserve distinct Private+ and Max Intelligence behaviors, and keep provider count decisions open until pricing lands.</p></article>
           <article><strong>5. Minimal internal ops console</strong><p>Provide audit lookup, troubleshooting, and operational visibility without implying a full internal admin product.</p></article>
           <article><strong>6. Audit viewer and trust proof</strong><p>Keep the trust trail legible to users and operators while the open decisions remain marked as open.</p></article>

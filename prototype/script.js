@@ -34,6 +34,7 @@ const vaultPods = {
     title: "Records Pod",
     description: "EHR, EMR, and PHR documents stay under stronger guardrails.",
     assets: [
+      { name: "Medication list", detail: "Allowed as record data in the Vault and clinician-sharing packet, but not a launch AI guidance category." },
       { name: "Visit summary PDF", detail: "Available for clinician sharing or Max Intelligence only after explicit policy selection." },
       { name: "Discharge instructions", detail: "Raw document artifact with stronger review requirements." }
     ]
@@ -44,7 +45,7 @@ const vaultPods = {
     assets: [
       { name: "Primary email", detail: "Explicit toggle only for broader governed context or clinician sharing." },
       { name: "Home address", detail: "Safe Harbor identifier, never part of the Private+ default route." },
-      { name: "MRN linkage", detail: "Stored for custody and patient-authorized clinician sharing under tighter scope." }
+      { name: "MRN linkage", detail: "Stored for custody and user-authorized clinician sharing under tighter scope." }
     ]
   },
   derived: {
@@ -105,7 +106,7 @@ const laneMap = [
     adapterPath: "Adapter-ready base, provider count open"
   },
   {
-    match: /compare|research|treatment/i,
+    match: /compare|research|questions|options/i,
     lane: "Max Intelligence",
     summary: "Broader user-authorized context can move through the governed gateway for highest-capability assistance.",
     internal: false,
@@ -166,7 +167,7 @@ const workstreams = [
     title: "Clinician share and ops layer",
     badge: "Working direction",
     status: "Prototype now",
-    description: "Patient-authorized clinician sharing and a minimal ops console should be real surfaces now, without implying a full staff portal.",
+    description: "User-authorized clinician sharing and a minimal ops console should be real surfaces now, without implying a full staff portal.",
     focus: [
       "Doctor / clinic / hospital share path",
       "Audit lookup and troubleshooting",
@@ -210,7 +211,7 @@ const scenarioPresets = [
     id: "clinician-share",
     title: "Share with clinician",
     badge: "Clinician share path",
-    summary: "Prepare a patient-authorized packet for a doctor, clinic, or hospital without implying a full staff portal.",
+    summary: "Prepare a user-authorized packet for a doctor, clinic, or hospital without implying a full staff portal.",
     outcome: "Scoped share packet for a verified destination",
     recipient: "clinician_share",
     purpose: "clinician_consult",
@@ -236,7 +237,7 @@ const scenarioPresets = [
     pods: ["biomarkers", "wearables", "records", "identity"],
     identifiers: true,
     verified: true,
-    prompt: "Compare treatments for high LDL",
+    prompt: "Compare research summaries for high LDL and list clinician questions",
     targetTab: "gateway",
     autoRoute: true
   },
@@ -431,7 +432,7 @@ function classifyAction(action) {
 function buildPolicyNarrative(policy) {
   if (!policy) return "No active policy is loaded yet.";
   if (policy.recipient_type === "clinician_share") {
-    return `Patient-authorized clinician sharing is scoped for ${purposeLabels[policy.purpose] || policy.purpose} across ${policy.pod_types.join(", ")}.`;
+    return `User-authorized clinician sharing is scoped for ${purposeLabels[policy.purpose] || policy.purpose} across ${policy.pod_types.join(", ")}.`;
   }
   if (policy.recipient_type === "api_consumer") {
     return `API consumer access is governed by verification checks and the current share scope across ${policy.pod_types.join(", ")}.`;
@@ -471,14 +472,14 @@ function buildClinicianPacket() {
 
   return {
     packet_id: `clinician-packet-${policy.policy_id}`,
-    readiness: policy.recipient_type === "clinician_share" ? "patient_authorized_share_ready" : "preview_only_not_clinician_mode",
+    readiness: policy.recipient_type === "clinician_share" ? "user_authorized_share_ready" : "preview_only_not_clinician_mode",
     destination_type: policy.recipient_type === "clinician_share" ? "doctor_clinic_or_hospital" : recipientLabels[policy.recipient_type],
     purpose: purposeLabels[policy.purpose] || policy.purpose,
     duration: policy.duration,
     destination_verified: policy.recipient_verified,
     identifiers_included: policy.identifiers_included,
     notes: policy.recipient_type === "clinician_share"
-      ? "This preview models a patient-authorized packet for a verified clinician destination."
+      ? "This preview models a user-authorized packet for a verified clinician destination."
       : "Switch recipient type to clinician share for a fully aligned packet preview.",
     included_pods: podSummaries
   };
@@ -533,7 +534,7 @@ function renderTrustFlow() {
       : policy.recipient_type === "ai_export"
         ? "Consentext keeps the provider decision behind the governed gateway."
         : policy.recipient_type === "clinician_share"
-          ? "The share path stays patient-authorized and destination-bound."
+          ? "The share path stays user-authorized and destination-bound."
           : "The fetch path stays constrained by verification and scope checks.";
   }
   if (trustFlowProof) trustFlowProof.textContent = last ? last.action : "Audit proof pending";
@@ -617,7 +618,7 @@ function renderPodsTable() {
         status = "Broader lane only";
         note = "Private+ keeps identifiers out; broader governed routes require explicit authorization.";
       } else if (policy.recipient_type === "clinician_share" && ["records", "identity"].includes(key)) {
-        status = "Patient authorized";
+        status = "User authorized";
         note = "Available only to the verified clinician destination within the scoped share.";
       } else if (policy.recipient_type === "api_consumer" && key === "identity" && !policy.identifiers_included) {
         status = "Selected, masked";
@@ -627,7 +628,7 @@ function renderPodsTable() {
         note = policy.recipient_type === "api_consumer"
           ? "Accessible only after recipient verification and scope checks."
           : policy.recipient_type === "clinician_share"
-            ? "Included in the patient-authorized clinician share."
+            ? "Included in the user-authorized clinician share."
             : "Available to the governed route within the active policy.";
       }
     }
@@ -908,13 +909,15 @@ function computeEffectivePolicy() {
   if (recipient === "ai_export") {
     guardrails.push("Private+ defaults to minimum-necessary or de-identified context.");
     guardrails.push("Max Intelligence can use broader user-authorized context through the governed gateway.");
+    guardrails.push("Medication may remain in record data, but launch AI excludes medication recommendations, dosing, interaction clearance, and treatment-direction outputs.");
     if (requestedPods.includes("records")) guardrails.push("Records are held for Max Intelligence or clinician sharing only; Private+ keeps them out.");
     if (requestedPods.includes("identity") && effectiveIdentifiers) guardrails.push("Identifiers may only participate in broader governed context, never in Private+.");
     if (requestedPods.includes("identity") && !effectiveIdentifiers) guardrails.push("Identity selected but identifiers remain off until explicit authorization.");
     if (effectiveGranularity === "raw_if_allowed") guardrails.push("Raw wearable detail is reserved for broader governed context when specifically authorized.");
   } else if (recipient === "clinician_share") {
     guardrails.push(recipientVerified.checked ? "Destination verification satisfied for clinician share." : "Clinician share stays pending until the doctor, clinic, or hospital destination is verified.");
-    guardrails.push("Patient-authorized clinician sharing can scope purpose, duration, and selected pods now.");
+    guardrails.push("User-authorized clinician sharing can scope purpose, duration, and selected pods now.");
+    guardrails.push("Medication may travel as part of the selected record set, but it is not a launch AI guidance category.");
     guardrails.push("Full clinician-facing staff portal remains deferred.");
   } else {
     guardrails.push(recipientVerified.checked ? "Recipient verification satisfied for API access." : "API consumer requests deny until recipient verification passes.");
@@ -938,7 +941,7 @@ function computeEffectivePolicy() {
     deidentify_by_default: recipient === "ai_export",
     gateway_adapter_mode: recipient === "ai_export" ? "adapter_ready_base" : "not_applicable",
     provider_count_pricing: recipient === "ai_export" ? "price_1_2_3_4_then_decide" : "n/a",
-    clinician_share_mode: recipient === "clinician_share" ? "patient_authorized" : "none"
+    clinician_share_mode: recipient === "clinician_share" ? "user_authorized" : "none"
   };
 
   return { policy, guardrails };
@@ -958,7 +961,7 @@ function renderPolicy() {
   ];
 
   if (policy.recipient_type === "ai_export") chips.push("Providers: price 1 / 2 / 3 / 4");
-  if (policy.recipient_type === "clinician_share") chips.push("Share path: patient authorized");
+  if (policy.recipient_type === "clinician_share") chips.push("Share path: user authorized");
   if (policy.recipient_type === "api_consumer") chips.push(`Verification: ${policy.recipient_verified ? "passed" : "required"}`);
 
   if (policyChips) policyChips.innerHTML = chips.map((chip) => `<span class="policy-chip">${chip}</span>`).join("");
@@ -1299,7 +1302,7 @@ renderRouteState(
 renderDashboard();
 renderControlStatus();
 renderOps();
-addAudit("consent_policy_created", "Initial prototype policy loaded using the March 17 control-plane defaults.");
+addAudit("consent_policy_created", "Initial prototype policy loaded using the March 17 control-plane baseline plus the March 19 medication-scope override.");
 addAudit("auth_login", "User entered the prototype workspace and established an authenticated session.");
 
 const walkthroughStage = document.getElementById("walkthrough-stage");
@@ -1378,10 +1381,10 @@ const walkthroughSegments = [
     theme: "sharing",
     kicker: "Real-world workflow",
     title: "Clinician sharing and internal ops are part of the system now",
-    summary: "The architecture story is not only about AI prompts. It also includes patient-authorized shares and operational visibility.",
+    summary: "The architecture story is not only about AI prompts. It also includes user-authorized shares, a medication launch boundary, and operational visibility.",
     hook: "Clinician handoff and support visibility need real surfaces, not just future-state notes.",
-    pills: ["Patient-authorized clinician share", "Recipient verification", "Minimal ops console"],
-    speech: "The prototype also has to show that this is more than an AI routing demo. A patient-authorized clinician share path is now part of the system contract. That means a person can scope what should be sent to a doctor, clinic, or hospital without pretending a full staff portal already exists. On top of that, the internal team needs enough operational visibility to support the system. They need event lookup, route search, recent risk review, and proof that a share or route behaved the way policy said it should. That is why the prototype now includes both the clinician packet preview and the internal ops console."
+    pills: ["User-authorized clinician share", "Medication in records only", "Minimal ops console"],
+    speech: "The prototype also has to show that this is more than an AI routing demo. A user-authorized clinician share path is now part of the system contract. That means a person can scope what should be sent to a doctor, clinic, or hospital without pretending a full staff portal already exists. The March nineteenth medication note adds an important launch boundary on top of that. Medication may exist in the record set and in the clinician packet, but launch AI does not offer dosing advice, medication recommendations, interaction clearance, or treatment-direction outputs. On top of that, the internal team needs enough operational visibility to support the system. They need event lookup, route search, recent risk review, and proof that a share or route behaved the way policy said it should. That is why the prototype now includes both the clinician packet preview and the internal ops console."
   },
   {
     theme: "presentation",
