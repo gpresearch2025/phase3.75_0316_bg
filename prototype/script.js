@@ -207,7 +207,11 @@ const state = {
 const topbar = document.querySelector(".topbar");
 const topNav = document.getElementById("top-nav");
 const topbarToggle = document.getElementById("topbar-toggle");
+const focusModeToggle = document.getElementById("focus-mode-toggle");
+const focusHiddenSections = document.querySelectorAll("[data-focus-hidden='true']");
+const focusHiddenLinks = document.querySelectorAll("[data-focus-link='true']");
 const topbarStorageKey = "consentext.topbar.collapsed";
+const focusModeStorageKey = "consentext.focusmode.enabled";
 
 const podButtons = document.querySelectorAll(".pod-button");
 const podTitle = document.getElementById("pod-title");
@@ -1053,6 +1057,49 @@ function initializeTopbar() {
   });
 }
 
+function setFocusMode(enabled, { persist = true } = {}) {
+  document.body.classList.toggle("focus-mode", enabled);
+
+  if (focusModeToggle) {
+    focusModeToggle.textContent = enabled ? "Focus mode on" : "Focus mode off";
+    focusModeToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+    focusModeToggle.setAttribute("aria-label", enabled ? "Disable focus mode" : "Enable focus mode");
+  }
+
+  focusHiddenSections.forEach((section) => {
+    section.setAttribute("aria-hidden", enabled ? "true" : "false");
+  });
+
+  focusHiddenLinks.forEach((link) => {
+    link.tabIndex = enabled ? -1 : 0;
+  });
+
+  if (!persist) return;
+
+  try {
+    window.localStorage.setItem(focusModeStorageKey, enabled ? "true" : "false");
+  } catch (error) {
+    // Storage can fail in embedded contexts; the toggle should still work.
+  }
+}
+
+function initializeFocusMode() {
+  if (!focusModeToggle) return;
+
+  let shouldEnableFocusMode = false;
+
+  try {
+    shouldEnableFocusMode = window.localStorage.getItem(focusModeStorageKey) === "true";
+  } catch (error) {
+    shouldEnableFocusMode = false;
+  }
+
+  setFocusMode(shouldEnableFocusMode, { persist: false });
+  focusModeToggle.addEventListener("click", () => {
+    setFocusMode(!document.body.classList.contains("focus-mode"));
+  });
+}
+
 function updateWalkthroughButtons() {
   if (walkthroughPause) walkthroughPause.textContent = walkthroughState.isPaused ? "Resume" : "Pause";
 }
@@ -1257,4 +1304,5 @@ if ("speechSynthesis" in window) {
   window.speechSynthesis.onvoiceschanged = () => renderWalkthrough();
 }
 initializeTopbar();
+initializeFocusMode();
 renderWalkthrough();

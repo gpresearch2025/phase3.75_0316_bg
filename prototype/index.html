@@ -20,7 +20,10 @@
             <p>Phase 3.75 working prototype</p>
           </div>
         </div>
-        <button id="topbar-toggle" class="topbar-toggle" type="button" aria-expanded="true" aria-controls="top-nav">Minimize header</button>
+        <div class="topbar-actions">
+          <button id="focus-mode-toggle" class="topbar-toggle topbar-toggle-secondary" type="button" aria-pressed="false">Focus mode off</button>
+          <button id="topbar-toggle" class="topbar-toggle" type="button" aria-expanded="true" aria-controls="top-nav">Minimize header</button>
+        </div>
       </div>
       <nav id="top-nav" class="top-nav">
         <a href="#overview">Overview</a>
@@ -28,15 +31,41 @@
         <a href="#control-plane">Control</a>
         <a href="#decisions">Decisions</a>
         <a href="#lanes">Lanes</a>
-        <a href="#workflow">Flow</a>
-        <a href="#workstreams">Workstreams</a>
-        <a href="#workspace">Workspace</a>
-        <a href="#audit">Audit</a>
-        <a href="#handoff">Handoff</a>
+        <a href="#workflow" data-focus-link="true">Flow</a>
+        <a href="#workstreams" data-focus-link="true">Workstreams</a>
+        <a href="#workspace" data-focus-link="true">Workspace</a>
+        <a href="#audit" data-focus-link="true">Audit</a>
+        <a href="#handoff" data-focus-link="true">Handoff</a>
       </nav>
     </header>
 
     <main class="main-stack">
+      <section class="panel executive-strip reveal">
+        <div class="executive-strip-head">
+          <div>
+            <p class="eyebrow">Executive Summary</p>
+            <h2>The shortest accurate way to describe the product</h2>
+          </div>
+          <span class="executive-status">Presentation-ready summary</span>
+        </div>
+        <div class="executive-summary-grid">
+          <article class="executive-summary-card">
+            <span class="mini-label">What it is</span>
+            <strong>Consentext is the governance layer between health context and AI.</strong>
+            <p>It decides what can stay internal, what can leave in reduced form, and what must be blocked or explicitly authorized.</p>
+          </article>
+          <article class="executive-summary-card">
+            <span class="mini-label">Why it matters</span>
+            <strong>It turns trust into a product feature instead of a legal afterthought.</strong>
+            <p>The platform gives people safer AI help, a visible control boundary, and a proof trail for every decision.</p>
+          </article>
+          <article class="executive-summary-card">
+            <span class="mini-label">What is locked</span>
+            <strong>The Private lane stays internal, and Private+ stays narrow by default.</strong>
+            <p>That distinction is the core business promise, and the rest of the prototype is now organized around it.</p>
+          </article>
+        </div>
+      </section>
       <section id="overview" class="hero panel reveal">
         <div class="hero-core">
           <div class="hero-portrait">
@@ -406,7 +435,7 @@
         </div>
       </section>
 
-      <section id="workstreams" class="panel workstreams-panel reveal delay-1">
+      <section id="workstreams" class="panel workstreams-panel reveal delay-1" data-focus-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Workstreams</p>
           <h2>Parallel experiments, one governance alignment</h2>
@@ -415,7 +444,7 @@
         <div id="workstream-grid" class="workstream-grid"></div>
       </section>
 
-      <section class="panel dashboard-overview reveal delay-1">
+      <section class="panel dashboard-overview reveal delay-1" data-focus-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Share Preview</p>
           <h2>Live-looking indicators for patient-authorized review</h2>
@@ -475,7 +504,7 @@
         </div>
       </section>
 
-      <section id="workflow" class="panel reveal delay-1">
+      <section id="workflow" class="panel reveal delay-1" data-focus-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Workflow Spine</p>
           <h2>The governed request path</h2>
@@ -489,7 +518,7 @@
         </div>
       </section>
 
-      <section class="overview-grid reveal delay-2">
+      <section class="overview-grid reveal delay-2" data-focus-hidden="true">
         <article class="panel">
           <div class="section-header">
             <p class="eyebrow">Scope Clarification</p>
@@ -538,7 +567,7 @@
         </article>
       </section>
 
-      <section class="panel reveal">
+      <section class="panel reveal" data-focus-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Vocabulary Alignment</p>
           <h2>Terms the prototype now carries forward</h2>
@@ -551,7 +580,7 @@
           <article class="definition-card"><strong>Outbound Flow</strong><p>Vault / Health Context Store to Control Plane to AI Gateway to External Systems.</p></article>
         </div>
       </section>
-      <section id="workspace" class="panel workspace-shell reveal delay-1">
+      <section id="workspace" class="panel workspace-shell reveal delay-1" data-focus-hidden="true">
         <div class="workspace-header">
           <div>
             <p class="eyebrow">Workspace</p>
@@ -839,7 +868,7 @@
         </div>
       </section>
 
-      <section id="audit" class="panel audit-panel reveal">
+      <section id="audit" class="panel audit-panel reveal" data-focus-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Audit Ledger</p>
           <h2>User-visible proof with operator lookup value</h2>
@@ -847,7 +876,7 @@
         <div id="audit-feed" class="audit-feed"></div>
       </section>
 
-      <section id="handoff" class="panel handoff-panel reveal delay-1">
+      <section id="handoff" class="panel handoff-panel reveal delay-1" data-focus-hidden="true">
         <div class="section-header">
           <p class="eyebrow">Developer Handoff</p>
           <h2>The first surfaces to build without overcommitting</h2>
