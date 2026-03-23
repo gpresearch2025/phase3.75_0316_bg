@@ -296,6 +296,34 @@ const topbarStorageKey = "consentext.topbar.collapsed";
 const focusModeStorageKey = "consentext.focusmode.enabled";
 const bossModeStorageKey = "consentext.bossmode.enabled";
 const themeStorageKey = "consentext.theme.enterprise_light";
+const pageRouteDefinitions = {
+  overview: {
+    kicker: "Page 1 of 4",
+    title: "Overview",
+    description: "Start with the system boundary, launch scope, and the shortest accurate framing of Consentext before you drill into the deeper technical surfaces."
+  },
+  walkthrough: {
+    kicker: "Page 2 of 4",
+    title: "Walkthrough",
+    description: "Use the narrated review, presentation controls, and downloadable review assets when you want the architecture story presented cleanly without opening the full workspace first."
+  },
+  architecture: {
+    kicker: "Page 3 of 4",
+    title: "Architecture",
+    description: "Inspect the control-plane split, open decisions, lane semantics, trust flow, glossary terms, and workstreams as a dedicated technical page instead of one long scroll."
+  },
+  workspace: {
+    kicker: "Page 4 of 4",
+    title: "Workspace",
+    description: "Move into the live prototype controls, scenario presets, audit proof, handoff view, and export surfaces when you want to review behavior instead of only reading summaries."
+  }
+};
+const pageRouteSections = document.querySelectorAll("[data-page-routes]");
+const pageNavLinks = document.querySelectorAll("[data-page-nav]");
+const pageRouteCards = document.querySelectorAll("[data-page-link]");
+const pageRouteKicker = document.getElementById("page-route-kicker");
+const pageRouteTitle = document.getElementById("page-route-title");
+const pageRouteDescription = document.getElementById("page-route-description");
 
 const podButtons = document.querySelectorAll(".pod-button");
 const podTitle = document.getElementById("pod-title");
@@ -1413,6 +1441,71 @@ const walkthroughState = {
   runId: 0
 };
 
+function getActivePageRoute() {
+  const params = new URLSearchParams(window.location.search);
+  const requestedRoute = params.get("page");
+  return pageRouteDefinitions[requestedRoute] ? requestedRoute : "overview";
+}
+
+function sectionSupportsPageRoute(section, route) {
+  const supportedRoutes = (section.dataset.pageRoutes || "")
+    .split(/\s+/)
+    .filter(Boolean);
+
+  return !supportedRoutes.length || supportedRoutes.includes(route) || supportedRoutes.includes("all");
+}
+
+function scrollToVisibleHashTarget() {
+  if (!window.location.hash) return;
+
+  const target = document.getElementById(window.location.hash.slice(1));
+  if (!target || target.hidden) return;
+
+  window.setTimeout(() => {
+    target.scrollIntoView({ block: "start", behavior: "smooth" });
+  }, 90);
+}
+
+function initializePageRoute() {
+  const route = getActivePageRoute();
+  const config = pageRouteDefinitions[route];
+
+  document.body.dataset.pageRoute = route;
+  document.title = `${config.title} | Consentext Phase 3.75`;
+
+  if (pageRouteKicker) pageRouteKicker.textContent = config.kicker;
+  if (pageRouteTitle) pageRouteTitle.textContent = config.title;
+  if (pageRouteDescription) pageRouteDescription.textContent = config.description;
+
+  pageRouteSections.forEach((section) => {
+    const shouldShow = sectionSupportsPageRoute(section, route);
+    section.hidden = !shouldShow;
+    section.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+  });
+
+  pageNavLinks.forEach((link) => {
+    const isActive = link.dataset.pageNav === route;
+    link.classList.toggle("is-active", isActive);
+    if (isActive) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+
+  pageRouteCards.forEach((card) => {
+    const isActive = card.dataset.pageLink === route;
+    card.classList.toggle("is-active", isActive);
+    if (isActive) {
+      card.setAttribute("aria-current", "page");
+    } else {
+      card.removeAttribute("aria-current");
+    }
+  });
+
+  scrollToVisibleHashTarget();
+}
+
 function setTopbarCollapsed(collapsed, { persist = true } = {}) {
   if (!topbar || !topbarToggle || !topNav) return;
 
@@ -1799,9 +1892,11 @@ if (walkthroughPause) walkthroughPause.addEventListener("click", pauseWalkthroug
 if (walkthroughRestart) walkthroughRestart.addEventListener("click", () => startWalkthrough(true));
 if (walkthroughFullscreen) walkthroughFullscreen.addEventListener("click", toggleWalkthroughFullscreen);
 document.addEventListener("fullscreenchange", updateWalkthroughFullscreenButton);
+window.addEventListener("hashchange", scrollToVisibleHashTarget);
 if ("speechSynthesis" in window) {
   window.speechSynthesis.onvoiceschanged = () => renderWalkthrough();
 }
+initializePageRoute();
 initializeTopbar();
 initializeFocusMode();
 initializeBossMode();

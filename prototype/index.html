@@ -28,21 +28,45 @@
         </div>
       </div>
       <nav id="top-nav" class="top-nav">
-        <a href="#overview">Overview</a>
-        <a href="#walkthrough">Walkthrough</a>
-        <a href="#control-plane" data-boss-link="true">Control</a>
-        <a href="#decisions" data-boss-link="true">Decisions</a>
-        <a href="#lanes" data-boss-link="true">Lanes</a>
-        <a href="#workflow" data-focus-link="true" data-boss-link="true">Flow</a>
-        <a href="#workstreams" data-focus-link="true" data-boss-link="true">Workstreams</a>
-        <a href="#workspace" data-focus-link="true" data-boss-link="true">Workspace</a>
-        <a href="#audit" data-focus-link="true" data-boss-link="true">Audit</a>
-        <a href="#handoff" data-focus-link="true" data-boss-link="true">Handoff</a>
+        <a href="index.html?page=overview" data-page-nav="overview">Overview</a>
+        <a href="index.html?page=walkthrough" data-page-nav="walkthrough">Walkthrough</a>
+        <a href="index.html?page=architecture" data-page-nav="architecture">Architecture</a>
+        <a href="index.html?page=workspace" data-page-nav="workspace">Workspace</a>
+        <a href="executive-brief.html">Technical Brief</a>
       </nav>
     </header>
 
     <main class="main-stack">
-      <section class="panel executive-strip reveal">
+      <section class="panel route-banner reveal">
+        <div class="route-banner-copy">
+          <p id="page-route-kicker" class="eyebrow">Page 1 of 4</p>
+          <h1 id="page-route-title">Overview</h1>
+          <p id="page-route-description" class="hero-text">Start with the boundary, launch scope, and the shortest accurate framing of the system before drilling into the deeper technical surfaces.</p>
+        </div>
+        <div class="route-link-grid">
+          <a href="index.html?page=overview" class="route-link-card" data-page-link="overview">
+            <span class="mini-label">Page 1</span>
+            <strong>Overview</strong>
+            <p>Boundary, launch scope, and the top-level product framing.</p>
+          </a>
+          <a href="index.html?page=walkthrough" class="route-link-card" data-page-link="walkthrough">
+            <span class="mini-label">Page 2</span>
+            <strong>Walkthrough</strong>
+            <p>Narrated review, presentation controls, and downloadable review assets.</p>
+          </a>
+          <a href="index.html?page=architecture" class="route-link-card" data-page-link="architecture">
+            <span class="mini-label">Page 3</span>
+            <strong>Architecture</strong>
+            <p>Control plane, decisions, lane semantics, trust flow, and workstreams.</p>
+          </a>
+          <a href="index.html?page=workspace" class="route-link-card" data-page-link="workspace">
+            <span class="mini-label">Page 4</span>
+            <strong>Workspace</strong>
+            <p>Scenario presets, live controls, audit proof, handoff, and exports.</p>
+          </a>
+        </div>
+      </section>
+      <section class="panel executive-strip reveal" data-page-routes="overview">
         <div class="executive-strip-head">
           <div>
             <p class="eyebrow">Technical Snapshot</p>
@@ -68,7 +92,7 @@
           </article>
         </div>
       </section>
-      <section id="overview" class="hero panel reveal">
+      <section id="overview" class="hero panel reveal" data-page-routes="overview">
         <div class="hero-core">
           <div class="hero-portrait">
             <p class="eyebrow accent">Control plane first</p>
@@ -101,10 +125,10 @@
               <span class="trust-pill">Append-only audit</span>
             </div>
             <div class="hero-actions">
-              <a href="#walkthrough" class="button button-primary">Play Technical Walkthrough</a>
+              <a href="index.html?page=walkthrough#walkthrough" class="button button-primary">Play Technical Walkthrough</a>
               <button id="hero-boss-toggle" class="button button-secondary" type="button">Turn Summary Mode On</button>
               <a href="executive-brief.html" class="button button-secondary">Open Technical Brief</a>
-              <a href="#artifacts" class="button button-secondary">Open Artifact Center</a>
+              <a href="index.html?page=workspace#artifacts" class="button button-secondary">Open Artifact Center</a>
             </div>
             <div class="signal-strip">
               <article class="signal-card">
@@ -189,7 +213,7 @@
         </aside>
       </section>
 
-      <section id="walkthrough" class="panel walkthrough-panel reveal delay-1">
+      <section id="walkthrough" class="panel walkthrough-panel reveal delay-1" data-page-routes="walkthrough">
         <div class="section-header walkthrough-header">
           <div>
             <p class="eyebrow">Technical Walkthrough</p>
@@ -260,7 +284,7 @@
           </div>
         </div>
       </section>
-      <section id="presentation-suite" class="panel presentation-suite reveal delay-1">
+      <section id="presentation-suite" class="panel presentation-suite reveal delay-1" data-page-routes="walkthrough">
         <div class="section-header">
           <p class="eyebrow">Review Kit</p>
           <h2>Everything you need for a clean technical review</h2>
@@ -307,7 +331,7 @@
         </div>
       </section>
 
-      <section id="presets" class="panel scenario-panel reveal delay-1">
+      <section id="presets" class="panel scenario-panel reveal delay-1" data-page-routes="workspace">
         <div class="section-header">
           <p class="eyebrow">Scenario Presets</p>
           <h2>Tell the story with a few fast reusable demo states</h2>
@@ -316,7 +340,7 @@
         <div id="scenario-grid" class="scenario-grid"></div>
       </section>
 
-      <section id="lane-compare" class="panel lane-compare-panel reveal delay-1">
+      <section id="lane-compare" class="panel lane-compare-panel reveal delay-1" data-page-routes="architecture">
         <div class="section-header">
           <p class="eyebrow">Lane Comparison</p>
           <h2>Show the difference between safety, utility, and freedom at a glance</h2>
@@ -325,7 +349,7 @@
         <div id="lane-comparison-grid" class="lane-comparison-grid"></div>
       </section>
 
-      <section id="trust-flow" class="panel trust-flow-panel reveal delay-1">
+      <section id="trust-flow" class="panel trust-flow-panel reveal delay-1" data-page-routes="architecture">
         <div class="section-header">
           <p class="eyebrow">Animated Trust Flow</p>
           <h2>The request path from context to proof</h2>
@@ -380,7 +404,7 @@
         </div>
       </section>
 
-      <section id="glossary" class="panel glossary-panel reveal delay-1">
+      <section id="glossary" class="panel glossary-panel reveal delay-1" data-page-routes="architecture">
         <div class="section-header">
           <p class="eyebrow">Glossary</p>
           <h2>Hover or focus the key terms when you want a fast architecture definition</h2>
@@ -418,7 +442,7 @@
         </div>
       </section>
 
-      <section id="artifacts" class="panel artifacts-panel reveal delay-1">
+      <section id="artifacts" class="panel artifacts-panel reveal delay-1" data-page-routes="walkthrough workspace">
         <div class="section-header">
           <p class="eyebrow">Artifact Center</p>
           <h2>Download the files that explain or prove the current state</h2>
@@ -453,7 +477,7 @@
         </div>
       </section>
 
-      <section id="control-plane" class="panel control-plane-panel reveal delay-1" data-boss-hidden="true">
+      <section id="control-plane" class="panel control-plane-panel reveal delay-1" data-boss-hidden="true" data-page-routes="architecture">
         <div class="section-header">
           <p class="eyebrow">Data vs control</p>
           <h2>The split that Phase 3.75 protects</h2>
@@ -493,7 +517,7 @@
           </article>
         </div>
       </section>
-      <section id="decisions" class="panel decisions-panel reveal delay-1" data-boss-hidden="true">
+      <section id="decisions" class="panel decisions-panel reveal delay-1" data-boss-hidden="true" data-page-routes="architecture">
         <div class="section-header">
           <p class="eyebrow">March 17 + March 19 Source Of Truth</p>
           <h2>Settled direction versus open decisions</h2>
@@ -595,7 +619,7 @@
         </div>
       </section>
 
-      <section id="lanes" class="panel lanes-panel reveal delay-1" data-boss-hidden="true">
+      <section id="lanes" class="panel lanes-panel reveal delay-1" data-boss-hidden="true" data-page-routes="architecture">
         <div class="section-header">
           <p class="eyebrow">Exposure lanes</p>
           <h2>Privacy, capability, and control for every request</h2>
@@ -643,7 +667,7 @@
         </div>
       </section>
 
-      <section id="workstreams" class="panel workstreams-panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
+      <section id="workstreams" class="panel workstreams-panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true" data-page-routes="architecture">
         <div class="section-header">
           <p class="eyebrow">Workstreams</p>
           <h2>Parallel experiments, one governance alignment</h2>
@@ -712,7 +736,7 @@
         </div>
       </section>
 
-      <section id="workflow" class="panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
+      <section id="workflow" class="panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true" data-page-routes="architecture">
         <div class="section-header">
           <p class="eyebrow">Workflow Spine</p>
           <h2>The governed request path</h2>
@@ -788,7 +812,7 @@
           <article class="definition-card"><strong>Outbound Flow</strong><p>Vault / Health Context Store to Control Plane to AI Gateway to External Systems.</p></article>
         </div>
       </section>
-      <section id="workspace" class="panel workspace-shell reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
+      <section id="workspace" class="panel workspace-shell reveal delay-1" data-focus-hidden="true" data-boss-hidden="true" data-page-routes="workspace">
         <div class="workspace-header">
           <div>
             <p class="eyebrow">Workspace</p>
@@ -1127,7 +1151,7 @@
         </div>
       </section>
 
-      <section id="audit" class="panel audit-panel reveal" data-focus-hidden="true" data-boss-hidden="true">
+      <section id="audit" class="panel audit-panel reveal" data-focus-hidden="true" data-boss-hidden="true" data-page-routes="workspace">
         <div class="section-header">
           <p class="eyebrow">Audit Ledger</p>
           <h2>User-visible proof with operator lookup value</h2>
@@ -1135,7 +1159,7 @@
         <div id="audit-feed" class="audit-feed"></div>
       </section>
 
-      <section id="handoff" class="panel handoff-panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true">
+      <section id="handoff" class="panel handoff-panel reveal delay-1" data-focus-hidden="true" data-boss-hidden="true" data-page-routes="workspace">
         <div class="section-header">
           <p class="eyebrow">Developer Handoff</p>
           <h2>The first surfaces to build without overcommitting</h2>
