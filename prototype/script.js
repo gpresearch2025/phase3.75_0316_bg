@@ -300,30 +300,103 @@ const pageRouteDefinitions = {
   overview: {
     kicker: "Page 1 of 4",
     title: "Overview",
-    description: "Start with the system boundary, launch scope, and the shortest accurate framing of Consentext before you drill into the deeper technical surfaces."
+    description: "Start with the system boundary, launch scope, and the shortest accurate framing of Consentext before you drill into the deeper technical surfaces.",
+    capabilities: [
+      "Read the shortest technical framing of the product without opening the denser workspace surfaces first.",
+      "Check the launch boundary, including the medication-in-records but not medication-guidance decision.",
+      "Use this page as the opening screen before handing off to walkthrough, architecture, or workspace pages."
+    ],
+    sections: [
+      { label: "Technical snapshot", href: "index.html?page=overview" },
+      { label: "System overview", href: "index.html?page=overview#overview" }
+    ],
+    shortcuts: [
+      { label: "Open walkthrough", href: "index.html?page=walkthrough#walkthrough", tone: "primary" },
+      { label: "Open architecture", href: "index.html?page=architecture#control-plane", tone: "secondary" },
+      { label: "Open workspace", href: "index.html?page=workspace#workspace", tone: "secondary" },
+      { label: "Open brief", href: "executive-brief.html", tone: "secondary" }
+    ]
   },
   walkthrough: {
     kicker: "Page 2 of 4",
     title: "Walkthrough",
-    description: "Use the narrated review, presentation controls, and downloadable review assets when you want the architecture story presented cleanly without opening the full workspace first."
+    description: "Use the narrated review, presentation controls, and downloadable review assets when you want the architecture story presented cleanly without opening the full workspace first.",
+    capabilities: [
+      "Play the narrated architecture walkthrough with captions and chapter jumping.",
+      "Switch presentation mode and theme without digging through the whole prototype.",
+      "Leave the page with the MP4, PDF, and artifact exports instead of relying on a live demo only."
+    ],
+    sections: [
+      { label: "Narrated walkthrough", href: "index.html?page=walkthrough#walkthrough" },
+      { label: "Review kit", href: "index.html?page=walkthrough#presentation-suite" },
+      { label: "Artifact center", href: "index.html?page=walkthrough#artifacts" }
+    ],
+    shortcuts: [
+      { label: "Play narration", action: "play_walkthrough", tone: "primary" },
+      { label: "Open artifact center", href: "index.html?page=walkthrough#artifacts", tone: "secondary" },
+      { label: "Download MP4", href: "assets/walkthrough-video/consentext-boss-walkthrough.mp4", tone: "secondary", download: "consentext-phase-3-75-technical-walkthrough.mp4" },
+      { label: "Open brief", href: "executive-brief.html", tone: "secondary" }
+    ]
   },
   architecture: {
     kicker: "Page 3 of 4",
     title: "Architecture",
-    description: "Inspect the control-plane split, open decisions, lane semantics, trust flow, glossary terms, and workstreams as a dedicated technical page instead of one long scroll."
+    description: "Inspect the control-plane split, open decisions, lane semantics, trust flow, glossary terms, and workstreams as a dedicated technical page instead of one long scroll.",
+    capabilities: [
+      "Review the control-plane contract and the open-versus-settled decisions without mixing them into the live workspace.",
+      "Compare lanes, inspect the trust flow, and keep the terminology close by with the glossary.",
+      "Use this page as the senior-developer architecture pass before moving into live controls."
+    ],
+    sections: [
+      { label: "Control plane", href: "index.html?page=architecture#control-plane" },
+      { label: "Decisions", href: "index.html?page=architecture#decisions" },
+      { label: "Lanes", href: "index.html?page=architecture#lanes" },
+      { label: "Lane compare", href: "index.html?page=architecture#lane-compare" },
+      { label: "Trust flow", href: "index.html?page=architecture#trust-flow" },
+      { label: "Glossary", href: "index.html?page=architecture#glossary" },
+      { label: "Workstreams", href: "index.html?page=architecture#workstreams" },
+      { label: "Flow", href: "index.html?page=architecture#workflow" }
+    ],
+    shortcuts: [
+      { label: "Open decisions", href: "index.html?page=architecture#decisions", tone: "primary" },
+      { label: "See lane compare", href: "index.html?page=architecture#lane-compare", tone: "secondary" },
+      { label: "Open trust flow", href: "index.html?page=architecture#trust-flow", tone: "secondary" },
+      { label: "Open workspace", href: "index.html?page=workspace#workspace", tone: "secondary" }
+    ]
   },
   workspace: {
     kicker: "Page 4 of 4",
     title: "Workspace",
-    description: "Move into the live prototype controls, scenario presets, audit proof, handoff view, and export surfaces when you want to review behavior instead of only reading summaries."
+    description: "Move into the live prototype controls, scenario presets, audit proof, handoff view, and export surfaces when you want to review behavior instead of only reading summaries.",
+    capabilities: [
+      "Apply a scenario preset, inspect the live workspace, and walk through the route and policy behavior.",
+      "Jump straight to audit proof and handoff notes instead of hunting through the long prototype.",
+      "Export the current policy, audit summary, or clinician packet from the same page."
+    ],
+    sections: [
+      { label: "Scenario presets", href: "index.html?page=workspace#presets" },
+      { label: "Live workspace", href: "index.html?page=workspace#workspace" },
+      { label: "Audit proof", href: "index.html?page=workspace#audit" },
+      { label: "Handoff", href: "index.html?page=workspace#handoff" },
+      { label: "Artifact center", href: "index.html?page=workspace#artifacts" }
+    ],
+    shortcuts: [
+      { label: "Open workspace", href: "index.html?page=workspace#workspace", tone: "primary" },
+      { label: "Download policy JSON", action: "download_policy", tone: "secondary" },
+      { label: "Download audit JSON", action: "download_audit", tone: "secondary" },
+      { label: "Download clinician packet", action: "download_clinician_packet", tone: "secondary" }
+    ]
   }
 };
-const pageRouteSections = document.querySelectorAll("[data-page-routes]");
+const pageRoutePanels = document.querySelectorAll("[data-page-routes]");
 const pageNavLinks = document.querySelectorAll("[data-page-nav]");
 const pageRouteCards = document.querySelectorAll("[data-page-link]");
 const pageRouteKicker = document.getElementById("page-route-kicker");
 const pageRouteTitle = document.getElementById("page-route-title");
 const pageRouteDescription = document.getElementById("page-route-description");
+const pageRouteCapabilities = document.getElementById("page-route-capabilities");
+const pageRouteSectionNav = document.getElementById("page-route-sections");
+const pageRouteShortcuts = document.getElementById("page-route-shortcuts");
 
 const podButtons = document.querySelectorAll(".pod-button");
 const podTitle = document.getElementById("pod-title");
@@ -1280,6 +1353,13 @@ downloadAudit?.addEventListener("click", () => {
 downloadClinicianPacket?.addEventListener("click", () => {
   downloadTextAsset("consentext-clinician-packet.json", JSON.stringify(buildClinicianPacket(), null, 2), "application/json;charset=utf-8");
 });
+pageRouteShortcuts?.addEventListener("click", (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  const shortcut = target?.closest("[data-route-shortcut-action]");
+  if (!(shortcut instanceof HTMLElement)) return;
+
+  runPageShortcutAction(shortcut.dataset.routeShortcutAction);
+});
 
 renderPod("biomarkers");
 if (promptSelect) promptSelect.value = "What lifestyle changes may improve these labs?";
@@ -1466,6 +1546,59 @@ function scrollToVisibleHashTarget() {
   }, 90);
 }
 
+function renderPageRouteUtilities(route) {
+  const config = pageRouteDefinitions[route];
+  if (!config) return;
+
+  if (pageRouteCapabilities) {
+    pageRouteCapabilities.innerHTML = config.capabilities
+      .map((item) => `<li>${item}</li>`)
+      .join("");
+  }
+
+  if (pageRouteSectionNav) {
+    pageRouteSectionNav.innerHTML = config.sections
+      .map((item) => `<a class="route-section-chip" href="${item.href}">${item.label}</a>`)
+      .join("");
+  }
+
+  if (pageRouteShortcuts) {
+    pageRouteShortcuts.innerHTML = config.shortcuts
+      .map((item) => {
+        const toneClass = item.tone === "primary" ? "button button-primary" : "button button-secondary";
+        if (item.href) {
+          const downloadAttr = item.download ? ` download="${item.download}"` : "";
+          return `<a class="${toneClass}" href="${item.href}"${downloadAttr}>${item.label}</a>`;
+        }
+
+        return `<button type="button" class="${toneClass}" data-route-shortcut-action="${item.action}">${item.label}</button>`;
+      })
+      .join("");
+  }
+}
+
+function runPageShortcutAction(action) {
+  if (action === "play_walkthrough") {
+    document.getElementById("walkthrough")?.scrollIntoView({ block: "start", behavior: "smooth" });
+    window.setTimeout(() => startWalkthrough(), 180);
+    return;
+  }
+
+  if (action === "download_policy") {
+    downloadPolicy?.click();
+    return;
+  }
+
+  if (action === "download_audit") {
+    downloadAudit?.click();
+    return;
+  }
+
+  if (action === "download_clinician_packet") {
+    downloadClinicianPacket?.click();
+  }
+}
+
 function initializePageRoute() {
   const route = getActivePageRoute();
   const config = pageRouteDefinitions[route];
@@ -1476,8 +1609,9 @@ function initializePageRoute() {
   if (pageRouteKicker) pageRouteKicker.textContent = config.kicker;
   if (pageRouteTitle) pageRouteTitle.textContent = config.title;
   if (pageRouteDescription) pageRouteDescription.textContent = config.description;
+  renderPageRouteUtilities(route);
 
-  pageRouteSections.forEach((section) => {
+  pageRoutePanels.forEach((section) => {
     const shouldShow = sectionSupportsPageRoute(section, route);
     section.hidden = !shouldShow;
     section.setAttribute("aria-hidden", shouldShow ? "false" : "true");
