@@ -61,7 +61,7 @@ const vaultPods = {
 
 const laneMap = [
   {
-    match: /trend|timeline|show|list|values|calculate/i,
+    match: /trend|timeline|show|values|calculate/i,
     lane: "Deterministic",
     summary: "No AI is needed for this request. Structured retrieval is enough.",
     internal: true,
@@ -276,7 +276,8 @@ const state = {
   currentRoute: null,
   opsFilter: "all",
   opsSearch: "",
-  activeScenario: ""
+  activeScenario: "",
+  activeTab: "vault"
 };
 
 const topbar = document.querySelector(".topbar");
@@ -397,6 +398,20 @@ const pageRouteDescription = document.getElementById("page-route-description");
 const pageRouteCapabilities = document.getElementById("page-route-capabilities");
 const pageRouteSectionNav = document.getElementById("page-route-sections");
 const pageRouteShortcuts = document.getElementById("page-route-shortcuts");
+const pageRouteOrder = ["overview", "walkthrough", "architecture", "workspace"];
+const stateAwareLinks = document.querySelectorAll("[data-preserve-state-link='true']");
+const globalPageStatus = document.getElementById("global-page-status");
+const globalPolicyStatus = document.getElementById("global-policy-status");
+const globalShareStatus = document.getElementById("global-share-status");
+const globalRecipientStatus = document.getElementById("global-recipient-status");
+const globalLaneStatus = document.getElementById("global-lane-status");
+const globalTabStatus = document.getElementById("global-tab-status");
+const globalScenarioStatus = document.getElementById("global-scenario-status");
+const pagePrevLink = document.getElementById("page-prev-link");
+const pageNextLink = document.getElementById("page-next-link");
+const copyStateLink = document.getElementById("copy-state-link");
+const resetWorkspace = document.getElementById("reset-workspace");
+const stateLinkFeedback = document.getElementById("state-link-feedback");
 
 const podButtons = document.querySelectorAll(".pod-button");
 const podTitle = document.getElementById("pod-title");
@@ -680,6 +695,7 @@ function renderControlStatus() {
   if (statusRecipient) statusRecipient.textContent = policy ? recipientLabels[policy.recipient_type] : "Not set";
   if (statusLane) statusLane.textContent = state.currentRoute ? state.currentRoute.lane : "Pending";
   if (statusAuditCount) statusAuditCount.textContent = String(state.audit.length);
+  renderReviewStateBar();
 }
 
 function renderTimeline() {
@@ -878,12 +894,15 @@ function renderLaneCards() {
     </button>
   `).join("");
 
-  laneCardsContainer.addEventListener("click", (event) => {
-    const button = event.target.closest(".lane-card");
-    if (!button) return;
-    const selected = laneMap.find((item) => item.lane === button.dataset.lane);
-    if (selected) selectLane(selected);
-  });
+  if (!laneCardsContainer.dataset.bound) {
+    laneCardsContainer.addEventListener("click", (event) => {
+      const button = event.target.closest(".lane-card");
+      if (!button) return;
+      const selected = laneMap.find((item) => item.lane === button.dataset.lane);
+      if (selected) selectLane(selected);
+    });
+    laneCardsContainer.dataset.bound = "true";
+  }
 
   selectLane(laneMap.find((item) => item.lane === "Private") || laneMap[0]);
 }
@@ -961,6 +980,7 @@ function renderScenarioPresets() {
       applyScenarioPreset(button.dataset.scenarioId);
     });
   });
+  renderReviewStateBar();
 }
 
 function renderWorkstreams() {
@@ -1109,7 +1129,7 @@ function renderRouteState(route, source, included, blocked, bundle) {
   renderOps();
 }
 
-function runRouting() {
+function runRouting({ skipAudit = false } = {}) {
   const prompt = promptSelect.value;
   const lane = resolveLane(prompt);
   const policy = state.activePolicy || computeEffectivePolicy().policy;
@@ -1141,7 +1161,7 @@ function runRouting() {
       share_status: state.shareStatus,
       summary: reason
     };
-    addAudit("off_board_exit", `User chose to bypass Consentext for: ${prompt}`);
+    if (!skipAudit) addAudit("off_board_exit", `User chose to bypass Consentext for: ${prompt}`);
   } else if (!lane.internal && state.shareStatus !== "active") {
     status = "deny";
     decision = "Denied";
@@ -1258,7 +1278,7 @@ function runRouting() {
 
   renderRouteState(route, source, route.included, route.blocked, bundle);
 
-  if (!lane.offboard) {
+  if (!lane.offboard && !skipAudit) {
     addAudit(status === "allow" ? "context_generated" : "context_generation_denied", `${decision}: ${prompt}`);
   }
 }
@@ -1299,8 +1319,10 @@ function runApiSimulation() {
 }
 
 function switchTab(tabName) {
+  state.activeTab = tabName;
   tabButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.tab === tabName));
   tabPanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === tabName));
+  renderReviewStateBar();
 }
 
 podButtons.forEach((button) => button.addEventListener("click", () => renderPod(button.dataset.pod)));
@@ -1360,58 +1382,16 @@ pageRouteShortcuts?.addEventListener("click", (event) => {
 
   runPageShortcutAction(shortcut.dataset.routeShortcutAction);
 });
+copyStateLink?.addEventListener("click", copyCurrentStateUrl);
+resetWorkspace?.addEventListener("click", () => {
+  resetPrototypeWorkspace();
+  const cleanUrl = new URL(window.location.href);
+  cleanUrl.searchParams.delete("state");
+  cleanUrl.hash = defaultHashForRoute(getActivePageRoute());
+  window.history.replaceState({}, "", cleanUrl.toString());
+});
 
-renderPod("biomarkers");
-if (promptSelect) promptSelect.value = "What lifestyle changes may improve these labs?";
-renderPolicy();
-renderLaneCards();
-renderLaneComparison();
-renderScenarioPresets();
-renderWorkstreams();
-
-const initialRoute = {
-  lane: "Private+",
-  summary: "Minimum-necessary context packet prepared for governed external AI assistance.",
-  prompt: "What lifestyle changes may improve these labs?",
-  included: ["AI gateway adapter-ready base is active", "Minimum-necessary export bundle", "Wearable derived summary"],
-  blocked: ["Records stay out of the Private+ default route", "Identifiers stay off in the Private+ default route"],
-  outputClass: "minimum_necessary_external",
-  privacy: 80,
-  capability: 74,
-  control: 90,
-  statusLabel: "Allowed",
-  statusClass: "status-allow"
-};
-
-const initialBundle = {
-  prompt: initialRoute.prompt,
-  lane: "private_plus",
-  recipient_type: "ai_export",
-  pod_scope: ["biomarkers", "wearables"],
-  identifiers_included: false,
-  records_included: false,
-  wearables_granularity: "derived_only",
-  transform_level: "minimum_necessary_l1_l2",
-  output_classification: initialRoute.outputClass,
-  share_status: state.shareStatus,
-  gateway_adapter_mode: "adapter_ready_base",
-  provider_count_pricing: "price_1_2_3_4_then_decide",
-  context_authorization: "minimum_necessary",
-  user_message: initialRoute.summary
-};
-
-renderRouteState(
-  initialRoute,
-  ["Biomarker values", "Wearable summaries"],
-  initialRoute.included,
-  initialRoute.blocked,
-  initialBundle
-);
-renderDashboard();
-renderControlStatus();
-renderOps();
-addAudit("consent_policy_created", "Initial prototype policy loaded using the March 17 control-plane baseline plus the March 19 medication-scope override.");
-addAudit("auth_login", "User entered the prototype workspace and established an authenticated session.");
+initializePrototypeWorkspace();
 
 const walkthroughStage = document.getElementById("walkthrough-stage");
 const walkthroughTitle = document.getElementById("walkthrough-title");
@@ -1546,6 +1526,354 @@ function scrollToVisibleHashTarget() {
   }, 90);
 }
 
+function defaultHashForRoute(route) {
+  return {
+    overview: "#overview",
+    walkthrough: "#walkthrough",
+    architecture: "#control-plane",
+    workspace: "#workspace"
+  }[route] || "";
+}
+
+function getCurrentScenarioTitle() {
+  const activeScenario = scenarioPresets.find((item) => item.id === state.activeScenario);
+  return activeScenario ? activeScenario.title : "Default";
+}
+
+function getCurrentTabTitle() {
+  const activeButton = Array.from(tabButtons).find((button) => button.classList.contains("is-active"));
+  return activeButton ? activeButton.textContent.trim() : "Vault";
+}
+
+function updateShareLinkFeedback(message, tone = "neutral") {
+  if (!stateLinkFeedback) return;
+  stateLinkFeedback.textContent = message;
+  stateLinkFeedback.dataset.tone = tone;
+}
+
+function updateReviewPagerLink(link, targetRoute, direction) {
+  if (!link) return;
+
+  if (!targetRoute || !pageRouteDefinitions[targetRoute]) {
+    link.textContent = `${direction}: unavailable`;
+    link.removeAttribute("href");
+    link.classList.add("is-disabled");
+    link.setAttribute("aria-disabled", "true");
+    link.tabIndex = -1;
+    return;
+  }
+
+  link.href = buildStateAwareHref(`index.html?page=${targetRoute}`);
+  link.textContent = `${direction}: ${pageRouteDefinitions[targetRoute].title}`;
+  link.classList.remove("is-disabled");
+  link.setAttribute("aria-disabled", "false");
+  link.tabIndex = 0;
+}
+
+function renderReviewStateBar() {
+  const route = getActivePageRoute();
+  const routeIndex = pageRouteOrder.indexOf(route);
+  const policy = state.activePolicy;
+
+  if (globalPageStatus) globalPageStatus.textContent = pageRouteDefinitions[route]?.title || "Overview";
+  if (globalPolicyStatus) globalPolicyStatus.textContent = policy ? policy.policy_id : "policy-000";
+  if (globalShareStatus) globalShareStatus.textContent = state.shareStatus === "active" ? "Active" : "Revoked";
+  if (globalRecipientStatus) globalRecipientStatus.textContent = policy ? recipientLabels[policy.recipient_type] : "Not set";
+  if (globalLaneStatus) globalLaneStatus.textContent = state.currentRoute ? state.currentRoute.lane : "Pending";
+  if (globalTabStatus) globalTabStatus.textContent = getCurrentTabTitle();
+  if (globalScenarioStatus) globalScenarioStatus.textContent = getCurrentScenarioTitle();
+
+  updateReviewPagerLink(pagePrevLink, routeIndex > 0 ? pageRouteOrder[routeIndex - 1] : null, "Previous");
+  updateReviewPagerLink(pageNextLink, routeIndex >= 0 && routeIndex < pageRouteOrder.length - 1 ? pageRouteOrder[routeIndex + 1] : null, "Next");
+  syncStateAwareLinks();
+}
+
+function syncAuditFilterUi() {
+  filterChips.forEach((chip) => {
+    chip.classList.toggle("is-active", chip.dataset.filter === state.auditFilter);
+  });
+}
+
+function syncOpsFilterUi() {
+  opsFilterChips.forEach((chip) => {
+    chip.classList.toggle("is-active", chip.dataset.opsFilter === state.opsFilter);
+  });
+  if (opsSearch) opsSearch.value = state.opsSearch;
+}
+
+function encodeStateToken(snapshot) {
+  try {
+    return window.btoa(JSON.stringify(snapshot)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  } catch (error) {
+    return "";
+  }
+}
+
+function decodeStateToken(token) {
+  if (!token) return null;
+
+  try {
+    const normalized = token.replace(/-/g, "+").replace(/_/g, "/");
+    const padding = "=".repeat((4 - (normalized.length % 4)) % 4);
+    return JSON.parse(window.atob(normalized + padding));
+  } catch (error) {
+    return null;
+  }
+}
+
+function readStateSnapshotFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return decodeStateToken(params.get("state"));
+}
+
+function captureCurrentStateSnapshot() {
+  const route = getActivePageRoute();
+
+  return {
+    page: route,
+    hash: window.location.hash || defaultHashForRoute(route),
+    tab: state.activeTab,
+    scenario: state.activeScenario,
+    share: state.shareStatus,
+    policyVersion: state.policyVersion,
+    recipient: recipientType?.value || "ai_export",
+    purpose: purpose?.value || "explanation",
+    duration: duration?.value || "one_time",
+    granularity: granularity?.value || "derived_only",
+    pods: {
+      biomarkers: Boolean(scopeBiomarkers?.checked),
+      wearables: Boolean(scopeWearables?.checked),
+      records: Boolean(scopeRecords?.checked),
+      identity: Boolean(scopeIdentity?.checked)
+    },
+    identifiers: Boolean(identifiersToggle?.checked),
+    verified: Boolean(recipientVerified?.checked),
+    prompt: promptSelect?.value || "What lifestyle changes may improve these labs?",
+    routeRan: Boolean(state.currentRoute),
+    auditFilter: state.auditFilter,
+    opsFilter: state.opsFilter,
+    opsSearch: state.opsSearch,
+    collapsed: topbar?.classList.contains("is-collapsed") || false,
+    focus: document.body.classList.contains("focus-mode"),
+    summary: document.body.classList.contains("boss-mode"),
+    theme: document.body.classList.contains("theme-light")
+  };
+}
+
+function buildCurrentStateUrl() {
+  const snapshot = captureCurrentStateSnapshot();
+  const url = new URL(window.location.href);
+  url.searchParams.set("page", snapshot.page);
+
+  const token = encodeStateToken(snapshot);
+  if (token) {
+    url.searchParams.set("state", token);
+  } else {
+    url.searchParams.delete("state");
+  }
+
+  url.hash = snapshot.hash || "";
+  return url.toString();
+}
+
+function buildStateAwareHref(baseHref) {
+  if (!baseHref || !baseHref.startsWith("index.html")) return baseHref;
+
+  const absolute = new URL(baseHref, window.location.href);
+  const route = absolute.searchParams.get("page") || getActivePageRoute();
+  const snapshot = captureCurrentStateSnapshot();
+  snapshot.page = route;
+  snapshot.hash = absolute.hash || defaultHashForRoute(route);
+
+  const token = encodeStateToken(snapshot);
+  absolute.searchParams.set("page", route);
+  if (token) absolute.searchParams.set("state", token);
+  absolute.hash = snapshot.hash || "";
+
+  return `${absolute.pathname.split("/").pop()}?${absolute.searchParams.toString()}${absolute.hash}`;
+}
+
+function syncStateAwareLinks() {
+  stateAwareLinks.forEach((link) => {
+    const baseHref = link.dataset.baseHref || link.getAttribute("href") || "";
+    if (!link.dataset.baseHref) link.dataset.baseHref = baseHref;
+    link.setAttribute("href", buildStateAwareHref(baseHref));
+  });
+}
+
+async function copyCurrentStateUrl() {
+  const url = buildCurrentStateUrl();
+
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const helper = document.createElement("textarea");
+      helper.value = url;
+      helper.setAttribute("readonly", "");
+      helper.style.position = "absolute";
+      helper.style.left = "-9999px";
+      document.body.appendChild(helper);
+      helper.select();
+      document.execCommand("copy");
+      helper.remove();
+    }
+    updateShareLinkFeedback("Copied a shareable link for the current page and workspace state.", "success");
+  } catch (error) {
+    updateShareLinkFeedback("Copy failed in this browser. You can still use the current page URL.", "warning");
+  }
+}
+
+function setDefaultWorkspaceInputs() {
+  if (recipientType) recipientType.value = "ai_export";
+  if (purpose) purpose.value = "explanation";
+  if (duration) duration.value = "one_time";
+  if (granularity) granularity.value = "derived_only";
+  if (scopeBiomarkers) scopeBiomarkers.checked = true;
+  if (scopeWearables) scopeWearables.checked = true;
+  if (scopeRecords) scopeRecords.checked = false;
+  if (scopeIdentity) scopeIdentity.checked = false;
+  if (identifiersToggle) identifiersToggle.checked = false;
+  if (recipientVerified) recipientVerified.checked = false;
+  if (promptSelect) promptSelect.value = "What lifestyle changes may improve these labs?";
+  if (apiPod) apiPod.value = "biomarkers";
+  if (apiScope) apiScope.value = "within_scope";
+  if (apiDecision) apiDecision.textContent = "Pending";
+  if (apiStatus) {
+    apiStatus.textContent = "Pending";
+    apiStatus.className = "status-pill";
+  }
+  if (apiReason) apiReason.textContent = "Run an API simulation to inspect the current contract.";
+}
+
+function buildInitialRoute() {
+  return {
+    lane: "Private+",
+    summary: "Minimum-necessary context packet prepared for governed external AI assistance.",
+    prompt: "What lifestyle changes may improve these labs?",
+    included: ["AI gateway adapter-ready base is active", "Minimum-necessary export bundle", "Wearable derived summary"],
+    blocked: ["Records stay out of the Private+ default route", "Identifiers stay off in the Private+ default route"],
+    outputClass: "minimum_necessary_external",
+    privacy: 80,
+    capability: 74,
+    control: 90,
+    statusLabel: "Allowed",
+    statusClass: "status-allow"
+  };
+}
+
+function buildInitialBundle(route) {
+  return {
+    prompt: route.prompt,
+    lane: "private_plus",
+    recipient_type: "ai_export",
+    pod_scope: ["biomarkers", "wearables"],
+    identifiers_included: false,
+    records_included: false,
+    wearables_granularity: "derived_only",
+    transform_level: "minimum_necessary_l1_l2",
+    output_classification: route.outputClass,
+    share_status: state.shareStatus,
+    gateway_adapter_mode: "adapter_ready_base",
+    provider_count_pricing: "price_1_2_3_4_then_decide",
+    context_authorization: "minimum_necessary",
+    user_message: route.summary
+  };
+}
+
+function initializePrototypeWorkspace() {
+  state.shareStatus = "active";
+  state.policyVersion = 1;
+  state.activePolicy = null;
+  state.audit = [];
+  state.auditFilter = "all";
+  state.currentRoute = null;
+  state.opsFilter = "all";
+  state.opsSearch = "";
+  state.activeScenario = "";
+  state.activeTab = "vault";
+
+  setDefaultWorkspaceInputs();
+  syncAuditFilterUi();
+  syncOpsFilterUi();
+  renderPod("biomarkers");
+  switchTab("vault");
+  renderPolicy();
+  renderLaneCards();
+  renderLaneComparison();
+  renderScenarioPresets();
+  renderWorkstreams();
+
+  const initialRoute = buildInitialRoute();
+  renderRouteState(
+    initialRoute,
+    ["Biomarker values", "Wearable summaries"],
+    initialRoute.included,
+    initialRoute.blocked,
+    buildInitialBundle(initialRoute)
+  );
+  renderDashboard();
+  renderControlStatus();
+  renderOps();
+  addAudit("consent_policy_created", "Initial prototype policy loaded using the March 17 control-plane baseline plus the March 19 medication-scope override.");
+  addAudit("auth_login", "User entered the prototype workspace and established an authenticated session.");
+  updateShareLinkFeedback("Shareable current-state link is ready when you need it.");
+}
+
+function applySnapshotToWorkspace(snapshot) {
+  if (!snapshot) return;
+
+  state.policyVersion = Number.isFinite(Number(snapshot.policyVersion)) ? Math.max(1, Number(snapshot.policyVersion)) : 1;
+  state.shareStatus = snapshot.share === "revoked" ? "revoked" : "active";
+  state.activeScenario = typeof snapshot.scenario === "string" ? snapshot.scenario : "";
+  state.auditFilter = typeof snapshot.auditFilter === "string" ? snapshot.auditFilter : "all";
+  state.opsFilter = typeof snapshot.opsFilter === "string" ? snapshot.opsFilter : "all";
+  state.opsSearch = typeof snapshot.opsSearch === "string" ? snapshot.opsSearch : "";
+
+  if (recipientType && snapshot.recipient) recipientType.value = snapshot.recipient;
+  if (purpose && snapshot.purpose) purpose.value = snapshot.purpose;
+  if (duration && snapshot.duration) duration.value = snapshot.duration;
+  if (granularity && snapshot.granularity) granularity.value = snapshot.granularity;
+  if (scopeBiomarkers && snapshot.pods) scopeBiomarkers.checked = snapshot.pods.biomarkers !== false;
+  if (scopeWearables && snapshot.pods) scopeWearables.checked = snapshot.pods.wearables !== false;
+  if (scopeRecords && snapshot.pods) scopeRecords.checked = Boolean(snapshot.pods.records);
+  if (scopeIdentity && snapshot.pods) scopeIdentity.checked = Boolean(snapshot.pods.identity);
+  if (identifiersToggle) identifiersToggle.checked = Boolean(snapshot.identifiers);
+  if (recipientVerified) recipientVerified.checked = Boolean(snapshot.verified);
+  if (promptSelect && typeof snapshot.prompt === "string" && snapshot.prompt) promptSelect.value = snapshot.prompt;
+
+  syncAuditFilterUi();
+  syncOpsFilterUi();
+  renderPolicy();
+  const requestedTab = typeof snapshot.tab === "string" ? snapshot.tab : "vault";
+  const tabExists = Array.from(tabButtons).some((button) => button.dataset.tab === requestedTab);
+  switchTab(tabExists ? requestedTab : "vault");
+  renderScenarioPresets();
+  renderAudit();
+  renderOpsConsole();
+
+  if (snapshot.routeRan) {
+    runRouting({ skipAudit: true });
+  }
+
+  updateShareLinkFeedback("Current state restored from link.", "success");
+}
+
+function applySnapshotToInterface(snapshot) {
+  if (!snapshot) return;
+
+  if (typeof snapshot.collapsed === "boolean") setTopbarCollapsed(snapshot.collapsed, { persist: false });
+  if (typeof snapshot.focus === "boolean") setFocusMode(snapshot.focus, { persist: false });
+  if (typeof snapshot.summary === "boolean") setBossMode(snapshot.summary, { persist: false });
+  if (typeof snapshot.theme === "boolean") setThemeMode(snapshot.theme, { persist: false });
+}
+
+function resetPrototypeWorkspace() {
+  initializePrototypeWorkspace();
+  renderReviewStateBar();
+  updateShareLinkFeedback("Workspace reset to the default review state.", "success");
+}
+
 function renderPageRouteUtilities(route) {
   const config = pageRouteDefinitions[route];
   if (!config) return;
@@ -1558,7 +1886,7 @@ function renderPageRouteUtilities(route) {
 
   if (pageRouteSectionNav) {
     pageRouteSectionNav.innerHTML = config.sections
-      .map((item) => `<a class="route-section-chip" href="${item.href}">${item.label}</a>`)
+      .map((item) => `<a class="route-section-chip" href="${buildStateAwareHref(item.href)}">${item.label}</a>`)
       .join("");
   }
 
@@ -1568,7 +1896,8 @@ function renderPageRouteUtilities(route) {
         const toneClass = item.tone === "primary" ? "button button-primary" : "button button-secondary";
         if (item.href) {
           const downloadAttr = item.download ? ` download="${item.download}"` : "";
-          return `<a class="${toneClass}" href="${item.href}"${downloadAttr}>${item.label}</a>`;
+          const href = item.download ? item.href : buildStateAwareHref(item.href);
+          return `<a class="${toneClass}" href="${href}"${downloadAttr}>${item.label}</a>`;
         }
 
         return `<button type="button" class="${toneClass}" data-route-shortcut-action="${item.action}">${item.label}</button>`;
@@ -1637,6 +1966,7 @@ function initializePageRoute() {
     }
   });
 
+  renderReviewStateBar();
   scrollToVisibleHashTarget();
 }
 
@@ -2030,9 +2360,13 @@ window.addEventListener("hashchange", scrollToVisibleHashTarget);
 if ("speechSynthesis" in window) {
   window.speechSynthesis.onvoiceschanged = () => renderWalkthrough();
 }
+const initialUrlSnapshot = readStateSnapshotFromUrl();
 initializePageRoute();
 initializeTopbar();
 initializeFocusMode();
 initializeBossMode();
 initializeThemeMode();
+applySnapshotToInterface(initialUrlSnapshot);
+applySnapshotToWorkspace(initialUrlSnapshot);
+renderReviewStateBar();
 renderWalkthrough();

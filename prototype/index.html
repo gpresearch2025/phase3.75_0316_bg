@@ -28,13 +28,53 @@
         </div>
       </div>
       <nav id="top-nav" class="top-nav">
-        <a href="index.html?page=overview" data-page-nav="overview">Overview</a>
-        <a href="index.html?page=walkthrough" data-page-nav="walkthrough">Walkthrough</a>
-        <a href="index.html?page=architecture" data-page-nav="architecture">Architecture</a>
-        <a href="index.html?page=workspace" data-page-nav="workspace">Workspace</a>
+        <a href="index.html?page=overview" data-page-nav="overview" data-preserve-state-link="true">Overview</a>
+        <a href="index.html?page=walkthrough" data-page-nav="walkthrough" data-preserve-state-link="true">Walkthrough</a>
+        <a href="index.html?page=architecture" data-page-nav="architecture" data-preserve-state-link="true">Architecture</a>
+        <a href="index.html?page=workspace" data-page-nav="workspace" data-preserve-state-link="true">Workspace</a>
         <a href="executive-brief.html">Technical Brief</a>
       </nav>
     </header>
+
+    <section class="panel review-state-bar reveal">
+      <div class="review-state-grid">
+        <article class="review-state-card">
+          <span class="mini-label">Current Page</span>
+          <strong id="global-page-status">Overview</strong>
+        </article>
+        <article class="review-state-card">
+          <span class="mini-label">Policy</span>
+          <strong id="global-policy-status">policy-001</strong>
+        </article>
+        <article class="review-state-card">
+          <span class="mini-label">Share</span>
+          <strong id="global-share-status">Active</strong>
+        </article>
+        <article class="review-state-card">
+          <span class="mini-label">Recipient</span>
+          <strong id="global-recipient-status">AI export</strong>
+        </article>
+        <article class="review-state-card">
+          <span class="mini-label">Lane</span>
+          <strong id="global-lane-status">Private+</strong>
+        </article>
+        <article class="review-state-card">
+          <span class="mini-label">Workspace Tab</span>
+          <strong id="global-tab-status">Vault</strong>
+        </article>
+        <article class="review-state-card">
+          <span class="mini-label">Scenario</span>
+          <strong id="global-scenario-status">Default</strong>
+        </article>
+      </div>
+      <div class="review-state-actions">
+        <a id="page-prev-link" class="button button-secondary" href="index.html?page=overview">Previous Page</a>
+        <a id="page-next-link" class="button button-secondary" href="index.html?page=walkthrough">Next Page</a>
+        <button id="copy-state-link" class="button button-secondary" type="button">Copy Current Link</button>
+        <button id="reset-workspace" class="button button-secondary" type="button">Reset Workspace</button>
+        <span id="state-link-feedback" class="review-state-feedback">Shareable current-state link is ready when you need it.</span>
+      </div>
+    </section>
 
     <main class="main-stack">
       <section class="panel route-banner reveal">
@@ -58,22 +98,22 @@
           </article>
         </div>
         <div class="route-link-grid">
-          <a href="index.html?page=overview" class="route-link-card" data-page-link="overview">
+          <a href="index.html?page=overview" class="route-link-card" data-page-link="overview" data-preserve-state-link="true">
             <span class="mini-label">Page 1</span>
             <strong>Overview</strong>
             <p>Boundary, launch scope, and the top-level product framing.</p>
           </a>
-          <a href="index.html?page=walkthrough" class="route-link-card" data-page-link="walkthrough">
+          <a href="index.html?page=walkthrough" class="route-link-card" data-page-link="walkthrough" data-preserve-state-link="true">
             <span class="mini-label">Page 2</span>
             <strong>Walkthrough</strong>
             <p>Narrated review, presentation controls, and downloadable review assets.</p>
           </a>
-          <a href="index.html?page=architecture" class="route-link-card" data-page-link="architecture">
+          <a href="index.html?page=architecture" class="route-link-card" data-page-link="architecture" data-preserve-state-link="true">
             <span class="mini-label">Page 3</span>
             <strong>Architecture</strong>
             <p>Control plane, decisions, lane semantics, trust flow, and workstreams.</p>
           </a>
-          <a href="index.html?page=workspace" class="route-link-card" data-page-link="workspace">
+          <a href="index.html?page=workspace" class="route-link-card" data-page-link="workspace" data-preserve-state-link="true">
             <span class="mini-label">Page 4</span>
             <strong>Workspace</strong>
             <p>Scenario presets, live controls, audit proof, handoff, and exports.</p>
@@ -139,10 +179,10 @@
               <span class="trust-pill">Append-only audit</span>
             </div>
             <div class="hero-actions">
-              <a href="index.html?page=walkthrough#walkthrough" class="button button-primary">Play Technical Walkthrough</a>
+              <a href="index.html?page=walkthrough#walkthrough" class="button button-primary" data-preserve-state-link="true">Play Technical Walkthrough</a>
               <button id="hero-boss-toggle" class="button button-secondary" type="button">Turn Summary Mode On</button>
               <a href="executive-brief.html" class="button button-secondary">Open Technical Brief</a>
-              <a href="index.html?page=workspace#artifacts" class="button button-secondary">Open Artifact Center</a>
+              <a href="index.html?page=workspace#artifacts" class="button button-secondary" data-preserve-state-link="true">Open Artifact Center</a>
             </div>
             <div class="signal-strip">
               <article class="signal-card">
